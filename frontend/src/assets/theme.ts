@@ -5,7 +5,3 @@ export const theme = {
 };
 
 export type Theme = typeof theme;
-
-declare module "@emotion/react" {
-  export interface Theme extends Theme {}
-}

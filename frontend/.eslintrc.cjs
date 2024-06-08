@@ -23,12 +23,12 @@ module.exports = {
     semi: ["error", "always"],
     "linebreak-style": "off",
     "react/react-in-jsx-scope": "off",
-    // "prettier/prettier": [
-    //   "error",
-    //   {
-    //     endOfLine: "auto"
-    //   }
-    // ],
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto"
+      }
+    ],
     "react/prop-types": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "no-unused-vars": "off",
