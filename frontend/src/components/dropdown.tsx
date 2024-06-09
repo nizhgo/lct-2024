@@ -8,8 +8,8 @@ import { useOnClickOutside } from "src/utils/hooks/on-click-outside.hook.ts";
 
 const Label = styled.label`
   font-size: 14px;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-weight: 500;
+  color: ${(p) => p.theme.colors.text};
 `;
 
 //const dropdown (with custom options)
@@ -25,22 +25,18 @@ interface LabeledDropdownProps {
 }
 
 const Drowdown = styled.select`
-  border: 1px solid #e7eef7;
+  border: 1px solid ${(p) => p.theme.colors.inputBorder};
   width: 100%;
-  font-size: 1em;
+  font-size: 14px;
   font-weight: 400;
-  background: #e7eef7;
-  color: #1a1a1a;
-  padding: 0.67857143em 1em;
+  color: ${(p) => p.theme.colors.textSecondary};
+  padding: 8px;
+  border-radius: 4px;
+  background-color: ${(p) => p.theme.colors.input.background};
 
   &:focus {
     outline: none;
-    border-color: transparent;
-  }
-
-  &:hover {
-    border-color: transparent;
-  }
+    border-color: ${(p) => p.theme.colors.link};
 `;
 
 export const LabeledDropdown = observer((x: LabeledDropdownProps) => {
@@ -95,6 +91,16 @@ export const CustomDropdown = observer<LabeledDropdownProps>((x) => {
       </Label>
       <DropdownButton type="button">
         {selectedOption ?? "Не выбрано"}
+        <Text
+          fontFamily={"IcoMoon"}
+          size={10}
+          style={{
+            marginLeft: "auto",
+            transform: isOpen ? "rotate(180deg)" : "none",
+          }}
+        >
+          
+        </Text>
       </DropdownButton>
       {isOpen && (
         <Stack
@@ -128,17 +134,18 @@ interface DropdownWithSearchProps extends LabeledDropdownProps {
 }
 
 const Input = styled.input`
-  border: 1px solid #e7eef7;
+  border: 1px solid ${(p) => p.theme.colors.inputBorder};
   position: relative;
-  font-size: 1em;
+  font-size: 14px;
   font-weight: 400;
-  background: #e7eef7;
-  color: #1a1a1a;
-  padding: 0.67857143em 1em;
+  background: ${(p) => p.theme.colors.input};
+  color: ${(p) => p.theme.colors.textSecondary};
+  padding: 6px 10px;
+  border-radius: 4px;
 
   &:focus {
     outline: none;
-    border-color: transparent;
+    border-color: ${(p) => p.theme.colors.link};
   }
 
   &:hover {
@@ -237,23 +244,25 @@ const CustomDropdownWrapper = styled(Stack)`
 `;
 
 const DropdownButton = styled.button`
-  border: 1px solid #e7eef7;
+  border: 1px solid ${(p) => p.theme.colors.inputBorder};
   width: 100%;
   display: flex;
+  align-items: center;
+  font-family: "MoscowSans", sans-serif;
   justify-content: start;
-  font-size: 1em;
+  font-size: 14px;
   font-weight: 400;
-  background: #e7eef7;
-  color: #1a1a1a;
-  padding: 0.67857143em 1em;
+  background: ${(p) => p.theme.colors.background};
+  color: ${(p) => p.theme.colors.textSecondary};
+  padding: 14px 18px;
+  border-radius: 4px;
 
   &:focus {
-    outline: none;
-    border-color: transparent;
+    border-color: ${(p) => p.theme.colors.link};
   }
 
   &:hover {
-    border-color: transparent;
+    border-color: ${(p) => p.theme.colors.link};
   }
 `;
 
@@ -267,17 +276,17 @@ const OptionsList = styled.div`
   overflow: auto;
   z-index: 1000;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e7eef7;
+  border: 1px solid ${(p) => p.theme.colors.inputBorder};
 `;
 
 const Option = styled.div<{
   ["aria-selected"]?: boolean;
   ["aria-disabled"]?: boolean;
 }>`
-  background: #fafafa;
+  background: ${(p) => (p["aria-selected"] ? "#f0f0f0" : "#fff")};
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #edf0f3;
+  border-bottom: 1px solid ${(p) => p.theme.colors.inputBorder};
   padding: 10px 14px;
 
   &[aria-selected="true"] {

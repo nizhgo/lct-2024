@@ -18,6 +18,7 @@ import { NotFoundPage } from "src/views/404/notFound.page.tsx";
 import { ErrorTemplate } from "components/error.tsx";
 import { AppLayout } from "src/views/layout.tsx";
 import MainPage from "src/mainPage.tsx";
+import { WorkerDetail } from "src/views/workers/detail/worker.detail.tsx";
 
 const authLoader = () => {
   //todo rewrite this cringe auth check
@@ -52,6 +53,11 @@ const router = createBrowserRouter([
       {
         path: "/worker/registration",
         element: <WorkerRegPage />,
+        loader: authLoader,
+      },
+      {
+        path: "/worker/:id",
+        element: <WorkerDetail />,
         loader: authLoader,
       },
       {
