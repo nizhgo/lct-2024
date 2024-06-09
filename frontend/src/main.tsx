@@ -48,13 +48,11 @@ const router = createBrowserRouter([
         path: "/worker",
         element: <WorkersPage />,
         loader: authLoader,
-        children: [
-          {
-            path: "/worker/registration",
-            element: <WorkerRegPage />,
-            loader: authLoader,
-          },
-        ],
+      },
+      {
+        path: "/worker/registration",
+        element: <WorkerRegPage />,
+        loader: authLoader,
       },
       {
         path: "/request/:id",
