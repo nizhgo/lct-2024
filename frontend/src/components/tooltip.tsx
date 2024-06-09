@@ -11,6 +11,7 @@ interface TooltipProps {
 
 const TooltipWrapper = styled.div`
   position: relative;
+  width: fit-content;
   display: inline-block;
 `;
 

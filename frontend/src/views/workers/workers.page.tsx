@@ -9,6 +9,7 @@ import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { observer } from "mobx-react-lite";
 import { WorkersDto } from "api/models/workers.mode.ts";
 import { useTheme } from "@emotion/react";
+import {PageHeader} from "components/pageHeader.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -25,7 +26,7 @@ const WorkersPage = observer(() => {
   return (
     <Stack wFull hFull direction={"column"} gap={20}>
       <ContentHeader>
-        <Text size={32}>Сотрудники</Text>
+        <PageHeader>Сотрудники</PageHeader>
         <Button onClick={handleAdd}>Добавить сотрудника</Button>
       </ContentHeader>
 

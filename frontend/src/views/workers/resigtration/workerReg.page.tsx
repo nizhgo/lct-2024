@@ -5,6 +5,7 @@ import { CustomDropdown } from "components/dropdown.tsx";
 import { Button } from "components/button.tsx";
 import styled from "@emotion/styled";
 import { theme } from "src/assets/theme.ts";
+import {PageHeader} from "components/pageHeader.tsx";
 
 const ShiftButton = styled(Button)<{ active?: boolean }>`
   background-color: ${({ active }) =>
@@ -20,7 +21,7 @@ const ShiftButton = styled(Button)<{ active?: boolean }>`
 const WorkerRegPage = () => {
   return (
     <Stack direction={"column"} gap={20} wFull style={{ maxWidth: "555px" }}>
-      <Text size={32}>Регистрация сотрудника</Text>
+      <PageHeader>Регистрация сотрудника</PageHeader>
       <Input placeholder={"Имя"} label={"Имя"} />
       <Input placeholder={"Фамилия"} label={"Фамилия"} />
       <Input placeholder={"Отчество"} label={"Отчество"} />

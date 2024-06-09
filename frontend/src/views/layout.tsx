@@ -105,14 +105,6 @@ const BurgerMenu = styled.div`
   cursor: pointer;
   margin-right: 20px;
 
-  & > div {
-    width: 25px;
-    height: 3px;
-    background-color: ${theme.colors.text};
-    margin: 4px 0;
-    transition: transform 0.3s ease;
-  }
-
   @media (max-width: 768px) {
     display: flex;
   }
@@ -160,7 +152,7 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 24px;
   margin-left: auto;
-  
+
   @media (max-width: 768px) {
     display: block;
   }
@@ -178,6 +170,11 @@ export const AppLayout = () => {
   };
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
+  //scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <Layout>
@@ -238,16 +235,23 @@ export const AppLayout = () => {
             </SidebarItem>
           </Link>
         </Stack>
+        <Stack gap={14} direction={"column"} style={{ marginTop: "56px" }}>
+          <Link to="/login">
+            <SidebarItem onClick={onLinkClick}>
+              <Text>Выйти</Text>
+            </SidebarItem>
+          </Link>
+        </Stack>
       </Sidebar>
       <Content>
         <Header>
           <BurgerMenu onClick={toggleSidebar}>
-            <div></div>
-            <div></div>
-            <div></div>
+            <Text fontFamily={"IcoMoon"}></Text>
           </BurgerMenu>
-          <div>Header Left</div>
-          <div>Профиль</div>
+          <Text fontFamily={"IcoMoon"}></Text>
+          <Link to={"/profile"}>
+            <Text>Профиль</Text>
+          </Link>
         </Header>
         <MainContent>
           <Outlet />
