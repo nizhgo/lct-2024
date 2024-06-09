@@ -9,59 +9,73 @@ on:
       - main
 
 jobs:
-  frontend-install:
-    runs-on: self-hosted
-    name: Install Frontend Dependencies
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Docker
-        run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app node:20 npm ci --prefix frontend
-
   frontend-build:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ryazan]
     name: Build Frontend
-    needs: frontend-install
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
       - name: Create .env file
         run: |
           echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> frontend/.env
           echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> frontend/.env
+          echo "PORT=${{ secrets.PORT }}" >> frontend/.env
 
-      - name: Set up Docker
+      - name: Build Docker image
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app node:20 npm run build --prefix frontend
+          cd frontend
+          docker build -t my-frontend-app:latest .
 
-      - name: Upload build artifacts
+      - name: Save Docker image to a tar file
+        run: |
+          docker save my-frontend-app:latest -o my-frontend-app.tar
+
+      - name: Upload Docker image artifact
         uses: actions/upload-artifact@v2
         with:
-          name: dist
-          path: frontend/dist/
+          name: my-frontend-app-tar
+          path: frontend/my-frontend-app.tar
 
   deploy:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ryazan]
     name: Deploy to Server
     needs: frontend-build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
-      - name: Download build artifacts
+      - name: Download Docker image artifact
         uses: actions/download-artifact@v2
         with:
-          name: dist
-          path: frontend/dist/
+          name: my-frontend-app-tar
+          path: frontend/my-frontend-app.tar
 
-      - name: Deploy Frontend
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: Copy Docker image to server
         env:
-          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_USER: deploy
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          sudo apt-get install -y rsync
-          rsync -avz --delete frontend/dist/ $SERVER_USER@$SERVER_HOST:$DEPLOY_PATH
+          sshpass -p $SERVER_PASSWORD scp frontend/my-frontend-app.tar $SERVER_USER@$SERVER_HOST:~/my-frontend-app.tar
+
+      - name: Load and run Docker image on server
+        env:
+          SERVER_USER: deploy
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          PORT: ${{ secrets.PORT }}
+        run: |
+          sshpass -p $SERVER_PASSWORD ssh $SERVER_USER@$SERVER_HOST << 'EOF'
+          docker load -i ~/my-frontend-app.tar
+          docker stop my-frontend-app || true
+          docker rm my-frontend-app || true
+          docker run -d -p $PORT:$PORT --env PORT=$PORT --name my-frontend-app my-frontend-app:latest
+          EOF
