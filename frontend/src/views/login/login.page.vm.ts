@@ -1,26 +1,27 @@
 import { makeAutoObservable } from "mobx";
-import { AuthDto } from "api/models/auth.model.ts";
+import {AuthDto } from "api/models/auth.model.ts";
 import { authService } from "src/stores/auth.service.ts";
+import {AuthEndpoint} from "api/endpoints/auth.endpoint.ts";
 
 export class LoginPageViewModel {
   constructor() {
     makeAutoObservable(this);
   }
 
-  form: AuthDto.AuthPayload = {
-    email: "",
-    password: "",
-  };
+  hasError = false;
 
-  async onSubmit(): Promise<boolean> {
-    console.log("submit");
-    const isValidLogin = true; // Тут будет логика проверки логина и пароля
-
-    if (isValidLogin) {
-      authService.setAuth({ state: "authorized" });
-      return true;
-    } else {
-      return false;
+  async onSubmit(data: AuthDto.AuthForm): Promise<boolean> {
+    try {
+      const res = await AuthEndpoint.login(data);
+      if (res) {
+        authService.setAuth(res);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+        this.hasError = true;
+        return false;
     }
   }
 }

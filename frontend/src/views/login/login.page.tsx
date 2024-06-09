@@ -11,6 +11,11 @@ import { Button } from "components/button.tsx";
 import { Input } from "components/input";
 import { LoginPageViewModel } from "src/views/login/login.page.vm.ts";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {AuthDto} from "api/models/auth.model.ts";
+import {useTheme} from "@emotion/react";
 
 const PageLayout = styled.div`
   display: grid;
@@ -18,7 +23,7 @@ const PageLayout = styled.div`
   grid-template-rows: 1fr;
   height: 100vh;
 
-  @media (max-width: ${p => p.theme.breakpoints.mobile}) {
+  @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
   }
 `;
@@ -31,19 +36,38 @@ const LoginContainer = styled.div`
   gap: 64px;
 `;
 
+const schema = yup.object().shape({
+  personal_phone: yup
+    .string()
+    // .matches(
+    //   /^(\+7|7|8)?[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/,
+    //   "Введите правильный номер телефона",
+    // )
+    .required("Поле обязательно для заполнения"),
+  password: yup.string().required("Поле обязательно для заполнения"),
+});
+
 export const LoginPage = observer(() => {
   const [vm] = useState(() => new LoginPageViewModel());
   const [showLoader, setShowLoader] = useState(true);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   useEffect(() => {
     setTimeout(() => {
       setShowLoader(false);
-      //just for testing
     }, 1000);
   }, []);
 
-  const handleSubmit = async () => {
-    const isLoggedIn = await vm.onSubmit();
+  const onSubmit = async (data: AuthDto.AuthForm) => {
+    const isLoggedIn = await vm.onSubmit(data);
     if (isLoggedIn) {
       navigate("/"); // Перенаправление после успешного входа
     }
@@ -56,6 +80,7 @@ export const LoginPage = observer(() => {
       </LoaderWrapper>
     );
   }
+
   return (
     <PageLayout>
       <LoginContainer>
@@ -65,27 +90,33 @@ export const LoginPage = observer(() => {
             Project M
           </Text>
         </Stack>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Stack direction={"column"} gap={24}>
             <Text size={24} weight={900}>
               Вход в систему
             </Text>
+            {
+                vm.hasError && (
+                    <Text size={14} color={theme.colors.error}>Неверный логин или пароль</Text>
+                )
+            }
             <Input
-              label={"Почта"}
-              value={vm.form.email}
-              withClear
-              onChange={(v) => (vm.form.email = v)}
-              placeholder={"Введите почту"}
+              label={"Номер телефона"}
+              placeholder={"Введите номер телефона"}
+              error={errors.personal_phone?.message}
+              register={register("personal_phone")}
+              required
             />
             <Input
               label={"Пароль"}
               type={"password"}
-              withClear
-              value={vm.form.password}
-              onChange={(v) => (vm.form.password = v)}
               placeholder={"Введите пароль"}
+              error={errors.password?.message}
+              register={register("password")}
+              onChange={v => console.log(v)}
+              required
             />
-            <Button onClick={handleSubmit} type={"button"} variant={"red"}>
+            <Button type="submit" variant={"red"}>
               Войти
             </Button>
           </Stack>

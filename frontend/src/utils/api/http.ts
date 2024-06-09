@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { ZodSchema } from "zod";
 import { getStoredAuthToken, removeStoredAuthToken } from "./authToken";
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+axios.defaults.baseURL = "https://papuas.tech/api/v1";
 
 class HttpRequest<T> {
   readonly #path: string;

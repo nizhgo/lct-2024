@@ -1,17 +1,18 @@
-import { makeAutoObservable } from "mobx";
-
 //TODO: Implement auth service
+import { AuthDto } from "api/models/auth.model.ts";
+
 class AuthService {
   constructor() {
-    makeAutoObservable(this);
     this.auth = { state: "unauthorized" };
   }
 
-  setAuth(auth: { state: "loading" | "authorized" | "unauthorized" }) {
-    this.auth = auth;
+  setAuth(data: AuthDto.AuthResponse) {
+    this.item = data;
+    this.auth = { state: "authorized", ...data };
   }
 
   auth: { state: "loading" | "authorized" | "unauthorized" };
+  item: AuthDto.AuthResponse | null = null;
 }
 
 export const authService = new AuthService();

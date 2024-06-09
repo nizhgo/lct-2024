@@ -8,7 +8,7 @@ import { CustomDropdown } from "components/dropdown.tsx";
 
 export const MainPage = () => {
   return (
-    <Stack direction={"column"} gap={6} style={{ width: "512px" }}>
+    <Stack direction={"column"} gap={6} wFull style={{ maxWidth: "512px" }}>
       <PageHeader>Главная страница</PageHeader>
       <Button>Кнопка</Button>
       <Button variant={"blue"}>Кнопка</Button>

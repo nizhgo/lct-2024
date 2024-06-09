@@ -9,6 +9,7 @@ import {
 } from "react";
 import { Text } from "components/text";
 import { useTheme } from "@emotion/react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 const InputRoot = styled.input<{ hasError?: boolean }>`
   background: transparent;
@@ -91,7 +92,7 @@ const ClearButton = styled.button`
 
 export interface InputProps {
   type?: "text" | "number" | "password";
-  value?: string | null;
+  defaultValue?: string | null;
   onChange?: (value: string) => void;
   readonly?: boolean;
   disabled?: boolean;
@@ -116,6 +117,8 @@ export interface InputProps {
   fullWidth?: boolean;
   width?: string;
   withClear?: boolean;
+  required?: boolean;
+  register?: UseFormRegisterReturn;
 }
 
 export const InputBase = forwardRef<HTMLInputElement, InputProps>(
@@ -127,7 +130,14 @@ export const InputBase = forwardRef<HTMLInputElement, InputProps>(
         width={props.width}
         style={props.outerContainerStyle}
       >
-        {props.label && <Label>{props.label}</Label>}
+        {props.label && (
+          <Label>
+            {props.label}{" "}
+            {props.required && (
+              <span style={{ color: theme.colors.error }}>*</span>
+            )}
+          </Label>
+        )}
         <Wrapper
           title={props.title}
           className={props.className}
@@ -139,7 +149,7 @@ export const InputBase = forwardRef<HTMLInputElement, InputProps>(
           {props.left}
           <InputRoot
             type={props.type}
-            value={props.value ?? ""}
+            defaultValue={props.defaultValue ?? ""}
             readOnly={props.readonly}
             placeholder={props.placeholder}
             aria-invalid={!!props.error}
@@ -151,15 +161,15 @@ export const InputBase = forwardRef<HTMLInputElement, InputProps>(
             onBlur={props.onBlur}
             onKeyDown={props.onKeyDown}
             ref={ref}
-            onChange={(e) => props.onChange?.(e.target.value)}
-            size={props.inputSize}
+            hasError={!!props.error}
+            {...props.register}
           />
           <div style={{ position: "absolute", right: 0 }} aria-hidden>
             {props.right}
             {!props.disabled &&
               props.withClear &&
               !props.readonly &&
-              props.value && (
+              props.defaultValue && (
                 <ClearButton
                   onClick={() => props.onChange?.("")}
                   title="Clear"

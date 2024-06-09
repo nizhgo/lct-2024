@@ -1,12 +1,18 @@
-import { AuthDto } from "api/models/auth.model";
-import { Http } from "src/utils/api/http.ts";
+import {AuthDto} from "api/models/auth.model";
+import {Http} from "src/utils/api/http.ts";
 
 export const AuthEndpoint = new (class AuthEndpoint {
-  //example of how to use the endpoint
-  login = async (data: AuthDto.AuthPayload) => {
-    const res = await Http.request("/auth/login")
+  login = async (data: AuthDto.AuthForm) => {
+    return await Http.request("/users/signin")
+        .expectJson(AuthDto.AuthResponse)
+        .post(data);
+  };
+
+  res = async () => {
+    const res = await Http.request("/auth/еуые")
       .expectJson(AuthDto.AuthForm)
-      .post(data);
-    console.log(res);
+      .withSearch({ key: "value", key2: "value2", key3: "value3" })
+      .post();
+    return res;
   };
 })();
