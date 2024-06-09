@@ -27,7 +27,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd frontend
-          docker build -t lct-frontend:latest .
+          docker build --quiet -t lct-frontend:latest .
 
       - name: Save Docker image to a tar file
         run: |
