@@ -10,3 +10,7 @@
 *.sw?
 !/.idea/
 /.idea/workspace.xml
+/node_modules/
+/frontend/.idea
+/.idea
+/frontend/.idea
