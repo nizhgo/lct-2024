@@ -14,7 +14,7 @@ jobs:
     name: Build Frontend
     steps:
       - name: Change file permissions
-        run: sudo chown -R $USER:$USER /home/github/actions-runner/_work/lct-2024
+        run: echo ${{ secrets.DEPLOY_PASSWORD }} | sudo -S chown -R $USER:$USER /home/github/actions-runner/_work/lct-2024
 
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -30,7 +30,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd frontend
-          docker build --quiet -t lct-frontend:latest .
+          docker build --quiet -t lct-frontend:latest . > build_output.log 2>&1
 
       - name: Save Docker image to a tar file
         run: |
