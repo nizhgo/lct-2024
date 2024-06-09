@@ -33,14 +33,17 @@ jobs:
           echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> frontend/.env
           echo "PORT=${{ secrets.PORT }}" >> frontend/.env
 
+      - name: List frontend directory contents
+        run: ls -la frontend
+
       - name: Build Docker image
         run: |
           cd frontend
-          docker build --quiet -t lct-frontend:latest . > build_output.log 2>&1
+          docker build -t lct-frontend:latest . | tee build_output.log
 
       - name: Save Docker image to a tar file
         run: |
-          docker save lct-frontend:latest -o lct-frontend.tar
+          docker save lct-frontend:latest -o frontend/lct-frontend.tar
 
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v2
