@@ -96,23 +96,3 @@ export const GridCell = styled.div<{header: string}>`
     }
   }
 `;
-
-const StatusBadge = styled.div<{ status: string }>`
-  padding: 6px 8px;
-  border-radius: 4px;
-  color: ${(p) =>
-    p.status === "active"
-      ? p.theme.colors.status.active
-      : p.theme.colors.status.inactive};
-  background-color: ${(p) =>
-    p.status === "active"
-      ? `${p.theme.colors.status.active}30`
-      : `${p.theme.colors.status.inactive}30`};
-  border: 1px solid
-    ${(p) =>
-      p.status === "active"
-        ? p.theme.colors.status.active
-        : p.theme.colors.status.inactive};
-  font-weight: 700;
-  text-align: center;
-`;
