@@ -36,11 +36,11 @@ const PassengersPage = observer(() => {
   const renderRow = (passenger: PassengerDto.Passenger) => (
     <>
       <GridCell header={"ФИО"}>
-        <Link to={`/passengers/${passenger.id}`}>{passenger.full_name}</Link>
+        <Link to={`/passengers/${passenger.id}`}>{passenger.name}</Link>
       </GridCell>
       <GridCell header={"Категория"}>{passenger.category}</GridCell>
-      <GridCell header={"Описание"}>{passenger.description}</GridCell>
-      <GridCell header={"Телефон"}>{passenger.phone}</GridCell>
+      <GridCell header={"Описание"}>{passenger.additional_information}</GridCell>
+      <GridCell header={"Телефон"}>{passenger.contact_details}</GridCell>
     </>
   );
 
@@ -55,7 +55,9 @@ const PassengersPage = observer(() => {
         <LoaderWrapper height={"100%"}>
           <Loader />
         </LoaderWrapper>
-      ) : (
+      ) : (vm.passengers.length === 0 ? (
+        <div>Пассажиров нет</div>
+        ) : (
         <>
           <Stack direction={"row"} align={"center"} gap={10}>
             <Input placeholder={"Поиск"} style={{ width: "300px" }} />
@@ -67,7 +69,7 @@ const PassengersPage = observer(() => {
             columnSizes={columnSizes}
           />
         </>
-      )}
+        ))}
     </Stack>
   );
 });

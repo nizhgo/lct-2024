@@ -1,6 +1,7 @@
 import { UsersDto } from "api/models/users.model.ts";
 import { Http } from "utils/api/http.ts";
 import { faker } from "@faker-js/faker";
+import {z} from "zod";
 
 const generateWorker = (): UsersDto.User => ({
   id: faker.number.int(),
@@ -20,13 +21,14 @@ const generateWorker = (): UsersDto.User => ({
 export const UsersEndpoint = new (class WorkersEndpoint {
   //find all workers
   findAll = async () => {
-    // const res = await Http.request("/users")
-    //   .expectJson(z.array(WorkersDto.User))
-    //   .get();
-    const workers = Array.from({ length: 16 }, generateWorker);
-    //wait for 1 second to simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return workers;
+    const res = await Http.request("/users/")
+      .expectJson(z.array(UsersDto.User))
+      .get();
+    // const workers = Array.from({ length: 16 }, generateWorker);
+    // //wait for 1 second to simulate network delay
+    // await new Promise((resolve) => setTimeout(resolve, 500));
+    // return workers;
+    return res;
   };
 
   //find worker by id
@@ -44,7 +46,7 @@ export const UsersEndpoint = new (class WorkersEndpoint {
 
   //create worker
   create = async (data: UsersDto.UserForm) => {
-    const res = await Http.request("/user/signup")
+    const res = await Http.request("/user/signup/")
       .expectJson(UsersDto.User)
       .post(data);
     return res;
@@ -52,7 +54,7 @@ export const UsersEndpoint = new (class WorkersEndpoint {
 
   //update worker
   update = async (id: string, data: UsersDto.User) => {
-    const res = await Http.request(`/users/${id}`)
+    const res = await Http.request(`/users/${id}/`)
       .expectJson(UsersDto.User)
       .put(data);
     return res;

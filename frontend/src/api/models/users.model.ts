@@ -36,12 +36,12 @@ export namespace UsersDto {
     work_phone: z.string(),
     personal_phone: z.string(),
     personnel_number: z.string(),
-    role: Roles,
-    rank: Ranks,
-    shift: Shifts,
+    role: z.string(),
+    rank: z.string(),
+    shift: z.string(),
     working_hours: z.string(),
     sex: Gengers,
-    area: Areas,
+    area: z.string(),
     is_lite: z.boolean(),
   });
 

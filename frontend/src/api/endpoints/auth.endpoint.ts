@@ -7,12 +7,4 @@ export const AuthEndpoint = new (class AuthEndpoint {
         .expectJson(AuthDto.AuthResponse)
         .post(data);
   };
-
-  res = async () => {
-    const res = await Http.request("/auth/еуые")
-      .expectJson(AuthDto.AuthForm)
-      .withSearch({ key: "value", key2: "value2", key3: "value3" })
-      .post();
-    return res;
-  };
 })();

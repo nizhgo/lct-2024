@@ -1,5 +1,5 @@
-//TODO: Implement auth service
 import { AuthDto } from "api/models/auth.model.ts";
+import {setStoredAuthToken} from "utils/api/authToken.ts";
 
 class AuthService {
   constructor() {
@@ -8,6 +8,7 @@ class AuthService {
 
   setAuth(data: AuthDto.AuthResponse) {
     this.item = data;
+    setStoredAuthToken(data.access_token);
     this.auth = { state: "authorized", ...data };
   }
 
