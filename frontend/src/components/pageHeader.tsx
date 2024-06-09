@@ -6,7 +6,7 @@ export const PageHeader = styled.h1`
   padding: 0;
   margin: 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
     font-size: 24px;
   }
 `;

@@ -18,7 +18,7 @@ const PageLayout = styled.div`
   grid-template-rows: 1fr;
   height: 100vh;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${p => p.theme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
   }
 `;

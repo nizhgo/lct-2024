@@ -6,7 +6,7 @@ export const PassengerDetails = () => {
   const { id } = useParams<{ id: string }>();
   return (
     <Stack direction={"column"} gap={6}>
-      <PageHeader>Пассажир {id}</PageHeader>
+      <PageHeader>Пассажир #{id}</PageHeader>
     </Stack>
   );
 };

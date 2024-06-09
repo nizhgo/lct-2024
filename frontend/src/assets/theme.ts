@@ -29,6 +29,13 @@ export const theme = {
       blue: "#04c",
       black: "#000000",
     },
+    status: {
+      active: "#008767", // зеленый
+      inactive: "#DF0404", // красный
+    },
+  },
+  breakpoints: {
+    mobile: "768px",
   },
 };
 

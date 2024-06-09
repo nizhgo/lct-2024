@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { theme } from "src/assets/theme.ts";
 import logo from "src/assets/logo.svg";
 import { Svg } from "src/components/svg.tsx";
 import UsersIcon from "src/assets/icons/users.svg";
 import { Stack } from "components/stack.ts";
 import { Text } from "components/text.ts";
+import { useTheme } from "@emotion/react";
 
 const useResponsiveSidebar = (setSidebarOpen: (isOpen: boolean) => void) => {
+  const theme = useTheme();
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768) {
+      if (window.innerWidth > parseInt(theme.breakpoints.mobile)) {
         setSidebarOpen(true);
       } else {
         setSidebarOpen(false);
@@ -36,18 +37,18 @@ const Layout = styled.div`
 
 const Sidebar = styled.div<{ isOpen: boolean }>`
   width: 250px;
-  background-color: ${theme.colors.background};
+  background-color: ${(p) => p.theme.colors.background};
   display: flex;
   flex-direction: column;
   padding: 20px;
-  border-right: 1px solid ${theme.colors.inputBorder};
+  border-right: 1px solid ${(p) => p.theme.colors.inputBorder};
   position: absolute;
   height: 100%;
   top: 0;
   left: ${(p) => (p.isOpen ? "0" : "-250px")};
   transition: left 0.3s ease;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
     width: 100%;
     left: ${(p) => (p.isOpen ? "0" : "-100%")};
     z-index: 1000;
@@ -60,11 +61,11 @@ const SidebarItem = styled.div<{ active?: boolean }>`
   gap: 10px;
   align-items: center;
   cursor: pointer;
-  color: ${(p) => (p.active ? theme.colors.link : theme.colors.text)};
+  color: ${(p) => (p.active ? p.theme.colors.link : p.theme.colors.text)};
   margin-bottom: 15px;
 
   &:hover {
-    color: ${theme.colors.link};
+    color: ${(p) => p.theme.colors.link};
   }
 
   & > svg {
@@ -80,7 +81,7 @@ const Content = styled.div`
   transition: margin-left 0.3s ease;
   justify-content: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
     margin-left: 0;
   }
 `;
@@ -93,7 +94,7 @@ const Header = styled.div`
   padding: 0 20px;
   border-bottom: 1px solid ${(p) => p.theme.colors.inputBorder};
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
     justify-content: flex-start;
     background-color: ${(p) => p.theme.colors.background};
   }
@@ -105,7 +106,7 @@ const BurgerMenu = styled.div`
   cursor: pointer;
   margin-right: 20px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
     display: flex;
   }
 `;
@@ -148,12 +149,12 @@ const CloseButton = styled.button`
   display: none;
   background: transparent;
   border: none;
-  color: ${theme.colors.text};
+  color: ${(p) => p.theme.colors.text};
   cursor: pointer;
   font-size: 24px;
   margin-left: auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
     display: block;
   }
 `;
@@ -198,18 +199,18 @@ export const AppLayout = () => {
               <Text>Главная</Text>
             </SidebarItem>
           </Link>
-          <Link to="/passenger">
+          <Link to="/passengers">
             <SidebarItem
-              active={location.pathname.startsWith("/passenger")}
+              active={location.pathname.startsWith("/passengers")}
               onClick={onLinkClick}
             >
               <Svg src={UsersIcon} width={24} />
               <Text>Пассажиры</Text>
             </SidebarItem>
           </Link>
-          <Link to="/worker">
+          <Link to="/staff">
             <SidebarItem
-              active={location.pathname.startsWith("/worker")}
+              active={location.pathname.startsWith("/staff")}
               onClick={onLinkClick}
             >
               <Svg src={UsersIcon} width={24} />

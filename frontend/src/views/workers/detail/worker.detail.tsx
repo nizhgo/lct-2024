@@ -6,7 +6,7 @@ export const WorkerDetail = () => {
   const { id } = useParams<{ id: string }>();
   return (
     <Stack direction={"column"} gap={6}>
-      <PageHeader>Сотрудник {id}</PageHeader>
+      <PageHeader>Сотрудник #{id}</PageHeader>
     </Stack>
   );
 };
