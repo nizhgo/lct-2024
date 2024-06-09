@@ -9,59 +9,32 @@ on:
       - main
 
 jobs:
-  frontend-install:
-    runs-on: self-hosted
-    name: Install Frontend Dependencies
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Docker
-        run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app node:20 npm ci --prefix frontend
-
   frontend-build:
     runs-on: self-hosted
     name: Build Frontend
-    needs: frontend-install
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
       - name: Create .env file
         run: |
           echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> frontend/.env
           echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> frontend/.env
+          echo "PORT=${{ secrets.PORT }}" >> frontend/.env
 
-      - name: Set up Docker
+      - name: Build Docker image
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app node:20 npm run build --prefix frontend
+          cd frontend
+          docker build -t lct-frontend:latest .
 
-      - name: Upload build artifacts
+      - name: Save Docker image to a tar file
+        run: |
+          docker save lct-frontend:latest -o lct-frontend.tar
+
+      - name: Upload Docker image artifact
         uses: actions/upload-artifact@v2
         with:
-          name: dist
-          path: frontend/dist/
-
-  deploy:
-    runs-on: self-hosted
-    name: Deploy to Server
-    needs: frontend-build
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: frontend/dist/
-
-      - name: Deploy Frontend
-        env:
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-        run: |
-          sudo apt-get install -y rsync
-          rsync -avz --delete frontend/dist/ $SERVER_USER@$SERVER_HOST:$DEPLOY_PATH
+          name: lct-frontend-tar
+          path: frontend/lct-frontend.tar
