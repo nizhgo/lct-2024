@@ -13,8 +13,14 @@ jobs:
     runs-on: self-hosted
     name: Build Frontend
     steps:
+      - name: Print working directory
+        run: pwd
+
+      - name: List directory contents
+        run: ls -la ${{ github.workspace }}
+
       - name: Change file permissions
-        run: echo ${{ secrets.DEPLOY_PASSWORD }} | sudo -S chown -R $USER:$USER /home/github/actions-runner/_work/lct-2024
+        run: echo ${{ secrets.DEPLOY_PASSWORD }} | sudo -S chown -R $USER:$USER ${{ github.workspace }}
 
       - name: Checkout repository
         uses: actions/checkout@v2
