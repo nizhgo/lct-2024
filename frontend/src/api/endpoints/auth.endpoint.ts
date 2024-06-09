@@ -5,7 +5,7 @@ export const AuthEndpoint = new (class AuthEndpoint {
   //example of how to use the endpoint
   login = async (data: AuthDto.AuthPayload) => {
     const res = await Http.request("/auth/login")
-      .expectJson(AuthDto.AuthPayload)
+      .expectJson(AuthDto.AuthForm)
       .post(data);
     console.log(res);
   };
