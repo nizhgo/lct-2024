@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  frontend-install:
+    runs-on: self-hosted
+    name: Install Frontend Dependencies
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/app -w /app node:20 npm ci --prefix frontend
+
+  frontend-build:
+    runs-on: self-hosted
+    name: Build Frontend
+    needs: frontend-install
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create .env file
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> frontend/.env
+          echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> frontend/.env
+
+      - name: Set up Docker
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/app -w /app node:20 npm run build --prefix frontend
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: frontend/dist/
+
+  deploy:
+    runs-on: self-hosted
+    name: Deploy to Server
+    needs: frontend-build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: frontend/dist/
+
+      - name: Deploy Frontend
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          sudo apt-get install -y rsync
+          rsync -avz --delete frontend/dist/ $SERVER_USER@$SERVER_HOST:$DEPLOY_PATH
