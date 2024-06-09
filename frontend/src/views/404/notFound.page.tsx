@@ -2,14 +2,17 @@ import { Stack } from "components/stack.ts";
 import { Text } from "components/text.ts";
 import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const NotFoundPage = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   return (
     <Stack direction={"column"} gap={14} justify={"center"} align={"center"}>
       <PageHeader>404</PageHeader>
-      <Text size={16}>Такой страницы не существует или она была удалена</Text>
+      <Text size={16} align={"center"}>
+        Такой страницы не существует или она была удалена
+      </Text>
       <Text
         fontFamily={"IcoMoon"}
         size={24}
@@ -18,11 +21,23 @@ export const NotFoundPage = () => {
       >
         
       </Text>
-      <Link to={"/"}>Вернуться на главную</Link>
+      <BackButton onClick={() => navigate(-1)}>Вернуться назад</BackButton>
     </Stack>
   );
 };
+
 const PageHeader = styled.h1`
   font-size: 56px;
   font-weight: 700;
+`;
+
+const BackButton = styled.button`
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: ${(p) => p.theme.colors.text};
+  text-decoration: underline;
+  text-decoration-style: dotted;
 `;

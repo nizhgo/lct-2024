@@ -69,7 +69,7 @@ export const TransparentButton = styled.button<ButtonProps>`
       p.variant
         ? (p.theme.colors.button[p.variant] as string)
         : p.theme.colors.primary};
-  color: ${(p) => p.theme.colors.primary};
+  color: ${(p) => p.variant && p.theme.colors.button[p.variant]};
   ${(p) => buttonStyles(p)}
 `;
 

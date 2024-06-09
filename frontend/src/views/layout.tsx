@@ -6,6 +6,7 @@ import logo from "src/assets/logo.svg";
 import { Svg } from "src/components/svg.tsx";
 import UsersIcon from "src/assets/icons/users.svg";
 import { Stack } from "components/stack.ts";
+import { Text } from "components/text.ts";
 
 const useResponsiveSidebar = (setSidebarOpen: (isOpen: boolean) => void) => {
   useEffect(() => {
@@ -30,6 +31,7 @@ const useResponsiveSidebar = (setSidebarOpen: (isOpen: boolean) => void) => {
 const Layout = styled.div`
   display: flex;
   height: 100vh;
+  overflow: hidden;
 `;
 
 const Sidebar = styled.div<{ isOpen: boolean }>`
@@ -39,14 +41,15 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
   flex-direction: column;
   padding: 20px;
   border-right: 1px solid ${theme.colors.inputBorder};
-  position: fixed;
+  position: absolute;
   height: 100%;
   top: 0;
   left: ${(p) => (p.isOpen ? "0" : "-250px")};
   transition: left 0.3s ease;
 
   @media (max-width: 768px) {
-    width: ${(p) => (p.isOpen ? "100%" : "auto")};
+    width: 100%;
+    left: ${(p) => (p.isOpen ? "0" : "-100%")};
     z-index: 1000;
     padding: 10px;
   }
@@ -75,6 +78,7 @@ const Content = styled.div`
   flex-direction: column;
   margin-left: 250px;
   transition: margin-left 0.3s ease;
+  justify-content: center;
 
   @media (max-width: 768px) {
     margin-left: 0;
@@ -87,10 +91,11 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  border-bottom: 1px solid ${theme.colors.inputBorder};
+  border-bottom: 1px solid ${(p) => p.theme.colors.inputBorder};
 
   @media (max-width: 768px) {
     justify-content: flex-start;
+    background-color: ${(p) => p.theme.colors.background};
   }
 `;
 
@@ -122,7 +127,6 @@ const MainContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: calc(100vh - 60px);
   overflow-y: auto;
   overflow-x: hidden;
   -ms-overflow-style: none;
@@ -135,11 +139,7 @@ const MainContent = styled.div`
 const Logo = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-
-  & > img {
-    margin-right: 10px;
-  }
+  gap: 10px;
 `;
 
 const LogoText = styled.h1`
@@ -152,64 +152,91 @@ const LogoText = styled.h1`
   }
 `;
 
+const CloseButton = styled.button`
+  display: none;
+  background: transparent;
+  border: none;
+  color: ${theme.colors.text};
+  cursor: pointer;
+  font-size: 24px;
+  margin-left: auto;
+  
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
 export const AppLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
   useResponsiveSidebar(setSidebarOpen);
-  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   const onLinkClick = () => {
-    //if mobile close sidebar
     if (window.innerWidth <= 768) {
       setSidebarOpen(false);
     }
   };
 
+  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
   return (
     <Layout>
       <Sidebar isOpen={isSidebarOpen}>
-        <Link to={"/"}>
-          <Logo>
-            <Svg src={logo} width={32} />
-            <LogoText>Project M</LogoText>
-          </Logo>
+        <Link to={"/"} onClick={onLinkClick} style={{ marginBottom: 20 }}>
+          <Stack justify={"space-between"} wFull gap={20}>
+            <Logo>
+              <Svg src={logo} width={32} />
+              <LogoText>Project M</LogoText>
+            </Logo>
+            <CloseButton onClick={toggleSidebar}>✕</CloseButton>
+          </Stack>
         </Link>
         <Stack gap={14} direction={"column"} wFull>
-          <SidebarItem
-            active={location.pathname === "/"}
-            onClick={toggleSidebar}
-          >
-            <Svg src={UsersIcon} width={24} />
-            <Link to={"/"}>Главная</Link>
-          </SidebarItem>
-          <SidebarItem
-            active={location.pathname.startsWith("/passenger")}
-            onClick={onLinkClick}
-          >
-            <Svg src={UsersIcon} width={24} />
-            <Link to="/passenger/1">Пассажиры</Link>
-          </SidebarItem>
-          <SidebarItem
-            active={location.pathname.startsWith("/worker")}
-            onClick={onLinkClick}
-          >
-            <Svg src={UsersIcon} width={24} />
-            <Link to="/worker">Сотрудники</Link>
-          </SidebarItem>
-          <SidebarItem
-            active={location.pathname.startsWith("/request")}
-            onClick={onLinkClick}
-          >
-            <Svg src={UsersIcon} width={24} />
-            <Link to="/request/1">Заявки</Link>
-          </SidebarItem>
-          <SidebarItem
-            active={location.pathname.startsWith("/notValidRoute")}
-            onClick={onLinkClick}
-          >
-            <Svg src={UsersIcon} width={24} />
-            <Link to="/notValidRoute">404</Link>
-          </SidebarItem>
+          <Link to="/">
+            <SidebarItem
+              active={location.pathname === "/"}
+              onClick={onLinkClick}
+            >
+              <Svg src={UsersIcon} width={24} />
+              <Text>Главная</Text>
+            </SidebarItem>
+          </Link>
+          <Link to="/passenger">
+            <SidebarItem
+              active={location.pathname.startsWith("/passenger")}
+              onClick={onLinkClick}
+            >
+              <Svg src={UsersIcon} width={24} />
+              <Text>Пассажиры</Text>
+            </SidebarItem>
+          </Link>
+          <Link to="/worker">
+            <SidebarItem
+              active={location.pathname.startsWith("/worker")}
+              onClick={onLinkClick}
+            >
+              <Svg src={UsersIcon} width={24} />
+              <Text>Сотрудники</Text>
+            </SidebarItem>
+          </Link>
+          <Link to="/request">
+            <SidebarItem
+              active={location.pathname.startsWith("/request")}
+              onClick={onLinkClick}
+            >
+              <Svg src={UsersIcon} width={24} />
+              <Text>Заявки</Text>
+            </SidebarItem>
+          </Link>
+          <Link to="/notValidRoute">
+            <SidebarItem
+              active={location.pathname.startsWith("/notValidRoute")}
+              onClick={onLinkClick}
+            >
+              <Svg src={UsersIcon} width={24} />
+              <Text>Not valid route</Text>
+            </SidebarItem>
+          </Link>
         </Stack>
       </Sidebar>
       <Content>

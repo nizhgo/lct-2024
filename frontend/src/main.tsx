@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import {
   createBrowserRouter,
+  Outlet,
   redirect,
   RouterProvider,
 } from "react-router-dom";
@@ -41,9 +42,21 @@ const router = createBrowserRouter([
         loader: authLoader,
       },
       {
-        path: "/passenger/:id",
-        element: <PassengerPage />,
+        path: "/passenger",
+        element: <Outlet />,
         loader: authLoader,
+        children: [
+          {
+            path: "/passenger/",
+            element: <PassengerPage />,
+            loader: authLoader,
+          },
+          {
+            path: "/passenger/:id",
+            element: <PassengerPage />,
+            loader: authLoader,
+          },
+        ],
       },
       {
         path: "/worker",
@@ -61,9 +74,21 @@ const router = createBrowserRouter([
         loader: authLoader,
       },
       {
-        path: "/request/:id",
-        element: <RequestPage />,
+        path: "/request",
+        element: <Outlet />,
         loader: authLoader,
+        children: [
+          {
+            path: "/request",
+            element: <RequestPage />,
+            loader: authLoader,
+          },
+          {
+            path: "/request/:id",
+            element: <RequestPage />,
+            loader: authLoader,
+          },
+        ],
       },
       {
         path: "/request/distrib",

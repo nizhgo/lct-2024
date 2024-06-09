@@ -25,7 +25,6 @@
 }
 
 body {
-  font-family: 'MoscowSans', sans-serif;
   font-weight: normal;
   background: #FFF;
   padding: 0;
@@ -34,12 +33,22 @@ body {
 
 * {
   box-sizing: border-box;
+  font-family: 'MoscowSans', sans-serif;
 }
 
-a {
+a:link {
   text-decoration: none;
-  color: inherit;
-  :hover {
-    text-decoration: underline;
-  }
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #47a1ad;
+}
+
+a:active {
+  text-decoration: none;
 }
