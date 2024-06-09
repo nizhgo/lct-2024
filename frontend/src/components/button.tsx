@@ -28,7 +28,7 @@ const buttonStyles = (x: ButtonProps) => `
   align-items: center;
   justify-content: center;
   outline: none;
-  border-radius: 8px;
+  border-radius: 4px;
   transition: background-color 0.3s, border-color 0.3s, opacity 0.3s;
 
   &:disabled {
