@@ -19,6 +19,7 @@ const rotate = keyframes`
 
 const buttonStyles = (x: ButtonProps) => `
   padding: ${x.size === "small" ? "8px 12px" : x.size === "compact" ? "4px 8px" : "12px 24px"};
+  font-family: "MoscowSans", sans-serif;
   font-size: 14px;
   font-weight: 400;
   cursor: ${x.disabled || x.pending ? "not-allowed" : "pointer"};
