@@ -4,14 +4,11 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   frontend-build:
     runs-on: self-hosted
-    name: Build Frontend
+    name: Build and Run Frontend
     steps:
       - name: Print working directory
         run: pwd
@@ -56,3 +53,12 @@ jobs:
         with:
           name: build-log
           path: frontend/build_output.log
+
+      - name: Run Docker container
+        run: |
+          docker stop lct-frontend || true
+          docker rm lct-frontend || true
+          docker run -d --name lct-frontend -p ${{ secrets.PORT }}:80 \
+            -e VITE_API_URL=${{ secrets.VITE_API_URL }} \
+            -e VITE_API_KEY=${{ secrets.VITE_API_KEY }} \
+            lct-frontend:latest
