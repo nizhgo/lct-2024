@@ -33,7 +33,7 @@ export namespace UsersDto {
   export const User = z.object({
     id: z.number(),
     first_name: z.string(),
-    second_name: z.number(),
+    second_name: z.string(),
     patronymic: z.string(),
     work_phone: z.string(),
     personal_phone: z.string(),
