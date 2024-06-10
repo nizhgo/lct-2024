@@ -228,15 +228,6 @@ export const AppLayout = () => {
               <Text>Расписание</Text>
             </SidebarItem>
           </Link>
-          <Link to="/passengers">
-            <SidebarItem
-              active={location.pathname.startsWith("/passengers")}
-              onClick={onLinkClick}
-            >
-              <Svg src={UsersIcon} width={24} />
-              <Text>Пассажиры</Text>
-            </SidebarItem>
-          </Link>
           <Link to="/staff">
             <SidebarItem
               active={location.pathname.startsWith("/staff")}
@@ -244,6 +235,15 @@ export const AppLayout = () => {
             >
               <Svg src={WorkersIcon} width={24} />
               <Text>Сотрудники</Text>
+            </SidebarItem>
+          </Link>
+          <Link to="/passengers">
+            <SidebarItem
+              active={location.pathname.startsWith("/passengers")}
+              onClick={onLinkClick}
+            >
+              <Svg src={UsersIcon} width={24} />
+              <Text>Пассажиры</Text>
             </SidebarItem>
           </Link>
           <Link to="/notValidRoute">
