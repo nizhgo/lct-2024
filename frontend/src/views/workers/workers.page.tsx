@@ -8,7 +8,7 @@ import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { observer } from "mobx-react-lite";
 import { PageHeader } from "components/pageHeader.tsx";
 import { Input } from "components/input.tsx";
-import {GridCell, ResponsiveTable} from "components/table.tsx";
+import { GridCell, ResponsiveTable } from "components/table.tsx";
 
 const ContentHeader = styled.div`
   display: flex;

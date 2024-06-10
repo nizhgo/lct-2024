@@ -5,9 +5,9 @@ import { CustomDropdown } from "components/dropdown.tsx";
 import { Button } from "components/button.tsx";
 import styled from "@emotion/styled";
 import { theme } from "src/assets/theme.ts";
-import {PageHeader} from "components/pageHeader.tsx";
+import { PageHeader } from "components/pageHeader.tsx";
 
-const ShiftButton = styled(Button)<{ active?: boolean }>`
+export const ShiftButton = styled(Button)<{ active?: boolean }>`
   background-color: ${({ active }) =>
     active ? theme.colors.primary : "transparent"};
   color: ${({ active }) => (active ? "#fff" : theme.colors.text)};
