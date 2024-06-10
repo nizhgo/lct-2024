@@ -37,17 +37,7 @@ jobs:
         run: |
           cd frontend
           docker build -t lct-frontend:latest . 2>&1 | tee ../build_output.log
-        continue-on-error: true
-
-      - name: ✅ Check Docker build result
-        run: |
-          if grep -q 'Successfully built' build_output.log; then
-            echo "Docker build succeeded 🎉"
-          else
-            echo "Docker build failed ❌"
-            cat build_output.log
-            exit 1
-          fi
+        continue-on-error: false
 
       - name: 🚀 Run Docker container
         if: success()
@@ -73,7 +63,6 @@ jobs:
           ref: ${{ github.sha }}
           environment: production
           description: 'Deploying lct-frontend'
-          required_contexts: []
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
