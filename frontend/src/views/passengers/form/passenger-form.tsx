@@ -47,8 +47,8 @@ export const PassengerForm = () => {
         <textarea
           id="Легкий труд"
           name="Легкий труд"
-          aria-rowcount="5"
-          aria-colcount="33"
+          aria-rowcount={5}
+          aria-colcount={33}
           defaultValue={"что-то"}
         />
       </Stack>

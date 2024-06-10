@@ -10,7 +10,7 @@ import WorkersIcon from "src/assets/icons/workers.svg";
 import { Stack } from "components/stack.ts";
 import { Text } from "components/text.ts";
 import { useTheme } from "@emotion/react";
-import {authService} from "src/stores/auth.service.ts";
+import { authService } from "src/stores/auth.service.ts";
 
 const useResponsiveSidebar = (setSidebarOpen: (isOpen: boolean) => void) => {
   const theme = useTheme();
@@ -103,12 +103,11 @@ const Header = styled.div`
     background-color: ${(p) => p.theme.colors.background};
     //hide second child
     & > *:nth-child(2) {
-        display: none;
+      display: none;
     }
     & > *:last-child {
       justify-self: flex-end;
     }
-    
   }
 `;
 
