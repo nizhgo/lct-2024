@@ -8,7 +8,7 @@ import { Button } from "components/button.tsx";
 export const PassengerForm = () => {
   return (
     <Stack direction={"column"} gap={20} wFull style={{ maxWidth: "555px" }}>
-      <PageHeader>Создание пассажира</PageHeader>
+      <PageHeader>Регистрация пассажира</PageHeader>
       <Input placeholder={"Имя"} label={"Имя"} />
       <Input placeholder={"Фамилия"} label={"Фамилия"} />
       <Input placeholder={"Отчество"} label={"Отчество"} />
@@ -43,12 +43,14 @@ export const PassengerForm = () => {
       </Stack>
       <Stack direction={"column"} gap={10}>
         {/*//TODO: add textarea component*/}
-        <Text size={14}>Легкий труд</Text>
+        <label htmlFor={"Легкий труд"}>Легкий труд</label>
         <textarea
+          id="Легкий труд"
+          name="Легкий труд"
           aria-rowcount="5"
           aria-colcount="33"
           defaultValue={"что-то"}
-        ></textarea>
+        />
       </Stack>
       <Button type="submit">Зарегистрировать</Button>
     </Stack>
