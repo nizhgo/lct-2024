@@ -8,66 +8,48 @@ on:
 jobs:
   frontend-build:
     runs-on: self-hosted
-    name: Build and Run Frontend
+    name: 🚀 Build and Run Frontend
     steps:
-      - name: Print working directory
+      - name: 📂 Print working directory
         run: pwd
 
-      - name: List directory contents
+      - name: 📂 List directory contents
         run: ls -la ${{ github.workspace }}
 
-      - name: Change file permissions
+      - name: 🔒 Change file permissions
         run: echo ${{ secrets.DEPLOY_PASSWORD }} | sudo -S chown -R $USER:$USER ${{ github.workspace }}
 
-      - name: Checkout repository
+      - name: 📦 Checkout repository
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
 
-      - name: Create .env file
+      - name: 🌍 Create .env file
         run: |
           echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> frontend/.env
           echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> frontend/.env
           echo "PORT=${{ secrets.PORT }}" >> frontend/.env
 
-      - name: List frontend directory contents
+      - name: 📂 List frontend directory contents
         run: ls -la frontend
 
-      - name: Build Docker image
+      - name: 🛠️ Build Docker image
         run: |
           cd frontend
-          docker build -t lct-frontend:latest . 2>&1 | tee build_output.log
+          docker build -t lct-frontend:latest . 2>&1 | tee ../build_output.log
         continue-on-error: true
 
-      - name: Check Docker build result
+      - name: ✅ Check Docker build result
         run: |
           if grep -q 'Successfully built' build_output.log; then
-            echo "Docker build succeeded"
+            echo "Docker build succeeded 🎉"
           else
-            echo "Docker build failed"
+            echo "Docker build failed ❌"
             cat build_output.log
             exit 1
           fi
 
-      - name: Save Docker image to a tar file
-        if: success()
-        run: |
-          docker save lct-frontend:latest -o frontend/lct-frontend.tar
-
-      - name: Upload Docker image artifact
-        if: success()
-        uses: actions/upload-artifact@v2
-        with:
-          name: lct-frontend-tar
-          path: frontend/lct-frontend.tar
-
-      - name: Upload build log
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-log
-          path: frontend/build_output.log
-
-      - name: Run Docker container
+      - name: 🚀 Run Docker container
         if: success()
         run: |
           docker stop lct-frontend || true
@@ -76,3 +58,9 @@ jobs:
             -e VITE_API_URL=${{ secrets.VITE_API_URL }} \
             -e VITE_API_KEY=${{ secrets.VITE_API_KEY }} \
             lct-frontend:latest
+
+      - name: 📜 Upload build log
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-log
+          path: build_output.log
