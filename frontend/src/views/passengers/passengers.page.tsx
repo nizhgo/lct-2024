@@ -9,7 +9,7 @@ import { PageHeader } from "components/pageHeader.tsx";
 import { Input } from "components/input.tsx";
 import { PassengerDto } from "api/models/passenger.model.ts";
 import { PassengersPageViewModel } from "src/views/passengers/passengers.vm.ts";
-import {GridCell, ResponsiveTable} from "components/table.tsx";
+import { GridCell, ResponsiveTable } from "components/table.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -39,7 +39,9 @@ const PassengersPage = observer(() => {
         <Link to={`/passengers/${passenger.id}`}>{passenger.name}</Link>
       </GridCell>
       <GridCell header={"Категория"}>{passenger.category}</GridCell>
-      <GridCell header={"Описание"}>{passenger.additional_information}</GridCell>
+      <GridCell header={"Описание"}>
+        {passenger.additional_information}
+      </GridCell>
       <GridCell header={"Телефон"}>{passenger.contact_details}</GridCell>
     </>
   );

@@ -1,5 +1,5 @@
-import { Text } from "components/text.ts";
+import { PageHeader } from "components/pageHeader.tsx";
 
 export const SchedulePage = () => {
-  return <Text>Schedule page</Text>;
+  return <PageHeader>Расписание</PageHeader>;
 };
