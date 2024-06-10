@@ -24,6 +24,7 @@ import { PassengerDetails } from "src/views/passengers/details/passenger-form.ts
 import RequestFormPage from "src/views/request/form/request.page.tsx";
 import RequestDetailPage from "src/views/request/details/requestDetailPage.tsx";
 import { ProfilePage } from "src/views/profile/worker.detail.tsx";
+import {SchedulePage} from "src/views/schedule/schedule.page.tsx";
 
 const authLoader = () => {
   //todo rewrite this cringe auth check
@@ -107,6 +108,11 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <ProfilePage />,
+        loader: authLoader,
+      },
+      {
+        path: "/schedule",
+        element: <SchedulePage />,
         loader: authLoader,
       },
     ],

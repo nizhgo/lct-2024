@@ -220,9 +220,9 @@ export const AppLayout = () => {
               <Text>Заявки</Text>
             </SidebarItem>
           </Link>
-          <Link to="/">
+          <Link to="/schedule">
             <SidebarItem
-              active={location.pathname === "/"}
+              active={location.pathname.startsWith("/schedule")}
               onClick={onLinkClick}
             >
               <Svg src={ScheduleIcon} width={24} />
