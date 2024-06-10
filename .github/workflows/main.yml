@@ -8,6 +8,7 @@ on:
 jobs:
   frontend-build:
     runs-on: self-hosted
+    permissions: write-all
     name: 🚀 Build and Run Frontend
     steps:
       - name: 📂 Print working directory
