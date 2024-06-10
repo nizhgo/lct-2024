@@ -4,6 +4,9 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import logo from "src/assets/logo.svg";
 import { Svg } from "src/components/svg.tsx";
 import UsersIcon from "src/assets/icons/users.svg";
+import RequestsIcon from "src/assets/icons/requests.svg";
+import ScheduleIcon from "src/assets/icons/schedule.svg";
+import WorkersIcon from "src/assets/icons/workers.svg";
 import { Stack } from "components/stack.ts";
 import { Text } from "components/text.ts";
 import { useTheme } from "@emotion/react";
@@ -204,8 +207,26 @@ export const AppLayout = () => {
               active={location.pathname === "/"}
               onClick={onLinkClick}
             >
-              <Svg src={UsersIcon} width={24} />
+              <Svg src={ScheduleIcon} width={24} />
               <Text>Главная</Text>
+            </SidebarItem>
+          </Link>
+          <Link to="/request">
+            <SidebarItem
+              active={location.pathname.startsWith("/request")}
+              onClick={onLinkClick}
+            >
+              <Svg src={RequestsIcon} width={24} />
+              <Text>Заявки</Text>
+            </SidebarItem>
+          </Link>
+          <Link to="/">
+            <SidebarItem
+              active={location.pathname === "/"}
+              onClick={onLinkClick}
+            >
+              <Svg src={ScheduleIcon} width={24} />
+              <Text>Расписание</Text>
             </SidebarItem>
           </Link>
           <Link to="/passengers">
@@ -222,17 +243,8 @@ export const AppLayout = () => {
               active={location.pathname.startsWith("/staff")}
               onClick={onLinkClick}
             >
-              <Svg src={UsersIcon} width={24} />
+              <Svg src={WorkersIcon} width={24} />
               <Text>Сотрудники</Text>
-            </SidebarItem>
-          </Link>
-          <Link to="/request">
-            <SidebarItem
-              active={location.pathname.startsWith("/request")}
-              onClick={onLinkClick}
-            >
-              <Svg src={UsersIcon} width={24} />
-              <Text>Заявки</Text>
             </SidebarItem>
           </Link>
           <Link to="/notValidRoute">
