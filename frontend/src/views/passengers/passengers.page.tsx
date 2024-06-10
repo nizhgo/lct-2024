@@ -36,7 +36,9 @@ const PassengersPage = observer(() => {
   const renderRow = (passenger: PassengerDto.Passenger) => (
     <>
       <GridCell header={"ФИО"}>
-        <Link to={`/passengers/${passenger.id}`}>{passenger.name}</Link>
+        <Link to={`/passengers/${passenger.id}`}>
+          {passenger.second_name} {passenger.first_name} {passenger.patronymic}
+        </Link>
       </GridCell>
       <GridCell header={"Категория"}>{passenger.category}</GridCell>
       <GridCell header={"Описание"}>
@@ -57,9 +59,9 @@ const PassengersPage = observer(() => {
         <LoaderWrapper height={"100%"}>
           <Loader />
         </LoaderWrapper>
-      ) : (vm.passengers.length === 0 ? (
+      ) : vm.passengers.length === 0 ? (
         <div>Пассажиров нет</div>
-        ) : (
+      ) : (
         <>
           <Stack direction={"row"} align={"center"} gap={10}>
             <Input placeholder={"Поиск"} style={{ width: "300px" }} />
@@ -71,7 +73,7 @@ const PassengersPage = observer(() => {
             columnSizes={columnSizes}
           />
         </>
-        ))}
+      )}
     </Stack>
   );
 });

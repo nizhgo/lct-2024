@@ -5,12 +5,12 @@ import { Input } from "components/input.tsx";
 import { CustomDropdown } from "components/dropdown.tsx";
 import { Text } from "components/text.ts";
 import styled from "@emotion/styled";
-import {Button} from "components/button.tsx";
-import {theme} from "src/assets/theme.ts";
+import { Button } from "components/button.tsx";
+import { theme } from "src/assets/theme.ts";
 
 const ShiftButton = styled(Button)<{ active?: boolean }>`
   background-color: ${({ active }) =>
-  active ? theme.colors.primary : "transparent"};
+    active ? theme.colors.primary : "transparent"};
   color: ${({ active }) => (active ? "#fff" : theme.colors.text)};
   border: 1px solid ${theme.colors.primary};
   &:hover {
@@ -33,7 +33,10 @@ export const WorkerDetail = () => {
           onChange={() => {}}
         />
         <Input defaultValue={worker.work_phone} label={"Раб. номер телефона"} />
-        <Input defaultValue={worker.self_phone} label={"Личн. номер телефона"} />
+        <Input
+          defaultValue={worker.self_phone}
+          label={"Личн. номер телефона"}
+        />
         <Input defaultValue={worker.table_number} label={"Табельный номер"} />
         <CustomDropdown
           label={"Должность"}
@@ -61,7 +64,7 @@ export const WorkerDetail = () => {
         <Input placeholder={"Пароль"} label={"Пароль"} type="password" />
         <Stack direction={"row"}>
           <Button type="submit">Сохранить</Button>
-          <Button >Удалить</Button>
+          <Button>Удалить</Button>
         </Stack>
       </Stack>
     );

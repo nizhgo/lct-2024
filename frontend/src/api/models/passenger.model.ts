@@ -1,8 +1,7 @@
 import { z } from "zod";
-import {UsersDto} from "api/models/users.model.ts";
+import { UsersDto } from "api/models/users.model.ts";
 
 export namespace PassengerDto {
-
   //{
   //         "contact_details": "+78008008080",
   //         "name": "Тестовый юзер юзерович",
@@ -15,7 +14,9 @@ export namespace PassengerDto {
 
   export const Passenger = z.object({
     id: z.number(),
-    name: z.string(),
+    first_name: z.string(),
+    second_name: z.string(),
+    patronymic: z.string(),
     category: z.string(),
     additional_information: z.string(),
     has_cardiac_pacemaker: z.boolean(),
@@ -26,7 +27,9 @@ export namespace PassengerDto {
   export type Passenger = z.infer<typeof PassengerDto.Passenger>;
 
   export const PassengerForm = z.object({
-    full_name: z.string(),
+    first_name: z.string(),
+    second_name: z.string(),
+    patronymic: z.string(),
     category: z.enum(["CAT1", "CAT2", "CAT3"]),
     description: z.string(),
     phone: z.string(),

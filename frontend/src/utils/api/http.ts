@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { ZodSchema } from "zod";
+import { ZodError, ZodSchema } from "zod";
 import { getStoredAuthToken, removeStoredAuthToken } from "./authToken";
+import { toast } from "react-toastify";
 
 axios.defaults.baseURL = "https://papuas.tech/api/v1";
 
@@ -96,7 +97,15 @@ class HttpRequest<T> {
 
   private handleResponse(response: AxiosResponse): T {
     if (this.#schema) {
-      return this.#schema.parse(response.data);
+      try {
+        return this.#schema.parse(response.data);
+      } catch (error) {
+        console.error(error);
+        if (error instanceof ZodError)
+          toast.error(
+            `Не удалось декодировать ответ сервера, в поле ${error.errors[0].path[1].toString()} ошибка: ${error.errors[0].message}.`,
+          );
+      }
     }
     return response.data;
   }

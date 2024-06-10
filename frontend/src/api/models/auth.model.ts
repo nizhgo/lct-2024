@@ -9,7 +9,9 @@ export namespace AuthDto {
   export type AuthForm = z.infer<typeof AuthForm>;
 
   export const AuthUser = z.object({
-    full_name: z.string(),
+    first_name: z.string(),
+    second_name: z.string(),
+    patronymic: z.string(),
     work_phone: z.string(),
     personal_phone: z.string(),
     personnel_number: z.string(),
@@ -17,17 +19,15 @@ export namespace AuthDto {
     rank: z.string(),
     shift: z.string(),
     working_hours: z.string(),
-    });
+  });
 
-    export type AuthUser = z.infer<typeof AuthUser>;
-
+  export type AuthUser = z.infer<typeof AuthUser>;
 
   export const AuthResponse = z.object({
     access_token: z.string(),
     user_id: z.number(),
     user: AuthUser.required(),
   });
-
 
   export type AuthResponse = z.infer<typeof AuthResponse>;
 }

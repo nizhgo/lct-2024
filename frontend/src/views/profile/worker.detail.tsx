@@ -10,11 +10,17 @@ export const ProfilePage = () => {
     <Stack direction={"column"} gap={6}>
       <PageHeader>Профиль</PageHeader>
       <Stack direction={"column"} gap={14} style={{ marginTop: 32 }}>
-        <img src={"https://placehold.co/130x160"} alt={"Фото"} style={{ maxWidth: 256 }} />
+        <img
+          src={"https://placehold.co/130x160"}
+          alt={"Фото"}
+          style={{ maxWidth: 256 }}
+        />
         <Stack direction={"row"} gap={6}>
           <Text weight={900}>ФИО:</Text>
           <Text color={theme.colors.textSecondary}>
-            {authService.item?.user.full_name}
+            {authService.item?.user.second_name}{" "}
+            {authService.item?.user.first_name}{" "}
+            {authService.item?.user.patronymic}
           </Text>
         </Stack>
         <Stack direction={"row"} gap={6}>

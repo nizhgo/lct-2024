@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
-import {PassengerDto} from "api/models/passenger.model.ts";
-import {PassengerEndpoint} from "api/endpoints/passenger.endpoint.ts";
+import { PassengerDto } from "api/models/passenger.model.ts";
+import { PassengerEndpoint } from "api/endpoints/passenger.endpoint.ts";
 
 export class PassengersPageViewModel {
   constructor() {

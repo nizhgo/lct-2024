@@ -271,7 +271,11 @@ export const AppLayout = () => {
           </BurgerMenu>
           <Text fontFamily={"IcoMoon"}></Text>
           <Link to={"/profile"}>
-            <Text>Профиль {authService.item?.user.full_name}</Text>
+              <Text>
+              Профиль {authService.item?.user.second_name}{" "}
+              {authService.item?.user.first_name}{" "}
+              {authService.item?.user.patronymic}
+            </Text>
           </Link>
         </Header>
         <MainContent>

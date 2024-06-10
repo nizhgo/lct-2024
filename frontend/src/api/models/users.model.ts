@@ -32,7 +32,9 @@ export namespace UsersDto {
 
   export const User = z.object({
     id: z.number(),
-    full_name: z.string(),
+    first_name: z.string(),
+    second_name: z.number(),
+    patronymic: z.string(),
     work_phone: z.string(),
     personal_phone: z.string(),
     personnel_number: z.string(),
@@ -47,9 +49,10 @@ export namespace UsersDto {
 
   export type User = z.infer<typeof UsersDto.User>;
 
-
   export const UserForm = z.object({
-    full_name: z.string(),
+    first_name: z.string(),
+    second_name: z.string(),
+    patronymic: z.string(),
     work_phone: z.string(),
     personal_phone: z.string(),
     personnel_number: z.string(),
@@ -62,6 +65,5 @@ export namespace UsersDto {
     is_lite: z.boolean(),
   });
 
-    export type UserForm = z.infer<typeof UsersDto.UserForm>;
-
+  export type UserForm = z.infer<typeof UsersDto.UserForm>;
 }

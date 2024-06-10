@@ -1,5 +1,5 @@
 import { AuthDto } from "api/models/auth.model.ts";
-import {setStoredAuthToken} from "utils/api/authToken.ts";
+import { setStoredAuthToken } from "utils/api/authToken.ts";
 
 class AuthService {
   constructor() {

@@ -14,8 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {AuthDto} from "api/models/auth.model.ts";
-import {useTheme} from "@emotion/react";
+import { AuthDto } from "api/models/auth.model.ts";
+import { useTheme } from "@emotion/react";
 
 const PageLayout = styled.div`
   display: grid;
@@ -95,11 +95,11 @@ export const LoginPage = observer(() => {
             <Text size={24} weight={900}>
               Вход в систему
             </Text>
-            {
-                vm.hasError && (
-                    <Text size={14} color={theme.colors.error}>Неверный логин или пароль</Text>
-                )
-            }
+            {vm.hasError && (
+              <Text size={14} color={theme.colors.error}>
+                Неверный логин или пароль
+              </Text>
+            )}
             <Input
               label={"Номер телефона"}
               placeholder={"Введите номер телефона"}
@@ -113,7 +113,7 @@ export const LoginPage = observer(() => {
               placeholder={"Введите пароль"}
               error={errors.password?.message}
               register={register("password")}
-              onChange={v => console.log(v)}
+              onChange={(v) => console.log(v)}
               required
             />
             <Button type="submit" variant={"red"}>

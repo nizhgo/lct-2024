@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
 import {
   createBrowserRouter,
   Outlet,
@@ -24,7 +25,8 @@ import { PassengerDetails } from "src/views/passengers/details/passenger-form.ts
 import RequestFormPage from "src/views/request/form/request.page.tsx";
 import RequestDetailPage from "src/views/request/details/requestDetailPage.tsx";
 import { ProfilePage } from "src/views/profile/worker.detail.tsx";
-import {SchedulePage} from "src/views/schedule/schedule.page.tsx";
+import { SchedulePage } from "src/views/schedule/schedule.page.tsx";
+import { ToastContainer } from "react-toastify";
 
 const authLoader = () => {
   //todo rewrite this cringe auth check
@@ -123,6 +125,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <ThemeProvider theme={theme}>
+    <ToastContainer />
     <RouterProvider router={router} />
   </ThemeProvider>,
 );

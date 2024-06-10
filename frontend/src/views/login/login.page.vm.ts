@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
-import {AuthDto } from "api/models/auth.model.ts";
+import { AuthDto } from "api/models/auth.model.ts";
 import { authService } from "src/stores/auth.service.ts";
-import {AuthEndpoint} from "api/endpoints/auth.endpoint.ts";
+import { AuthEndpoint } from "api/endpoints/auth.endpoint.ts";
 
 export class LoginPageViewModel {
   constructor() {
@@ -20,8 +20,8 @@ export class LoginPageViewModel {
         return false;
       }
     } catch (e) {
-        this.hasError = true;
-        return false;
+      this.hasError = true;
+      return false;
     }
   }
 }

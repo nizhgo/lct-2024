@@ -9,6 +9,7 @@ import { observer } from "mobx-react-lite";
 import { PageHeader } from "components/pageHeader.tsx";
 import { Input } from "components/input.tsx";
 import { GridCell, ResponsiveTable } from "components/table.tsx";
+import { UsersDto } from "api/models/users.model.ts";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -38,20 +39,17 @@ const WorkersPage = observer(() => {
     "Работает сейчас",
   ];
 
-  const renderRow = (worker: any) => (
+  const renderRow = (worker: UsersDto.User) => (
     <>
       <GridCell header={"ФИО"}>
-        <Link to={`/staff/${worker.id}`}>{worker.full_name}</Link>
+        <Link to={`/staff/${worker.id}`}>
+          {worker.second_name} {worker.first_name} {worker.patronymic}
+        </Link>
       </GridCell>
-      <GridCell header={"Пол"}>
-          {worker.sex}</GridCell>
-      <GridCell header={"Режим работы"}>
-          {worker.shift}
-      </GridCell>
-      <GridCell header={"Табельный номер"}>
-          {worker.personnel_number}</GridCell>
-      <GridCell header={"Должность"}>
-          {worker.role}</GridCell>
+      <GridCell header={"Пол"}>{worker.sex}</GridCell>
+      <GridCell header={"Режим работы"}>{worker.shift}</GridCell>
+      <GridCell header={"Табельный номер"}>{worker.personnel_number}</GridCell>
+      <GridCell header={"Должность"}>{worker.role}</GridCell>
       <GridCell header={"Работает сейчас"}>
         <StatusBadge status={Math.random() > 0.5 ? "active" : "inactive"}>
           {Math.random() > 0.5 ? "Да" : "Нет"}

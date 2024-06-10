@@ -75,7 +75,7 @@ const GridCellHeader = styled.div`
   border-top: none;
 `;
 
-export const GridCell = styled.div<{header: string}>`
+export const GridCell = styled.div<{ header: string }>`
   padding: 20px 14px;
   font-size: 14px;
   text-align: left;
