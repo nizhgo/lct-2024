@@ -112,6 +112,9 @@ class HttpRequest<T> {
 
   private handleError(error: unknown): Promise<never> {
     if (axios.isAxiosError(error) && error.response) {
+      toast.error(
+        `Ошибка ${error.response.status}: ${error.response.data ? JSON.stringify(error.response.data) : ""}`,
+      );
       if (error.response.status === 401) {
         removeStoredAuthToken();
         if (window?.location) {
