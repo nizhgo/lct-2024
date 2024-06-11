@@ -63,7 +63,7 @@ export const WorkerDetail = () => {
           label={"Должность"}
           options={["ЦА", "Менеджер", "Полевой инженер"]}
           onChange={() => {}}
-          // value={worker.rank}
+          value={worker.rank}
         />
         <Text size={16}>Смена</Text>
         <Stack direction={"row"} gap={10}>
