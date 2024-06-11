@@ -18,6 +18,7 @@ interface LabeledDropdownProps {
   label: string;
   onChange: (v: string) => void;
   value?: string;
+  defaultValue?: string;
   isRequired?: boolean;
   options: string[];
   disabledOptions?: string[];
@@ -67,11 +68,12 @@ export const LabeledDropdown = observer((x: LabeledDropdownProps) => {
 
 export const CustomDropdown = observer<LabeledDropdownProps>((x) => {
   const [isOpen, setIsOpen] = useState(false);
-  const selectedOption = x.options.find((option) => option === x.value);
+  const [curOption, setCurOption] = useState(x.value);
   const ref = React.useRef<HTMLDivElement>(null);
   useKeydown("Enter", () => setIsOpen(false), undefined, [isOpen]);
   useOnClickOutside([ref], () => setIsOpen(false));
   const handleSelect = (option: string) => {
+    setCurOption(option);
     x.onChange(option);
     setIsOpen(false);
   };
@@ -90,7 +92,7 @@ export const CustomDropdown = observer<LabeledDropdownProps>((x) => {
         <Text color={"#B91827"}>{x.isRequired ? "*" : ""}</Text>
       </Label>
       <DropdownButton type="button">
-        {selectedOption ?? "Не выбрано"}
+        {curOption ?? "Не выбрано"}
         <Text
           fontFamily={"IcoMoon"}
           size={10}
@@ -113,7 +115,7 @@ export const CustomDropdown = observer<LabeledDropdownProps>((x) => {
               <Option
                 key={option}
                 onClick={() => handleSelect(option)}
-                aria-selected={option === selectedOption}
+                aria-selected={option === curOption}
                 aria-disabled={x.disabledOptions?.includes(option)}
                 tabIndex={index}
               >

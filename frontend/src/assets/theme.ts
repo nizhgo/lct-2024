@@ -8,7 +8,7 @@ export const theme = {
     background: "#F8F9FA", // Цвет фона
     text: "#000000", // Цвет текста
     textSecondary: "#6C757D", // Вторичный цвет текста
-    link: "#04c", // Цвет ссылки
+    link: "#D9232E", // Цвет ссылки
     inputBorder: "#CED4DA", // Цвет границы инпута
     error: "#DC3545",
     input: {
