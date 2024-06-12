@@ -20,7 +20,7 @@ import { AppLayout } from "src/views/layout.tsx";
 import MainPage from "src/mainPage.tsx";
 import { StaffDetail } from "src/views/staff/detail/staff.detail.tsx";
 import { PassengerForm } from "src/views/passengers/form/passenger-form.tsx";
-import { PassengerDetails } from "src/views/passengers/details/passenger-form.tsx";
+import { PassengerDetails } from "src/views/passengers/details/passenger.page.tsx";
 import RequestFormPage from "src/views/request/form/request.page.tsx";
 import RequestDetailPage from "src/views/request/details/requestDetailPage.tsx";
 import { ProfilePage } from "src/views/profile/profile.detail.tsx";
@@ -30,6 +30,7 @@ import { useEffect } from "react";
 import AuthService from "src/stores/auth.service.ts";
 import { observer } from "mobx-react-lite";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
+import {PassengerEdit} from "src/views/passengers/details/passenger-form.tsx";
 
 const nonAuthCheck = () => {
   if (!AuthService.isLoading && !AuthService.user) {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
           {
             path: "/passengers/:id",
             element: <PassengerDetails />,
+          },
+          {
+            path: "/passengers/edit/:id",
+            element: <PassengerEdit />,
           },
           {
             path: "/passengers/new",
@@ -147,7 +152,7 @@ const Root = observer(() => {
           <Loader />
         </LoaderWrapper>
       ) : (
-        <RouterProvider router={router}/>
+        <RouterProvider router={router} />
       )}
     </ThemeProvider>
   );
@@ -156,4 +161,3 @@ const Root = observer(() => {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Root />
 );
-
