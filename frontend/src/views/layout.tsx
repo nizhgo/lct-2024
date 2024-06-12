@@ -10,7 +10,7 @@ import WorkersIcon from "src/assets/icons/workers.svg";
 import { Stack } from "components/stack.ts";
 import { Text } from "components/text.ts";
 import { useTheme } from "@emotion/react";
-import { authService } from "src/stores/auth.service.ts";
+import AuthService from "src/stores/auth.service.ts";
 
 const useResponsiveSidebar = (setSidebarOpen: (isOpen: boolean) => void) => {
   const theme = useTheme();
@@ -257,7 +257,7 @@ export const AppLayout = () => {
           </Link>
         </Stack>
         <Stack gap={14} direction={"column"} style={{ marginTop: "56px" }}>
-          <Link to="/login">
+          <Link to="/logout">
             <SidebarItem onClick={onLinkClick}>
               <Text>Выйти</Text>
             </SidebarItem>
@@ -271,9 +271,9 @@ export const AppLayout = () => {
           </BurgerMenu>
           <Text fontFamily={"IcoMoon"}></Text>
           <Link to={"/profile"}>
-            Профиль {authService.item?.user.second_name}{" "}
-            {authService.item?.user.first_name}{" "}
-            {authService.item?.user.patronymic}
+            Профиль {AuthService.user?.second_name}{" "}
+            {AuthService.user?.first_name}{" "}
+            {AuthService.user?.patronymic}
           </Link>
         </Header>
         <MainContent>

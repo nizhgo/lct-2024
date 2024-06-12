@@ -49,7 +49,6 @@ const schema = yup.object().shape({
 
 export const LoginPage = observer(() => {
   const [vm] = useState(() => new LoginPageViewModel());
-  const [showLoader, setShowLoader] = useState(true);
   const navigate = useNavigate();
   const theme = useTheme();
   const {
@@ -60,26 +59,12 @@ export const LoginPage = observer(() => {
     resolver: yupResolver(schema),
   });
 
-  useEffect(() => {
-    setTimeout(() => {
-      setShowLoader(false);
-    }, 1000);
-  }, []);
-
   const onSubmit = async (data: AuthDto.AuthForm) => {
     const isLoggedIn = await vm.onSubmit(data);
     if (isLoggedIn) {
       navigate("/"); // Перенаправление после успешного входа
     }
   };
-
-  if (showLoader) {
-    return (
-      <LoaderWrapper height={"100vh"}>
-        <Loader />
-      </LoaderWrapper>
-    );
-  }
 
   return (
     <PageLayout>

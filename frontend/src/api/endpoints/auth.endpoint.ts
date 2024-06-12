@@ -7,4 +7,11 @@ export const AuthEndpoint = new (class AuthEndpoint {
       .expectJson(AuthDto.AuthResponse)
       .post(data);
   };
+
+  findMe = async () => {
+    return await Http.request("/users/me")
+      .expectJson(AuthDto.AuthUser)
+      .silent()
+      .get()
+  }
 })();

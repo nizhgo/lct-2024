@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { AuthDto } from "api/models/auth.model.ts";
-import { authService } from "src/stores/auth.service.ts";
 import { AuthEndpoint } from "api/endpoints/auth.endpoint.ts";
+import AuthService from "src/stores/auth.service.ts";
 
 export class LoginPageViewModel {
   constructor() {
@@ -14,7 +14,7 @@ export class LoginPageViewModel {
     try {
       const res = await AuthEndpoint.login(data);
       if (res) {
-        authService.setAuth(res);
+        AuthService.setAuth(res);
         return true;
       } else {
         return false;

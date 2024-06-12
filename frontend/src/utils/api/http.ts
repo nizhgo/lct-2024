@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { ZodError, ZodSchema } from "zod";
-import { getStoredAuthToken, removeStoredAuthToken } from "./authToken";
 import { toast } from "react-toastify";
+import AuthService from "src/stores/auth.service.ts";
 
 axios.defaults.baseURL = "https://papuas.tech/api/v1";
 
@@ -10,6 +10,7 @@ class HttpRequest<T> {
   readonly #config?: AxiosRequestConfig<unknown>;
   #schema?: ZodSchema<T>;
   #queryParams?: Record<string, string>;
+  #showErrors = true;
 
   constructor(path: string, config?: AxiosRequestConfig<unknown>) {
     this.#path = path;
@@ -86,10 +87,18 @@ class HttpRequest<T> {
     }
   }
 
+  /**
+   * Disable error messages
+   */
+  public silent() {
+    this.#showErrors = false;
+    return this;
+  }
+
   private getAuthHeaders() {
     return {
-      Authorization: getStoredAuthToken()
-        ? `Bearer ${getStoredAuthToken()}`
+      Authorization: AuthService.token
+        ? `Bearer ${AuthService.token}`
         : undefined,
       "Access-Control-Allow-Origin": "*",
     };
@@ -100,8 +109,8 @@ class HttpRequest<T> {
       try {
         return this.#schema.parse(response.data);
       } catch (error) {
-        console.error(error);
-        if (error instanceof ZodError)
+        if (this.#showErrors && error instanceof ZodError) {
+          console.error(error);
           try {
             toast.error(
               `Не удалось декодировать ответ сервера, в поле ${error.errors[0].path[1].toString()} ошибка: ${error.errors[0].message}.`,
@@ -109,6 +118,7 @@ class HttpRequest<T> {
           } catch (e) {
             toast.error("Не удалось декодировать ответ сервера.");
           }
+        }
       }
     }
     return response.data;
@@ -116,11 +126,13 @@ class HttpRequest<T> {
 
   private handleError(error: unknown): Promise<never> {
     if (axios.isAxiosError(error) && error.response) {
-      toast.error(
-        `Ошибка ${error.response.status}: ${error.response.data ? JSON.stringify(error.response.data) : ""}`,
-      );
-      if (error.response.status === 401) {
-        removeStoredAuthToken();
+      if (this.#showErrors) {
+        toast.error(
+          `Ошибка при выполнении запроса: ${error.response.status} ${error.response.statusText}`,
+        );
+      }
+      if (error.response.status === 401 ?? error.response.status === 403) {
+        AuthService.logout();
         if (window?.location) {
           window.location.replace("/login");
         }
