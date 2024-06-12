@@ -11,11 +11,9 @@ import { Input } from "components/input";
 import { LoginPageViewModel } from "src/views/login/login.page.vm.ts";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthDto } from "api/models/auth.model.ts";
 import { useTheme } from "@emotion/react";
-import AuthService from "src/stores/auth.service.ts";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const PageLayout = styled.div`
   display: grid;
@@ -36,37 +34,22 @@ const LoginContainer = styled.div`
   gap: 64px;
 `;
 
-const schema = yup.object().shape({
-  personal_phone: yup
-    .string()
-    // .matches(
-    //   /^(\+7|7|8)?[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/,
-    //   "Введите правильный номер телефона",
-    // )
-    .required("Поле обязательно для заполнения"),
-  password: yup.string().required("Поле обязательно для заполнения"),
-});
-
 export const LoginPage = observer(() => {
   const [vm] = useState(() => new LoginPageViewModel());
   const navigate = useNavigate();
   const theme = useTheme();
-  if (AuthService.user) {
-    console.log("User is logged in");
-    navigate("/");
-  } else {
-    console.log("User is not logged in");
-  }
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
+  } = useForm<AuthDto.AuthForm>({
+    resolver: zodResolver(AuthDto.AuthForm),
   });
 
   const onSubmit = async (data: AuthDto.AuthForm) => {
     const isLoggedIn = await vm.onSubmit(data);
+    console.log("isLoggedIn", isLoggedIn ? "true" : "false");
     if (isLoggedIn) {
       navigate("/");
     }
@@ -94,7 +77,7 @@ export const LoginPage = observer(() => {
             <Input
               label={"Номер телефона"}
               placeholder={"Введите номер телефона"}
-              error={errors.personal_phone?.message}
+              error={errors.personal_phone?.message?.toString()}
               register={register("personal_phone")}
               required
             />
@@ -102,7 +85,7 @@ export const LoginPage = observer(() => {
               label={"Пароль"}
               type={"password"}
               placeholder={"Введите пароль"}
-              error={errors.password?.message}
+              error={errors.password?.message?.toString()}
               register={register("password")}
               onChange={(v) => console.log(v)}
               required
