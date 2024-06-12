@@ -15,6 +15,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthDto } from "api/models/auth.model.ts";
 import { useTheme } from "@emotion/react";
+import AuthService from "src/stores/auth.service.ts";
 
 const PageLayout = styled.div`
   display: grid;
@@ -50,6 +51,12 @@ export const LoginPage = observer(() => {
   const [vm] = useState(() => new LoginPageViewModel());
   const navigate = useNavigate();
   const theme = useTheme();
+  if (AuthService.user) {
+    console.log("User is logged in");
+    navigate("/");
+  } else {
+    console.log("User is not logged in");
+  }
   const {
     register,
     handleSubmit,
@@ -61,7 +68,7 @@ export const LoginPage = observer(() => {
   const onSubmit = async (data: AuthDto.AuthForm) => {
     const isLoggedIn = await vm.onSubmit(data);
     if (isLoggedIn) {
-      navigate("/"); // Перенаправление после успешного входа
+      navigate("/");
     }
   };
 

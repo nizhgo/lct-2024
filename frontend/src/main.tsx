@@ -26,16 +26,16 @@ import RequestDetailPage from "src/views/request/details/requestDetailPage.tsx";
 import { ProfilePage } from "src/views/profile/profile.detail.tsx";
 import { SchedulePage } from "src/views/schedule/schedule.page.tsx";
 import { ToastContainer } from "react-toastify";
-import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { useEffect } from "react";
 import AuthService from "src/stores/auth.service.ts";
 import { observer } from "mobx-react-lite";
+import { Loader, LoaderWrapper } from "src/loader.tsx";
 
 const nonAuthCheck = () => {
   if (!AuthService.isLoading && !AuthService.user) {
     return redirect("/login");
   }
-  return redirect("/login");
+  return null;
 };
 
 const router = createBrowserRouter([
@@ -148,7 +148,7 @@ const Root = observer(() => {
         </LoaderWrapper>
       ) : (
         <RouterProvider router={router}/>
-        )}
+      )}
     </ThemeProvider>
   );
 });
