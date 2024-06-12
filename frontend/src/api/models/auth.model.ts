@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export namespace AuthDto {
   export const AuthForm = z.object({
-    personal_phone: z.string(),
-    password: z.string(),
+    personal_phone: z.string().min(1, "Это поле не может быть пустым"),
+    password: z.string().min(1, "Это поле не может быть пустым"),
   });
 
   export type AuthForm = z.infer<typeof AuthForm>;
