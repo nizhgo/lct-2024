@@ -102,9 +102,13 @@ class HttpRequest<T> {
       } catch (error) {
         console.error(error);
         if (error instanceof ZodError)
-          toast.error(
-            `Не удалось декодировать ответ сервера, в поле ${error.errors[0].path[1].toString()} ошибка: ${error.errors[0].message}.`,
-          );
+          try {
+            toast.error(
+              `Не удалось декодировать ответ сервера, в поле ${error.errors[0].path[1].toString()} ошибка: ${error.errors[0].message}.`,
+            );
+          } catch (e) {
+            toast.error("Не удалось декодировать ответ сервера.");
+          }
       }
     }
     return response.data;

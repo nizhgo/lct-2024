@@ -10,6 +10,9 @@ import { PageHeader } from "components/pageHeader.tsx";
 import { Input } from "components/input.tsx";
 import { ColumnConfig, GridCell, ResponsiveTable } from "components/table.tsx";
 import { UsersDto } from "api/models/users.model.ts";
+import { Text } from "components/text.ts";
+import { useTheme } from "@emotion/react";
+import { Tooltip } from "components/tooltip.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -45,6 +48,7 @@ const StatusBadge = styled.div<{ status: string }>`
 
 const StaffPage = observer(() => {
   const [vm] = useState(() => new StaffPageViewModel());
+  const theme = useTheme();
   const navigate = useNavigate();
   const handleAdd = () => {
     navigate("/staff/registration");
@@ -63,18 +67,27 @@ const StaffPage = observer(() => {
     switch (columnHeader) {
       case "ФИО":
         return (
-          <Link to={`/staff/${staff.id}`}>
-            {staff.second_name} {staff.first_name} {staff.patronymic}
-          </Link>
+          <Stack direction={"row"} align={"center"} gap={10}>
+            <Link to={`/staff/${staff.id}`}>
+              {staff.second_name} {staff.first_name} {staff.patronymic}
+            </Link>
+            {staff.role === "admin" && (
+              <Tooltip content={"Администратор"} action={"hover"}>
+                <Text fontFamily={"IcoMoon"} color={theme.colors.primary}>
+                  
+                </Text>
+              </Tooltip>
+            )}
+          </Stack>
         );
       case "Пол":
-        return staff.sex;
+        return UsersDto.localizeGender(staff.sex);
       case "Режим работы":
         return staff.shift;
       case "Табельный номер":
         return staff.personnel_number;
       case "Должность":
-        return staff.role;
+        return staff.rank;
       case "Работает сейчас":
         // eslint-disable-next-line no-case-declarations
         const isActive = Math.random() > 0.5; // Пример логики

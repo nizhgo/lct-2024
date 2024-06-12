@@ -10,7 +10,7 @@ import {
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./assets/theme.ts";
 import PassengersPage from "src/views/passengers/passengers.page.tsx";
-import WorkerRegPage from "src/views/staff/resigtration/workerReg.page.tsx";
+import StaffRegPage from "src/views/staff/resigtration/staffRegPage.tsx";
 import StaffPage from "src/views/staff/staff.page.tsx";
 import RequestPage from "src/views/request/request.page.tsx";
 import { LoginPage } from "src/views/login/login.page.tsx";
@@ -77,7 +77,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/staff/registration",
-        element: <WorkerRegPage />,
+        element: <StaffRegPage />,
         loader: authLoader,
       },
       {
