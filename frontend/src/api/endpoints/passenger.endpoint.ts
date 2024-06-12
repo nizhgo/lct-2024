@@ -16,10 +16,10 @@ export const PassengerEndpoint = new (class PassengerEndpoint {
 
   //find passengers by id
   findById = async (id: string) => {
-    console.log("findById", id);
-    //wait for 1 second to simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return null;
+    const res = await Http.request(`/passengers/${id}`)
+      .expectJson(PassengerDto.Passenger)
+      .get();
+    return res;
   };
 
   //create passengers
