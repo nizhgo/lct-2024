@@ -135,23 +135,6 @@ const router = createBrowserRouter([
   { path: "*", element: <NotFoundPage /> },
 ]);
 
-
-const nonAuthRouter = createBrowserRouter([
-  {
-    path: "*",
-    element: <LoginPage />,
-    handle: {
-      "*": () => {
-        if (!AuthService.user) {
-          return redirect("/");
-        }
-      },
-    },
-    loader: () => {
-      return redirect("/");
-    }
-  }]);
-
 const Root = observer(() => {
   useEffect(() => {
     AuthService.init();
@@ -164,7 +147,7 @@ const Root = observer(() => {
           <Loader />
         </LoaderWrapper>
       ) : (
-        <RouterProvider router={AuthService.user ? router : nonAuthRouter}/>
+        <RouterProvider router={router}/>
         )}
     </ThemeProvider>
   );
