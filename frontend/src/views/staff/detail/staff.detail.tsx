@@ -7,6 +7,7 @@ import { Text } from "components/text.ts";
 import styled from "@emotion/styled";
 import { Button } from "components/button.tsx";
 import { theme } from "src/assets/theme.ts";
+import { UsersDto } from "api/models/users.model.ts";
 
 const ShiftButton = styled(Button)<{ active?: boolean }>`
   background-color: ${({ active }) =>
@@ -36,34 +37,34 @@ const workerExample = {
   id: 2,
 };
 
-export const WorkerDetail = () => {
+export const StaffDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const renderForm = (worker: any) => {
+  const renderForm = (staff: UsersDto.User) => {
     return (
       <Stack direction={"column"} gap={20} wFull style={{ maxWidth: "555px" }}>
-        <Input defaultValue={worker.first_name} label={"Имя"} />
-        <Input defaultValue={worker.second_name} label={"Фамилия"} />
-        <Input defaultValue={worker.patronymic} label={"Отчество"} />
+        <Input defaultValue={staff.first_name} label={"Имя"} />
+        <Input defaultValue={staff.second_name} label={"Фамилия"} />
+        <Input defaultValue={staff.patronymic} label={"Отчество"} />
         <CustomDropdown
           label={"Пол"}
           options={["Мужской", "Женский"]}
           onChange={() => {}}
-          value={worker.sex === "male" ? "Мужской" : "Женский"}
+          value={staff.sex === "male" ? "Мужской" : "Женский"}
         />
-        <Input defaultValue={worker.work_phone} label={"Раб. номер телефона"} />
+        <Input defaultValue={staff.work_phone} label={"Раб. номер телефона"} />
         <Input
-          defaultValue={worker.personal_phone}
+          defaultValue={staff.personal_phone}
           label={"Личн. номер телефона"}
         />
         <Input
-          defaultValue={worker.personnel_number}
+          defaultValue={staff.personnel_number}
           label={"Табельный номер"}
         />
         <CustomDropdown
           label={"Должность"}
           options={["ЦА", "Менеджер", "Полевой инженер"]}
           onChange={() => {}}
-          value={worker.rank}
+          value={staff.rank}
         />
         <Text size={16}>Смена</Text>
         <Stack direction={"row"} gap={10}>
@@ -77,7 +78,7 @@ export const WorkerDetail = () => {
           label={"Участок"}
           options={["ЦУ-1", "ЦУ-2", "ЦУ-3"]}
           onChange={() => {}}
-          value={worker.area}
+          value={staff.area}
         />
         <Stack direction={"row"} align={"center"} gap={10}>
           {/*//TODO: add checkbox component*/}
@@ -95,7 +96,7 @@ export const WorkerDetail = () => {
   return (
     <Stack direction={"column"} gap={20} style={{ maxWidth: "500px" }}>
       <PageHeader>Сотрудник #{id}</PageHeader>
-      {renderForm(workerExample)}
+      {renderForm(workerExample as UsersDto.User)}
     </Stack>
   );
 };

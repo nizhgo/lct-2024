@@ -18,14 +18,14 @@ export namespace UsersDto {
   export type Ranks = z.infer<typeof UsersDto.Ranks>;
 
   export const Areas = z.enum([
-    "CU1",
-    "CU2",
-    "CU3",
-    "CU3(N)",
-    "CU4",
-    "CU4(N)",
-    "CU5",
-    "CU8",
+    "ЦУ-1",
+    "ЦУ-2",
+    "ЦУ-3",
+    "ЦУ-3 (Н)",
+    "ЦУ-4",
+    "ЦУ-4 (Н)",
+    "ЦУ-5",
+    "ЦУ-8",
   ]);
 
   export type Areas = z.infer<typeof UsersDto.Areas>;
@@ -42,8 +42,8 @@ export namespace UsersDto {
     rank: z.string(),
     shift: z.string(),
     working_hours: z.string(),
-    sex: Gengers,
-    area: z.string(),
+    sex: z.string(),
+    area: Areas,
     is_lite: z.boolean(),
   });
 
@@ -60,7 +60,7 @@ export namespace UsersDto {
     rank: Ranks,
     shift: Shifts,
     working_hours: z.string(),
-    sex: Gengers,
+    sex: z.string(),
     area: Areas,
     is_lite: z.boolean(),
   });

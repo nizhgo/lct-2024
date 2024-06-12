@@ -9,7 +9,9 @@ import { PageHeader } from "components/pageHeader.tsx";
 import { Input } from "components/input.tsx";
 import { PassengerDto } from "api/models/passenger.model.ts";
 import { PassengersPageViewModel } from "src/views/passengers/passengers.vm.ts";
-import { GridCell, ResponsiveTable } from "components/table.tsx";
+import { ColumnConfig, GridCell, ResponsiveTable } from "components/table.tsx";
+import { Text } from "components/text.ts";
+import { useTheme } from "@emotion/react";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -25,26 +27,59 @@ const ContentHeader = styled.div`
 
 const PassengersPage = observer(() => {
   const [vm] = useState(() => new PassengersPageViewModel());
+  const theme = useTheme();
   const navigate = useNavigate();
   const handleAdd = () => {
     navigate("/passengers/new");
   };
 
-  const headers = ["ФИО", "Категория", "Описание", "Телефон"];
-  const columnSizes = ["2fr", "1fr", "2fr", "1fr"];
+  const columns: ColumnConfig[] = [
+    { header: "ФИО", size: "2fr" },
+    { header: "Пол" },
+    { header: "Категория", centred: true },
+    { header: "Описание" },
+    { header: "Кардиостимулятор", centred: true },
+    { header: "Телефон" },
+  ];
 
-  const renderRow = (passenger: PassengerDto.Passenger) => (
+  const renderCellContent = (
+    columnHeader: string,
+    passenger: PassengerDto.Passenger,
+  ) => {
+    switch (columnHeader) {
+      case "ФИО":
+        return <Link to={`/passengers/${passenger.id}`}>{passenger.name}</Link>;
+      case "Пол":
+        return passenger.sex === "male" ? "Мужчина" : "Женщина";
+      case "Категория":
+        return passenger.category;
+      case "Описание":
+        return (
+          passenger.additional_information || (
+            <Text color={theme.colors.textSecondary} align={"center"}>
+              —
+            </Text>
+          )
+        );
+      case "Кардиостимулятор":
+        return passenger.has_cardiac_pacemaker ? "Есть" : "Нет";
+      case "Телефон":
+        return passenger.contact_details;
+      default:
+        return null;
+    }
+  };
+
+  const renderRow = (
+    passenger: PassengerDto.Passenger,
+    columns: ColumnConfig[],
+  ) => (
     <>
-      <GridCell header={"ФИО"}>
-        <Link to={`/passengers/${passenger.id}`}>
-          {passenger.second_name} {passenger.first_name} {passenger.patronymic}
-        </Link>
-      </GridCell>
-      <GridCell header={"Категория"}>{passenger.category}</GridCell>
-      <GridCell header={"Описание"}>
-        {passenger.additional_information}
-      </GridCell>
-      <GridCell header={"Телефон"}>{passenger.contact_details}</GridCell>
+      {columns.map((column, index) => (
+        <GridCell key={index} header={column.header} centred={column.centred}>
+          {renderCellContent(column.header, passenger)}
+        </GridCell>
+      ))}
     </>
   );
 
@@ -67,10 +102,9 @@ const PassengersPage = observer(() => {
             <Input placeholder={"Поиск"} style={{ width: "300px" }} />
           </Stack>
           <ResponsiveTable
-            headers={headers}
+            columns={columns}
             data={vm.passengers}
             renderRow={renderRow}
-            columnSizes={columnSizes}
           />
         </>
       )}

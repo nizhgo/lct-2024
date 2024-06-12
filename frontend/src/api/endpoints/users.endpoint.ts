@@ -43,7 +43,7 @@ import { z } from "zod";
 // });
 
 export const UsersEndpoint = new (class WorkersEndpoint {
-  //find all workers
+  //find all staff
   findAll = async () => {
     const res = await Http.request("/users/")
       .expectJson(z.array(UsersDto.User))

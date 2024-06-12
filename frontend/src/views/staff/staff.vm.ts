@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { UsersDto } from "api/models/users.model.ts";
 import { UsersEndpoint } from "api/endpoints/users.endpoint.ts";
 
-export class WorkersPageViewModel {
+export class StaffPageViewModel {
   constructor() {
     void this.#init();
     makeAutoObservable(this);

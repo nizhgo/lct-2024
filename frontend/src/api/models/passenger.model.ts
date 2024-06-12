@@ -1,27 +1,32 @@
 import { z } from "zod";
-import { UsersDto } from "api/models/users.model.ts";
-
 export namespace PassengerDto {
-  //{
-  //         "contact_details": "+78008008080",
-  //         "name": "Тестовый юзер юзерович",
-  //         "has_cardiac_pacemaker": true,
-  //         "category": "string",
-  //         "sex": "male",
-  //         "additional_information": "some add inf",
-  //         "id": 1
-  //     }
+  export const PassengerCategory = z.enum([
+    "ИЗТ",
+    "ИЗ",
+    "ИС",
+    "ИК",
+    "ИО",
+    "ДИ",
+    "ПЛ",
+    "РД",
+    "РДК",
+    "ОГД",
+    "ОВ",
+    "ИУ",
+  ]);
+
+  export type PassengerCategory = z.infer<
+    typeof PassengerDto.PassengerCategory
+  >;
 
   export const Passenger = z.object({
     id: z.number(),
-    first_name: z.string(),
-    second_name: z.string(),
-    patronymic: z.string(),
-    category: z.string(),
+    name: z.string(),
+    contact_details: z.string(),
+    category: PassengerCategory,
     additional_information: z.string(),
     has_cardiac_pacemaker: z.boolean(),
-    contact_details: z.string(),
-    sex: UsersDto.Gengers,
+    sex: z.string(),
   });
 
   export type Passenger = z.infer<typeof PassengerDto.Passenger>;
