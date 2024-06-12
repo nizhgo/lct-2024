@@ -1,15 +1,6 @@
-import { faker } from "@faker-js/faker";
 import { PassengerDto } from "api/models/passenger.model.ts";
 import { Http } from "utils/api/http.ts";
 import { z } from "zod";
-
-const generatePassenger = () => ({
-  id: faker.number.int({ min: 1, max: 10000 }),
-  full_name: faker.person.fullName(),
-  category: faker.helpers.arrayElements(["CAT1", "CAT2", "CAT3"]),
-  description: faker.lorem.sentence(),
-  phone: faker.phone.number(),
-});
 
 export const PassengerEndpoint = new (class PassengerEndpoint {
   //find all passengers
@@ -26,10 +17,9 @@ export const PassengerEndpoint = new (class PassengerEndpoint {
   //find passengers by id
   findById = async (id: string) => {
     console.log("findById", id);
-    const passenger = generatePassenger();
     //wait for 1 second to simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 500));
-    return passenger;
+    return null;
   };
 
   //create passengers
