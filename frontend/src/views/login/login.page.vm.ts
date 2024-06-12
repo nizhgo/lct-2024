@@ -2,7 +2,6 @@ import { makeAutoObservable } from "mobx";
 import { AuthDto } from "api/models/auth.model.ts";
 import { AuthEndpoint } from "api/endpoints/auth.endpoint.ts";
 import AuthService from "src/stores/auth.service.ts";
-import { redirect } from "react-router-dom";
 
 export class LoginPageViewModel {
   constructor() {
@@ -16,7 +15,6 @@ export class LoginPageViewModel {
       const res = await AuthEndpoint.login(data);
       if (res) {
         AuthService.setAuth(res);
-        redirect("/");
         return true;
       } else {
         return false;
