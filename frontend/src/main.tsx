@@ -30,7 +30,7 @@ import { useEffect } from "react";
 import AuthService from "src/stores/auth.service.ts";
 import { observer } from "mobx-react-lite";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
-import {PassengerEdit} from "src/views/passengers/details/passenger-form.tsx";
+import { PassengerEdit } from "src/views/passengers/edit/passenger-edit.tsx";
 
 const nonAuthCheck = () => {
   if (!AuthService.isLoading && !AuthService.user) {

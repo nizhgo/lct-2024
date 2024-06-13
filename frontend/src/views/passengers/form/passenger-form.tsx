@@ -43,10 +43,10 @@ export const PassengerForm = () => {
       </Stack>
       <Stack direction={"column"} gap={10}>
         {/*//TODO: add textarea component*/}
-        <label htmlFor={"Легкий труд"}>Легкий труд</label>
+        <label htmlFor={"Комментарий"}>Комментарий</label>
         <textarea
-          id="Легкий труд"
-          name="Легкий труд"
+          id="Комментарий"
+          name="Комментарий"
           aria-rowcount={5}
           aria-colcount={33}
           defaultValue={"что-то"}

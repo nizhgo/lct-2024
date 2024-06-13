@@ -7,8 +7,9 @@ import { PassengerEndpoint } from "api/endpoints/passenger.endpoint.ts";
 import { useEffect } from "react";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { Button } from "components/button.tsx";
+import { ColumnConfig, ResponsiveTable } from "components/table.tsx";
 
-const ParamName = ({children}) => {
+const ParamName = ({ children }) => {
   return <Text color={"#787486"}>{children}</Text>;
 };
 
@@ -28,7 +29,7 @@ const Tab = ({color, children}) => {
 };
 
 export const PassengerDetails = () => {
-  const {id} = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -36,6 +37,14 @@ export const PassengerDetails = () => {
   const handleEdit = () => {
     navigate(`/passengers/edit/${id}`);
   };
+
+  const columns: ColumnConfig[] = [
+    { header: "Дата", size: "2fr" },
+    { header: "Время от." },
+    { header: "Время приб.", centred: true },
+    { header: "Станция от." },
+    { header: "Станция приб.", centred: true },
+  ];
 
   useEffect(() => {
     PassengerEndpoint.findById(id).then((passenger) => {
@@ -46,8 +55,9 @@ export const PassengerDetails = () => {
   return (loading ? <LoaderWrapper height={"100%"}><Loader/></LoaderWrapper> :
     <Stack direction={"column"} gap={30}>
       <PageHeader>Пассажир #{id}</PageHeader>
-      <Stack justify={"space-between"}>
+      <Stack gap={200}>
         <Stack direction={"column"} gap={20}>
+          <Text size={24}>Данные пассажира</Text>
           <Stack direction={"column"} gap={6}>
             <ParamName>ФИО</ParamName>
             <Text size={18}>{data.name}</Text>
@@ -88,6 +98,11 @@ export const PassengerDetails = () => {
             onClick={handleEdit}>Редактировать</Button>
         </Stack>
         <Text size={24}>Заявки</Text>
+        {/*<ResponsiveTable*/}
+        {/*  columns={columns}*/}
+        {/*  data={vm.passengers}*/}
+        {/*  renderRow={renderRow}*/}
+        {/*/>*/}
       </Stack>
     </Stack>);
 };
