@@ -16,6 +16,9 @@ export const PassengerEdit = () => {
 
   useEffect(() => {
     PassengerEndpoint.findById(id).then((passenger) => {
+      passenger.patronymic = passenger.name.split(" ")[2];
+      passenger.second_name = passenger.name.split(" ")[1];
+      passenger.name = passenger.name.split(" ")[0];
       setData(passenger);
       console.log(passenger);
       setLoading(false);
@@ -25,8 +28,8 @@ export const PassengerEdit = () => {
     <Stack direction={"column"} gap={14} wFull style={{ maxWidth: "555px" }}>
       <PageHeader style={{ marginBottom: 16 }}>Пассажир #{id}</PageHeader>
       <Input defaultValue={data.name} label={"Имя"} />
-      <Input defaultValue={data.name} label={"Фамилия"} />
-      <Input defaultValue={data.name} label={"Отчество"} />
+      <Input defaultValue={data.second_name} label={"Фамилия"} />
+      <Input defaultValue={data.patronymic} label={"Отчество"} />
       <CustomDropdown
         label={"Пол"}
         options={["Мужской", "Женский"]}
