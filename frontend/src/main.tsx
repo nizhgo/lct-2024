@@ -20,7 +20,7 @@ import { AppLayout } from "src/views/layout.tsx";
 import MainPage from "src/mainPage.tsx";
 import { StaffDetail } from "src/views/staff/detail/staff.detail.tsx";
 import { PassengerForm } from "src/views/passengers/form/passenger-form.tsx";
-import { PassengerDetails } from "src/views/passengers/details/passenger.page.tsx";
+import { PassengerDetails } from "src/views/passengers/details/passenger.detail.tsx";
 import RequestFormPage from "src/views/request/form/request.page.tsx";
 import RequestDetailPage from "src/views/request/details/requestDetailPage.tsx";
 import { ProfilePage } from "src/views/profile/profile.detail.tsx";

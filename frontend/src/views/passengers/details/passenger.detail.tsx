@@ -7,30 +7,30 @@ import { PassengerEndpoint } from "api/endpoints/passenger.endpoint.ts";
 import { useEffect } from "react";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { Button } from "components/button.tsx";
-import { ColumnConfig, ResponsiveTable } from "components/table.tsx";
+import { PassengerDto } from "api/models/passenger.model.ts";
 
-const ParamName = ({ children }) => {
-  return <Text color={"#787486"}>{children}</Text>;
+const ParamName = (x: { children: React.ReactNode }) => {
+  return <Text color={"#787486"}>{x.children}</Text>;
 };
 
-const Tab = ({color, children}) => {
+const Tab = (x: { color: string; children: React.ReactNode }) => {
   return (
     <div
       style={{
-        backgroundColor: color,
+        backgroundColor: x.color,
         width: "fit-content",
         padding: "5px 10px",
         borderRadius: 20,
       }}
     >
-      {children}
+      {x.children}
     </div>
   );
 };
 
 export const PassengerDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const [data, setData] = useState({});
+  const [data, setData] = useState<PassengerDto.Passenger | null>(null);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -38,21 +38,26 @@ export const PassengerDetails = () => {
     navigate(`/passengers/edit/${id}`);
   };
 
-  const columns: ColumnConfig[] = [
-    { header: "Дата", size: "2fr" },
-    { header: "Время от." },
-    { header: "Время приб.", centred: true },
-    { header: "Станция от." },
-    { header: "Станция приб.", centred: true },
-  ];
-
   useEffect(() => {
+    if (!id) {
+      return;
+    }
     PassengerEndpoint.findById(id).then((passenger) => {
       setData(passenger);
       setLoading(false);
     });
   }, []);
-  return (loading ? <LoaderWrapper height={"100%"}><Loader/></LoaderWrapper> :
+  if (loading && !data) {
+    return (
+      <LoaderWrapper height={"100%"}>
+        <Loader />
+      </LoaderWrapper>
+    );
+  }
+  if (!data) {
+    return <Text>Пассажир не найден</Text>;
+  }
+  return (
     <Stack direction={"column"} gap={30}>
       <PageHeader>Пассажир #{id}</PageHeader>
       <Stack gap={200}>
@@ -79,23 +84,25 @@ export const PassengerDetails = () => {
           </Stack>
           <Stack direction={"column"} gap={10}>
             <ParamName>Имется электрокардио стимулятор?</ParamName>
-            {
-              data.has_cardiac_pacemaker ?
+            {data.has_cardiac_pacemaker ? (
               <Tab color={"#FFCED1"}>
                 <Text color={"#D9232E"}>Кардио стим.</Text>
-              </Tab> :
+              </Tab>
+            ) : (
               <Tab color={"#16C09838"}>
                 <Text color={"#008767"}>Отсутсвует</Text>
               </Tab>
-            }
+            )}
           </Stack>
           <Stack direction={"column"} gap={6}>
             <ParamName>Комментарий</ParamName>
-            <Text size={18}>{data.additional_information || "Комментарий отсутствует"}</Text>
+            <Text size={18}>
+              {data.additional_information || "Комментарий отсутствует"}
+            </Text>
           </Stack>
-          <Button
-            style={{width: "fit-content"}}
-            onClick={handleEdit}>Редактировать</Button>
+          <Button style={{ width: "fit-content" }} onClick={handleEdit}>
+            Редактировать
+          </Button>
         </Stack>
         <Text size={24}>Заявки</Text>
         {/*<ResponsiveTable*/}
@@ -104,5 +111,6 @@ export const PassengerDetails = () => {
         {/*  renderRow={renderRow}*/}
         {/*/>*/}
       </Stack>
-    </Stack>);
+    </Stack>
+  );
 };

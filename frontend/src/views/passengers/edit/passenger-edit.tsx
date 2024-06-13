@@ -1,35 +1,53 @@
 import { PageHeader } from "components/pageHeader.tsx";
 import { Stack } from "components/stack.ts";
 import { useParams } from "react-router-dom";
-import {useEffect, useState} from "react";
-import {PassengerEndpoint} from "api/endpoints/passenger.endpoint.ts";
-import {Loader, LoaderWrapper} from "src/loader.tsx";
-import {Input} from "components/input.tsx";
-import {CustomDropdown} from "components/dropdown.tsx";
-import {Text} from "components/text.ts";
-import {Button} from "components/button.tsx";
+import { useEffect, useState } from "react";
+import { PassengerEndpoint } from "api/endpoints/passenger.endpoint.ts";
+import { Loader, LoaderWrapper } from "src/loader.tsx";
+import { Input } from "components/input.tsx";
+import { CustomDropdown } from "components/dropdown.tsx";
+import { Text } from "components/text.ts";
+import { Button } from "components/button.tsx";
+import { PassengerDto } from "api/models/passenger.model.ts";
 
 export const PassengerEdit = () => {
   const { id } = useParams<{ id: string }>();
-  const [data, setData] = useState({});
+  const [data, setData] = useState<PassengerDto.Passenger | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!id) {
+      return;
+    }
     PassengerEndpoint.findById(id).then((passenger) => {
-      passenger.patronymic = passenger.name.split(" ")[2];
-      passenger.second_name = passenger.name.split(" ")[1];
-      passenger.name = passenger.name.split(" ")[0];
+      // passenger.patronymic = passenger.name.split(" ")[2];
+      // passenger.second_name = passenger.name.split(" ")[1];
+      // passenger.name = passenger.name.split(" ")[0];
       setData(passenger);
       console.log(passenger);
       setLoading(false);
     });
   }, []);
-  return (loading ? <LoaderWrapper height={"100%"}><Loader/></LoaderWrapper> :
+
+  if (loading && !data) {
+    return (
+      <LoaderWrapper height={"100%"}>
+        <Loader />
+      </LoaderWrapper>
+    );
+  }
+
+  if (!data) {
+    return <Text>Пассажир не найден</Text>;
+  }
+  return loading ? (
+    <LoaderWrapper height={"100%"}>
+      <Loader />
+    </LoaderWrapper>
+  ) : (
     <Stack direction={"column"} gap={14} wFull style={{ maxWidth: "555px" }}>
       <PageHeader style={{ marginBottom: 16 }}>Пассажир #{id}</PageHeader>
-      <Input defaultValue={data.name} label={"Имя"} />
-      <Input defaultValue={data.second_name} label={"Фамилия"} />
-      <Input defaultValue={data.patronymic} label={"Отчество"} />
+      <Input defaultValue={data.name} label={"ФИО"} />
       <CustomDropdown
         label={"Пол"}
         options={["Мужской", "Женский"]}
