@@ -1,102 +1,117 @@
-import { useParams } from "react-router-dom";
-import { Stack } from "components/stack.ts";
 import { PageHeader } from "components/pageHeader.tsx";
-import { Input } from "components/input.tsx";
-import { CustomDropdown } from "components/dropdown.tsx";
+import { Stack } from "components/stack.ts";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Text } from "components/text.ts";
-import styled from "@emotion/styled";
+import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { Button } from "components/button.tsx";
+import { observer } from "mobx-react-lite";
+import styled from "@emotion/styled";
 import { theme } from "src/assets/theme.ts";
-import { UsersDto } from "api/models/users.model.ts";
+import { StaffDetailsViewModel } from "src/views/staff/detail/staff.detail.vm.ts";
 
-const ShiftButton = styled(Button)<{ active?: boolean }>`
-  background-color: ${({ active }) =>
-    active ? theme.colors.primary : "transparent"};
-  color: ${({ active }) => (active ? "#fff" : theme.colors.text)};
-  border: 1px solid ${theme.colors.primary};
-  &:hover {
-    background-color: ${theme.colors.primary};
-    color: #fff;
+const ParamName = (x: { children: React.ReactNode }) => {
+  return <Text color={"#787486"}>{x.children}</Text>;
+};
+
+const Tab = (x: { color: string; children: React.ReactNode }) => {
+  return (
+    <div
+      style={{
+        backgroundColor: x.color,
+        width: "fit-content",
+        padding: "5px 10px",
+        borderRadius: 20,
+      }}
+    >
+      {x.children}
+    </div>
+  );
+};
+
+const StaffDetails = observer(() => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [vm] = useState(() => new StaffDetailsViewModel(id!));
+
+  useEffect(() => {
+    vm.loadStaff();
+  }, [vm]);
+
+  const handleEdit = () => {
+    navigate(`/staff/${id}/edit`);
+  };
+
+  if (vm.loading && !vm.data) {
+    return (
+      <LoaderWrapper height={"100%"}>
+        <Loader />
+      </LoaderWrapper>
+    );
+  }
+
+  if (!vm.data) {
+    return <Text>Сотрудник не найден</Text>;
+  }
+
+  return (
+    <Stack direction={"column"} gap={30}>
+      <PageHeader>Сотрудник #{id}</PageHeader>
+      <ResponsiveStack>
+        <Stack direction={"column"} gap={20}>
+          <Text size={24}>Данные сотрудника</Text>
+          <Stack direction={"column"} gap={6}>
+            <ParamName>ФИО</ParamName>
+            <Text size={18}>
+              {vm.data.second_name} {vm.data.first_name} {vm.data.patronymic}
+            </Text>
+          </Stack>
+          <Stack direction={"column"} gap={6}>
+            <ParamName>Пол</ParamName>
+            <Text size={18}>
+              {vm.data.sex === "male" ? "Мужской" : "Женский"}
+            </Text>
+          </Stack>
+          <Stack direction={"column"} gap={6}>
+            <ParamName>Раб. номер телефона</ParamName>
+            <Text size={18}>{vm.data.work_phone}</Text>
+          </Stack>
+          <Stack direction={"column"} gap={6}>
+            <ParamName>Личн. номер телефона</ParamName>
+            <Text size={18}>{vm.data.personal_phone}</Text>
+          </Stack>
+          <Stack direction={"column"} gap={10}>
+            <ParamName>Должность</ParamName>
+            <Tab color={"#FFCED1"}>
+              <Text color={"#D9232E"}>{vm.data.rank}</Text>
+            </Tab>
+          </Stack>
+          <Stack direction={"column"} gap={10}>
+            <ParamName>Только легкий труд?</ParamName>
+            {vm.data.is_lite ? (
+              <Tab color={"#FFCED1"}>
+                <Text color={"#D9232E"}>Да</Text>
+              </Tab>
+            ) : (
+              <Tab color={"#16C09838"}>
+                <Text color={"#008767"}>Нет</Text>
+              </Tab>
+            )}
+          </Stack>
+          <Button style={{ width: "fit-content" }} onClick={handleEdit}>
+            Редактировать
+          </Button>
+        </Stack>
+      </ResponsiveStack>
+    </Stack>
+  );
+});
+
+const ResponsiveStack = styled(Stack)`
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    flex-direction: column;
+    gap: 20px;
   }
 `;
 
-const workerExample = {
-  first_name: "2",
-  second_name: "2",
-  patronymic: "2",
-  work_phone: "2",
-  personal_phone: "2",
-  personnel_number: "123",
-  role: "admin",
-  rank: "ЦА",
-  shift: "5",
-  working_hours: "08:00-17:00",
-  sex: "male",
-  area: "ЦУ-1",
-  is_lite: false,
-  id: 2,
-};
-
-export const StaffDetail = () => {
-  const { id } = useParams<{ id: string }>();
-  const renderForm = (staff: UsersDto.User) => {
-    return (
-      <Stack direction={"column"} gap={20} wFull style={{ maxWidth: "555px" }}>
-        <Input defaultValue={staff.first_name} label={"Имя"} />
-        <Input defaultValue={staff.second_name} label={"Фамилия"} />
-        <Input defaultValue={staff.patronymic} label={"Отчество"} />
-        <CustomDropdown
-          label={"Пол"}
-          options={["Мужской", "Женский"]}
-          onChange={() => {}}
-          value={staff.sex === "male" ? "Мужской" : "Женский"}
-        />
-        <Input defaultValue={staff.work_phone} label={"Раб. номер телефона"} />
-        <Input
-          defaultValue={staff.personal_phone}
-          label={"Личн. номер телефона"}
-        />
-        <Input
-          defaultValue={staff.personnel_number}
-          label={"Табельный номер"}
-        />
-        <CustomDropdown
-          label={"Должность"}
-          options={["ЦА", "Менеджер", "Полевой инженер"]}
-          onChange={() => {}}
-          value={staff.rank}
-        />
-        <Text size={16}>Смена</Text>
-        <Stack direction={"row"} gap={10}>
-          {["1", "2", "1н", "2н", "5"].map((shift, index) => (
-            <ShiftButton key={index} size="small" type="button">
-              {shift}
-            </ShiftButton>
-          ))}
-        </Stack>
-        <CustomDropdown
-          label={"Участок"}
-          options={["ЦУ-1", "ЦУ-2", "ЦУ-3"]}
-          onChange={() => {}}
-          value={staff.area}
-        />
-        <Stack direction={"row"} align={"center"} gap={10}>
-          {/*//TODO: add checkbox component*/}
-          <input type="checkbox" />
-          <Text size={14}>Легкий труд</Text>
-        </Stack>
-        {/*<Input placeholder={"Пароль"} label={"Пароль"} type="password" />*/}
-        <Stack direction={"row"} gap={20}>
-          <Button type={"submit"}>Сохранить</Button>
-          <Button variant={"black"}>Удалить</Button>
-        </Stack>
-      </Stack>
-    );
-  };
-  return (
-    <Stack direction={"column"} gap={20} style={{ maxWidth: "500px" }}>
-      <PageHeader>Сотрудник #{id}</PageHeader>
-      {renderForm(workerExample as UsersDto.User)}
-    </Stack>
-  );
-};
+export default StaffDetails;

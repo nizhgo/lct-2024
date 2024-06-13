@@ -26,8 +26,8 @@ export const UsersEndpoint = new (class WorkersEndpoint {
   };
 
   //update worker
-  update = async (id: string, data: UsersDto.User) => {
-    const res = await Http.request(`/users/${id}/`)
+  update = async (id: string, data: UsersDto.UserUpdateForm) => {
+    const res = await Http.request(`/users/${id}`)
       .expectJson(UsersDto.User)
       .put(data);
     return res;

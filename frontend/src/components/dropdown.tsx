@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { observer } from "mobx-react-lite";
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useEffect } from "react";
 import { Stack } from "src/components/stack.ts";
 import { useKeydown } from "src/utils/hooks/keydown.hook.ts";
 import { Text } from "src/components/text.ts";
@@ -106,11 +106,17 @@ const DropdownOpenButton = styled.button<{ isOpen: boolean }>`
 export const CustomDropdown = observer(
   <T extends {}>(x: LabeledDropdownProps<T>) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [curOption, setCurOption] = useState(x.value);
+    const [curOption, setCurOption] = useState<T | undefined>(x.value);
     const ref = React.useRef<HTMLDivElement>(null);
     const theme = useTheme();
+
     useKeydown("Enter", () => setIsOpen(false), undefined, [isOpen]);
     useOnClickOutside([ref], () => setIsOpen(false));
+
+    useEffect(() => {
+      setCurOption(x.value);
+    }, [x.value]);
+
     const handleSelect = (option: T) => {
       setCurOption(option);
       x.onChange(option as T);

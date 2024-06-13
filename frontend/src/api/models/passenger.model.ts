@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { UsersDto } from "api/models/users.model.ts";
 export namespace PassengerDto {
   export const PassengerCategory = z.enum([
     "ИЗТ",
@@ -19,6 +20,21 @@ export namespace PassengerDto {
     typeof PassengerDto.PassengerCategory
   >;
 
+  export const passengerCategoryValues: PassengerCategory[] = [
+    "ИЗТ",
+    "ИЗ",
+    "ИС",
+    "ИК",
+    "ИО",
+    "ДИ",
+    "ПЛ",
+    "РД",
+    "РДК",
+    "ОГД",
+    "ОВ",
+    "ИУ",
+  ];
+
   export const Passenger = z.object({
     id: z.number(),
     name: z.string(),
@@ -26,18 +42,21 @@ export namespace PassengerDto {
     category: PassengerCategory,
     additional_information: z.string(),
     has_cardiac_pacemaker: z.boolean(),
-    sex: z.string(),
+    sex: UsersDto.Genders,
   });
 
   export type Passenger = z.infer<typeof PassengerDto.Passenger>;
 
   export const PassengerForm = z.object({
-    first_name: z.string(),
-    second_name: z.string(),
-    patronymic: z.string(),
-    category: z.enum(["CAT1", "CAT2", "CAT3"]),
-    description: z.string(),
-    phone: z.string(),
+    name: z.string().min(1, { message: "Имя обязательно" }),
+    contact_details: z
+      .string()
+      .min(1, { message: "Контактные данные обязательны" }),
+    sex: UsersDto.Genders,
+    category: PassengerCategory,
+    additional_information: z
+      .string().optional(),
+    has_cardiac_pacemaker: z.boolean().default(false),
   });
 
   export type PassengerForm = z.infer<typeof PassengerDto.PassengerForm>;

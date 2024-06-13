@@ -24,7 +24,7 @@ export const PassengerEndpoint = new (class PassengerEndpoint {
 
   //create passengers
   create = async (data: PassengerDto.PassengerForm) => {
-    const res = await Http.request("/passengers/signup")
+    const res = await Http.request("/passengers/")
       .expectJson(PassengerDto.Passenger)
       .post(data);
     return res;
@@ -32,7 +32,7 @@ export const PassengerEndpoint = new (class PassengerEndpoint {
 
   //update passengers
   update = async (id: string, data: PassengerDto.PassengerForm) => {
-    const res = await Http.request(`/passenger/${id}`)
+    const res = await Http.request(`/passengers/${id}`)
       .expectJson(PassengerDto.Passenger)
       .put(data);
     return res;
@@ -40,7 +40,7 @@ export const PassengerEndpoint = new (class PassengerEndpoint {
 
   //delete passengers
   delete = async (id: string) => {
-    const res = await Http.request(`/passenger/${id}`)
+    const res = await Http.request(`/passengers/${id}`)
       .expectJson(PassengerDto.Passenger)
       .delete();
     return res;

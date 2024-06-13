@@ -5,7 +5,7 @@ import {
   createBrowserRouter,
   Outlet,
   redirect,
-  RouterProvider
+  RouterProvider,
 } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./assets/theme.ts";
@@ -18,8 +18,6 @@ import { NotFoundPage } from "src/views/404/notFound.page.tsx";
 import { ErrorTemplate } from "components/error.tsx";
 import { AppLayout } from "src/views/layout.tsx";
 import MainPage from "src/mainPage.tsx";
-import { StaffDetail } from "src/views/staff/detail/staff.detail.tsx";
-import { PassengerForm } from "src/views/passengers/form/passenger-form.tsx";
 import { PassengerDetails } from "src/views/passengers/details/passenger.detail.tsx";
 import RequestFormPage from "src/views/request/form/request.page.tsx";
 import RequestDetailPage from "src/views/request/details/requestDetailPage.tsx";
@@ -31,6 +29,9 @@ import AuthService from "src/stores/auth.service.ts";
 import { observer } from "mobx-react-lite";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { PassengerEdit } from "src/views/passengers/edit/passenger-edit.tsx";
+import PassengerForm from "src/views/passengers/form/passenger-form.tsx";
+import StaffEditPage from "src/views/staff/edit/staff.edit.page.tsx";
+import StaffDetail from "src/views/staff/detail/staff.detail.tsx";
 
 const nonAuthCheck = () => {
   if (!AuthService.isLoading && !AuthService.user) {
@@ -93,6 +94,11 @@ const router = createBrowserRouter([
         loader: nonAuthCheck,
       },
       {
+        path: "/staff/:id/edit",
+        element: <StaffEditPage />,
+        loader: nonAuthCheck,
+      },
+      {
         path: "/request",
         element: <Outlet />,
         errorElement: <ErrorTemplate />,
@@ -135,7 +141,7 @@ const router = createBrowserRouter([
     loader: () => {
       AuthService.logout();
       return redirect("/login");
-    }
+    },
   },
   { path: "*", element: <NotFoundPage /> },
 ]);
@@ -158,6 +164,4 @@ const Root = observer(() => {
   );
 });
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <Root />
-);
+ReactDOM.createRoot(document.getElementById("root")!).render(<Root />);

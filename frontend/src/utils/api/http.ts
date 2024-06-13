@@ -61,7 +61,21 @@ class HttpRequest<T> {
 
   public async put(variables?: unknown): Promise<T> {
     try {
-      const response: AxiosResponse = await axios.put(this.#path, variables, {
+      const response: AxiosResponse = await axios.patch(this.#path, variables, {
+        headers: {
+          ...this.getAuthHeaders(),
+        },
+        ...this.#config,
+      });
+      return this.handleResponse(response);
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  public async patch(variables?: unknown): Promise<T> {
+    try {
+      const response: AxiosResponse = await axios.patch(this.#path, variables, {
         headers: {
           ...this.getAuthHeaders(),
         },

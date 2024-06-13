@@ -12,7 +12,7 @@ export namespace UsersDto {
 
   export const shiftsValues: Shifts[] = ["1", "2H", "1(Н)", "2(Н)", "5"];
 
-  export const Roles = z.enum(["admin", "worker"]); //TODO: add all roles
+  export const Roles = z.enum(["admin", "worker", "operator"]); //TODO: add all roles
 
   export type Roles = z.infer<typeof UsersDto.Roles>;
 
@@ -77,9 +77,9 @@ export namespace UsersDto {
     work_phone: z.string(),
     personal_phone: z.string(),
     personnel_number: z.string(),
-    role: z.string(),
+    role: Roles,
     rank: Ranks,
-    shift: z.string(),
+    shift: Shifts,
     working_hours: z.string(),
     sex: Genders,
     area: Areas,
@@ -113,6 +113,30 @@ export namespace UsersDto {
 
   export type UserForm = z.infer<typeof UsersDto.UserForm>;
 
+  export const UserUpdateForm = z.object({
+    first_name: z.string().min(1, { message: "Имя обязательно" }),
+    second_name: z.string().min(1, { message: "Фамилия обязательна" }),
+    patronymic: z.string().min(1, { message: "Отчество обязательно" }),
+    work_phone: z
+      .string()
+      .min(1, { message: "Рабочий номер телефона обязателен" }),
+    personal_phone: z
+      .string()
+      .min(1, { message: "Личный номер телефона обязателен" }),
+    personnel_number: z
+      .string()
+      .min(1, { message: "Табельный номер обязателен" }),
+    role: Roles,
+    rank: Ranks,
+    shift: Shifts,
+    working_hours: z.string().min(1, { message: "Рабочие часы обязательны" }),
+    sex: Genders,
+    area: Areas,
+    is_lite: z.boolean().optional(),
+  });
+
+  export type UserUpdateForm = z.infer<typeof UsersDto.UserUpdateForm>;
+
   const localizedGender: Record<Genders, string> = {
     male: "Мужской",
     female: "Женский",
@@ -123,6 +147,7 @@ export namespace UsersDto {
   const localizedRole: Record<Roles, string> = {
     admin: "Администратор",
     worker: "Пользователь",
+    operator: "Оператор",
   };
 
   export const localizeRole = (role: Roles) => localizedRole[role];
@@ -149,5 +174,22 @@ export namespace UsersDto {
       default:
         return [];
     }
+  };
+
+  export const convertUserToForm = (user: User): UserUpdateForm => {
+    return {
+      area: user.area,
+      sex: user.sex,
+      first_name: user.first_name,
+      second_name: user.second_name,
+      patronymic: user.patronymic,
+      work_phone: user.work_phone,
+      personal_phone: user.personal_phone,
+      personnel_number: user.personnel_number,
+      role: user.role,
+      rank: user.rank,
+      shift: user.shift,
+      working_hours: user.working_hours,
+    };
   };
 }
