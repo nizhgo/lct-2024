@@ -210,9 +210,9 @@ export const AppLayout = () => {
               <Text>Главная</Text>
             </SidebarItem>
           </Link>
-          <Link to="/request">
+          <Link to="/requests">
             <SidebarItem
-              active={location.pathname.startsWith("/request")}
+              active={location.pathname.startsWith("/requests")}
               onClick={onLinkClick}
             >
               <Svg src={RequestsIcon} width={24} />

@@ -12,15 +12,12 @@ import { theme } from "./assets/theme.ts";
 import PassengersPage from "src/views/passengers/passengers.page.tsx";
 import StaffRegPage from "src/views/staff/resigtration/staffRegPage.tsx";
 import StaffPage from "src/views/staff/staff.page.tsx";
-import RequestPage from "src/views/request/request.page.tsx";
 import { LoginPage } from "src/views/login/login.page.tsx";
 import { NotFoundPage } from "src/views/404/notFound.page.tsx";
 import { ErrorTemplate } from "components/error.tsx";
 import { AppLayout } from "src/views/layout.tsx";
 import MainPage from "src/mainPage.tsx";
 import { PassengerDetails } from "src/views/passengers/details/passenger.detail.tsx";
-import RequestFormPage from "src/views/request/form/request.page.tsx";
-import RequestDetailPage from "src/views/request/details/requestDetailPage.tsx";
 import { ProfilePage } from "src/views/profile/profile.detail.tsx";
 import { SchedulePage } from "src/views/schedule/schedule.page.tsx";
 import { ToastContainer } from "react-toastify";
@@ -32,6 +29,9 @@ import { PassengerEdit } from "src/views/passengers/edit/passenger-edit.tsx";
 import PassengerForm from "src/views/passengers/form/passenger-form.tsx";
 import StaffEditPage from "src/views/staff/edit/staff.edit.page.tsx";
 import StaffDetail from "src/views/staff/detail/staff.detail.tsx";
+import RequestsPage from "src/views/requests/requests.page.tsx";
+import RequestDetail from "src/views/requests/details/request.detail.tsx";
+import RequestCreatePage from "src/views/requests/form/request.form.tsx";
 
 const nonAuthCheck = () => {
   if (!AuthService.isLoading && !AuthService.user) {
@@ -99,22 +99,26 @@ const router = createBrowserRouter([
         loader: nonAuthCheck,
       },
       {
-        path: "/request",
+        path: "/requests",
         element: <Outlet />,
         errorElement: <ErrorTemplate />,
         loader: nonAuthCheck,
         children: [
           {
-            path: "/request",
-            element: <RequestPage />,
+            path: "/requests",
+            element: <RequestsPage />,
           },
           {
-            path: "/request/:id",
-            element: <RequestDetailPage />,
+            path: "/requests/:id",
+            element: <RequestDetail />,
           },
           {
-            path: "/request/new",
-            element: <RequestFormPage />,
+            path: "/requests/new",
+            element: <RequestCreatePage />,
+          },
+          {
+            path: "/requests/:id/edit",
+            element: <RequestsPage />,
           },
         ],
       },

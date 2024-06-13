@@ -141,7 +141,9 @@ export const CustomDropdown = observer(
           onClick={() => setIsOpen(!isOpen)}
         >
           {curOption
-            ? String(x.render ? x.render(curOption) : curOption)
+            ? x.render
+              ? x.render(curOption)
+              : (curOption as unknown as string)
             : "Не выбрано"}
           <DropdownOpenButton isOpen={isOpen}>
             <Text fontFamily={"IcoMoon"} size={10}>
@@ -164,7 +166,7 @@ export const CustomDropdown = observer(
                   aria-disabled={x.disabledOptions?.includes(option)}
                   tabIndex={index}
                 >
-                  {String(x.render ? x.render(option) : option)}
+                  {x.render ? x.render(option) : (option as unknown as string)}
                 </Option>
               ))}
             </OptionsList>
