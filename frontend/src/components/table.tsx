@@ -40,7 +40,6 @@ const GridWrapper = styled.div<{ columnSizes: string }>`
   display: grid;
   grid-template-columns: ${({ columnSizes }) => columnSizes};
   width: 100%;
-  border-top: 1px solid ${(p) => p.theme.colors.inputBorder};
 
   @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
     display: flex;
@@ -73,7 +72,7 @@ const GridRow = styled.div`
 `;
 
 const GridCellHeader = styled.div<{ centred?: boolean }>`
-  padding: 20px 14px;
+  padding: 10px 14px;
   font-size: 14px;
   color: ${(p) => p.theme.colors.textSecondary};
   font-weight: bold;
