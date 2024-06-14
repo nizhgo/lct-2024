@@ -22,17 +22,18 @@ export default defineConfig({
       short_name: "M Project",
         icons: [
           {
-            src: "/192logo.png",
+            src: "192logo.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "/512logo.png",
+            src: "512logo.png",
             sizes: "512x512",
             type: "image/png",
           },
         ],
-      theme_color: "#D9282F",
+        display: "standalone",
+        theme_color: "#D9282F",
         description: "Сервис мониторинга и адаптивного распределения заявок на обслуживание от маломобильных пассажиров",
       },
     }),
