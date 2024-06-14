@@ -15,6 +15,13 @@ export const RequestsEndpoint = new (class PassengerEndpoint {
     return res;
   };
 
+  findByPassengerId = async (id: string) => {
+    const res = await Http.request(`/requests/passenger/${id}`)
+      .expectJson(z.array(RequestsDto.Request))
+      .get();
+    return res;
+  };
+
   create = async (data: RequestsDto.RequestForm) => {
     return await Http.request("/requests/")
       .expectJson(RequestsDto.Request)
