@@ -13,6 +13,7 @@ import { ColumnConfig, GridCell, ResponsiveTable } from "components/table.tsx";
 import { RequestsDto } from "api/models/requests.model.ts";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 import { Svg } from "components/svg.tsx";
+import { findLineIconByName } from "src/assets/metro.tsx";
 
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
@@ -127,9 +128,19 @@ export const PassengerDetails = observer(() => {
         const date = new Date(request.datetime);
         return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
       case "Станция отпр.":
-        return request.station_from;
+        return (
+          <Text size={18}>
+            {findLineIconByName(request.station_from.name_line)}
+            {request.station_from.name_station}
+          </Text>
+        );
       case "Станция приб.":
-        return request.station_to;
+        return (
+          <Text size={18}>
+            {findLineIconByName(request.station_to.name_line)}
+            {request.station_to.name_station}
+          </Text>
+        );
       case "Статус":
         return (
           <StatusBadge status={request.status}>

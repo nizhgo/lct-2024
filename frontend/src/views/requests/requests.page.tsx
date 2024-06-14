@@ -10,7 +10,7 @@ import { PageHeader } from "components/pageHeader.tsx";
 import { Input } from "components/input.tsx";
 import { ColumnConfig, GridCell, ResponsiveTable } from "components/table.tsx";
 import { RequestsDto } from "api/models/requests.model.ts";
-import { findIcon } from "src/assets/metro.tsx";
+import { findLineIconByName } from "src/assets/metro.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -77,20 +77,22 @@ const RequestsPage = observer(() => {
         return (
           <Link to={`/requests/${request.id}`}>{request.passenger.name}</Link>
         );
-      case "Откуда":
+      case "Откуда": {
         return (
           <Stack direction={"row"} gap={5} align={"center"}>
-            {findIcon(request.station_from)}
-            {request.station_from}
+            {findLineIconByName(request.station_from.name_line)}
+            {request.station_from.name_station}
           </Stack>
         );
-      case "Куда":
+      }
+      case "Куда": {
         return (
           <Stack direction={"row"} gap={5} align={"center"}>
-            {findIcon(request.station_to)}
-            {request.station_to}
+            {findLineIconByName(request.station_to.name_line)}
+            {request.station_to.name_station}
           </Stack>
         );
+      }
       case "Дата и время":
         return new Date(request.datetime).toLocaleString();
       case "Статус":

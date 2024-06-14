@@ -8,12 +8,13 @@ import { theme } from "src/assets/theme.ts";
 import { Text } from "components/text.ts";
 import { Stack } from "components/stack.ts";
 import { Input } from "components/input";
-import { CustomDropdown } from "components/dropdown.tsx";
+import { CustomDropdown, SearchableDropdown } from "components/dropdown.tsx";
 import { Button } from "components/button.tsx";
 import { PageHeader } from "components/pageHeader.tsx";
 import { RequestsDto } from "api/models/requests.model.ts";
 import { PassengerDto } from "api/models/passenger.model.ts";
 import { RequestCreateViewModel } from "src/views/requests/form/request.form.vm.ts";
+import { findLineIconByName, stations } from "src/assets/metro.tsx";
 
 const PageLayout = styled.div`
   display: grid;
@@ -57,19 +58,56 @@ const RequestCreatePage = observer(() => {
             wFull
             style={{ maxWidth: "555px" }}
           >
-            <Input
-              label="Станция отправления"
-              placeholder="Введите станцию отправления"
-              error={errors.station_from?.message?.toString()}
-              register={register("station_from")}
-              required
+            <Controller
+              name="station_from_id"
+              control={control}
+              render={({ field }) => (
+                <SearchableDropdown
+                  label="Станция отправления"
+                  options={stations}
+                  defaultValue={stations[0]}
+                  onChange={(option) => field.onChange(Number(option.id))}
+                  value={stations.find(
+                    (station) =>
+                      station.id ===
+                      (field.value ? field.value.toString() : ""),
+                  )}
+                  searchField="name_station"
+                  error={errors.station_from_id?.message?.toString()}
+                  required
+                  render={(option) => (
+                    <Stack direction={"row"} gap={5} align={"center"}>
+                      {findLineIconByName(option.name_line)}
+                      {option.name_station}
+                    </Stack>
+                  )}
+                />
+              )}
             />
-            <Input
-              label="Станция прибытия"
-              placeholder="Введите станцию прибытия"
-              error={errors.station_to?.message?.toString()}
-              register={register("station_to")}
-              required
+            <Controller
+              name="station_to_id"
+              control={control}
+              render={({ field }) => (
+                <SearchableDropdown
+                  label="Станция прибытия"
+                  options={stations}
+                  searchField="name_station"
+                  onChange={(option) => field.onChange(Number(option.id))}
+                  value={stations.find(
+                    (station) =>
+                      station.id ===
+                      (field.value ? field.value.toString() : ""),
+                  )}
+                  error={errors.station_to_id?.message?.toString()}
+                  required
+                  render={(option) => (
+                    <Stack direction={"row"} gap={5} align={"center"}>
+                      {findLineIconByName(option.name_line)}
+                      {option.name_station}
+                    </Stack>
+                  )}
+                />
+              )}
             />
             <Input
               label="Описание отправления"

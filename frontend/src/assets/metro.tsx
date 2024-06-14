@@ -1,36 +1,9 @@
 import { Text } from "components/text.ts";
+import { RequestsDto } from "api/models/requests.model.ts";
 
-export type Line =
-  | "1"
-  | "2"
-  | "3"
-  | "4"
-  | "4А"
-  | "5"
-  | "6"
-  | "7"
-  | "8"
-  | "8А"
-  | "9"
-  | "10"
-  | "11"
-  | "12"
-  | "13"
-  | "14"
-  | "15"
-  | "БКЛ"
-  | "БКЛ(А)"
-  | "Д1"
-  | "Д2"
-  | "Д3"
-  | "Д4"
-  | "Д5"
-  | "МЦК"
-  | "Л1";
-
-interface Station {
+export interface Station {
   name_station: string;
-  name_line: Line;
+  name_line: RequestsDto.Line;
   id: string;
   id_line: string;
 }
@@ -2850,13 +2823,14 @@ export const lineAndIcon: Record<Line, JSX.Element> = {
   ),
 };
 
-export const findIcon = (name: string) => {
-  const station = stations.find((station) => station.name_station === name);
-  if (station) {
-    return lineAndIcon[station.name_line];
-  }
-  return null;
+export const findLineIconByName = (
+  name: RequestsDto.Line,
+): JSX.Element | undefined => {
+  return lineAndIcon[name];
 };
 
+export const findStationById = (id: string) => {
+  return stations.find((station) => station.id === id);
+}
 
 //todo this is so cringe, do it on backend later

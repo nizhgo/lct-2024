@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite";
 import { useTheme } from "@emotion/react";
 import { RequestDetailsViewModel } from "src/views/requests/details/request.detail.vm.ts";
 import { RequestsDto } from "api/models/requests.model.ts";
-import { findIcon } from "src/assets/metro.tsx";
+import { findLineIconByName } from "src/assets/metro.tsx";
 
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
@@ -67,11 +67,17 @@ const RequestDetails = observer(() => {
           </Stack>
           <Stack direction={"column"} gap={6}>
             <ParamName>Откуда</ParamName>
-            <Text size={18}>{findIcon(vm.data.station_from)}{vm.data.station_from}</Text>
+            <Text size={18}>
+              {findLineIconByName(vm.data.station_from.name_line)}
+              {vm.data.station_from.name_station}
+            </Text>
           </Stack>
           <Stack direction={"column"} gap={6}>
             <ParamName>Куда</ParamName>
-            <Text size={18}>{findIcon(vm.data.station_to)}{vm.data.station_to}</Text>
+            <Text size={18}>
+              {findLineIconByName(vm.data.station_to.name_line)}
+              {vm.data.station_to.name_station}
+            </Text>
           </Stack>
           <Stack direction={"column"} gap={6}>
             <ParamName>Дата и время</ParamName>
