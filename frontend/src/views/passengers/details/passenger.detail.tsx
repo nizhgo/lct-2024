@@ -60,6 +60,38 @@ const DetailsSection = styled(Stack)`
   }
 `;
 
+const StatusBadge = styled.div<{ status: string }>`
+  padding: 6px 8px;
+  border-radius: 4px;
+  color: ${(p) =>
+    p.status === "new"
+      ? p.theme.colors.status.new
+      : p.status === "processed_auto"
+        ? p.theme.colors.status.processed_auto
+        : p.status === "processed"
+          ? p.theme.colors.status.processed
+          : p.theme.colors.status.completed};
+  background-color: ${(p) =>
+    p.status === "new"
+      ? `${p.theme.colors.status.new}30`
+      : p.status === "processed_auto"
+        ? `${p.theme.colors.status.processed_auto}30`
+        : p.status === "processed"
+          ? `${p.theme.colors.status.processed}30`
+          : `${p.theme.colors.status.completed}30`};
+  border: 1px solid
+    ${(p) =>
+      p.status === "new"
+        ? p.theme.colors.status.new
+        : p.status === "processed_auto"
+          ? p.theme.colors.status.processed_auto
+          : p.status === "processed"
+            ? p.theme.colors.status.processed
+            : p.theme.colors.status.completed};
+  font-weight: 700;
+  text-align: center;
+`;
+
 export const PassengerDetails = observer(() => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -77,10 +109,9 @@ export const PassengerDetails = observer(() => {
   const columns: ColumnConfig[] = [
     { header: "ID" },
     { header: "Дата" },
-    { header: "Время от" },
-    { header: "Время до" },
-    { header: "Станция от." },
+    { header: "Станция отпр." },
     { header: "Станция приб." },
+    { header: "Статус" },
   ];
   const renderCellContent = (
     columnHeader: string,
@@ -90,15 +121,19 @@ export const PassengerDetails = observer(() => {
       case "ID":
         return <Link to={`/requests/${request.id}`}>{request.id}</Link>;
       case "Дата":
-        return request.datetime;
-      case "Время от":
-        return "-";
-      case "Время до":
-        return "-";
-      case "Станция от.":
+        // eslint-disable-next-line no-case-declarations
+        const date = new Date(request.datetime);
+        return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+      case "Станция отпр.":
         return request.station_from;
       case "Станция приб.":
         return request.station_to;
+      case "Статус":
+        return (
+          <StatusBadge status={request.status}>
+            {RequestsDto.localizeRequestStatus(request.status)}
+          </StatusBadge>
+        );
       default:
         return null;
     }
