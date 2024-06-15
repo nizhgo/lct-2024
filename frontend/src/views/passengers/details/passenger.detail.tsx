@@ -129,14 +129,14 @@ export const PassengerDetails = observer(() => {
         return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
       case "Станция отпр.":
         return (
-          <Text size={18}>
+          <Text>
             {findLineIconByName(request.station_from.name_line)}
             {request.station_from.name_station}
           </Text>
         );
       case "Станция приб.":
         return (
-          <Text size={18}>
+          <Text>
             {findLineIconByName(request.station_to.name_line)}
             {request.station_to.name_station}
           </Text>
