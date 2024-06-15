@@ -12,6 +12,8 @@ import { useTheme } from "@emotion/react";
 import { Tooltip } from "components/tooltip.tsx";
 import InfinityTable from "components/infinity-table.tsx";
 import { CustomDropdown } from "components/dropdown.tsx";
+import {Svg} from "components/svg.tsx";
+import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -89,6 +91,12 @@ const CheckinPage = observer(() => {
 
   return (
     <Stack wFull hFull direction={"column"} gap={20}>
+      <Link to={"/staff"}>
+        <Stack align={"center"} gap={6}>
+          <Svg src={BackArrowIcon} width={20} color={"black"} />
+          <Text size={16}>К списку сотрудников</Text>
+        </Stack>
+      </Link>
       <ContentHeader>
         <PageHeader>Посещаемость сотрудников</PageHeader>
       </ContentHeader>

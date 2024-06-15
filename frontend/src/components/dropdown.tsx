@@ -13,7 +13,7 @@ const Label = styled.label`
   color: ${(p) => p.theme.colors.text};
 `;
 interface LabeledDropdownProps<T> {
-  label: string;
+  label?: string;
   onChange: (v: T) => void;
   value?: T | undefined;
   defaultValue?: T;
