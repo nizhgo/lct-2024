@@ -25,7 +25,7 @@ import { useEffect } from "react";
 import AuthService from "src/stores/auth.service.ts";
 import { observer } from "mobx-react-lite";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
-import { PassengerEdit } from "src/views/passengers/edit/passenger-edit.tsx";
+import { PassengerEditPage } from "src/views/passengers/edit/passenger.edit.page.tsx";
 import PassengerForm from "src/views/passengers/form/passenger-form.tsx";
 import StaffEditPage from "src/views/staff/edit/staff.edit.page.tsx";
 import StaffDetail from "src/views/staff/detail/staff.detail.tsx";
@@ -33,6 +33,7 @@ import RequestsPage from "src/views/requests/requests.page.tsx";
 import RequestDetail from "src/views/requests/details/request.detail.tsx";
 import RequestCreatePage from "src/views/requests/form/request.form.tsx";
 import CheckinPage from "src/views/staff/checkin.page.tsx";
+import RequestEditPage from "src/views/requests/edit/request.edit.page.tsx";
 
 const nonAuthCheck = () => {
   if (!AuthService.isLoading && !AuthService.user) {
@@ -70,7 +71,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/passengers/edit/:id",
-            element: <PassengerEdit />,
+            element: <PassengerEditPage />,
           },
           {
             path: "/passengers/new",
@@ -123,8 +124,8 @@ const router = createBrowserRouter([
             element: <RequestCreatePage />,
           },
           {
-            path: "/requests/:id/edit",
-            element: <RequestsPage />,
+            path: "/requests/edit/:id/",
+            element: <RequestEditPage />,
           },
         ],
       },

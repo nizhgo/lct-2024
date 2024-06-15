@@ -45,7 +45,7 @@ const TextArea = styled.textarea`
   }
 `;
 
-export const PassengerEdit = observer(() => {
+export const PassengerEditPage = observer(() => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
