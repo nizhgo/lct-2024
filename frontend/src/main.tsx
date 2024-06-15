@@ -32,6 +32,7 @@ import StaffDetail from "src/views/staff/detail/staff.detail.tsx";
 import RequestsPage from "src/views/requests/requests.page.tsx";
 import RequestDetail from "src/views/requests/details/request.detail.tsx";
 import RequestCreatePage from "src/views/requests/form/request.form.tsx";
+import CheckinPage from "src/views/staff/checkin.page.tsx";
 
 const nonAuthCheck = () => {
   if (!AuthService.isLoading && !AuthService.user) {
@@ -96,6 +97,11 @@ const router = createBrowserRouter([
       {
         path: "/staff/:id/edit",
         element: <StaffEditPage />,
+        loader: nonAuthCheck,
+      },
+      {
+        path: "/staff/checkin",
+        element: <CheckinPage />,
         loader: nonAuthCheck,
       },
       {
