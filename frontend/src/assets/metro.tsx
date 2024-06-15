@@ -1,9 +1,9 @@
 import { Text } from "components/text.ts";
-import { RequestsDto } from "api/models/requests.model.ts";
+import { StationsDto } from "api/models/stations.models.ts";
 
 export interface Station {
   name_station: string;
-  name_line: RequestsDto.Line;
+  name_line: StationsDto.Line;
   id: string;
   id_line: string;
 }
@@ -2824,7 +2824,7 @@ export const lineAndIcon: Record<Line, JSX.Element> = {
 };
 
 export const findLineIconByName = (
-  name: RequestsDto.Line,
+  name: StationsDto.Line,
 ): JSX.Element | undefined => {
   return lineAndIcon[name];
 };

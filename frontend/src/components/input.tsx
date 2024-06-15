@@ -93,7 +93,7 @@ const ClearButton = styled.button`
 
 // Input component props
 export interface InputProps {
-  type?: "text" | "number" | "password";
+  type?: "text" | "number" | "password" | "datetime-local" | "date";
   defaultValue?: string | null;
   onChange?: (value: string) => void;
   readonly?: boolean;

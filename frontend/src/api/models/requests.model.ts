@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { PassengerDto } from "api/models/passenger.model.ts";
+import { StationsDto } from "api/models/stations.models.ts";
 
 export namespace RequestsDto {
   export const RequestsStatus = z.enum([
@@ -24,46 +25,6 @@ export namespace RequestsDto {
 
   export const acceptationMethods: AcceptationMethod[] = ["phone", "email"];
 
-  export const Line = z.enum([
-    "1",
-    "2",
-    "3",
-    "4",
-    "4А",
-    "5",
-    "6",
-    "7",
-    "8",
-    "8А",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "БКЛ",
-    "БКЛ(А)",
-    "Д1",
-    "Д2",
-    "Д3",
-    "Д4",
-    "Д5",
-    "МЦК",
-    "Л1",
-  ]);
-
-  export type Line = z.infer<typeof Line>;
-
-  export const Station = z.object({
-    id_line: z.number(),
-    name_station: z.string(),
-    name_line: Line,
-    id: z.number(),
-  });
-
-  export type Station = z.infer<typeof Station>;
-
   export const Request = z.object({
     passenger_id: z.number(),
     description_from: z.string().optional(),
@@ -82,13 +43,14 @@ export namespace RequestsDto {
     id: z.number(),
     passenger: PassengerDto.Passenger,
     ticket: z.object({}).nullable(),
-    station_from: Station,
-    station_to: Station,
+    station_from: StationsDto.Station,
+    station_to: StationsDto.Station,
   });
 
   export type Request = z.infer<typeof Request>;
 
   export const RequestForm = z.object({
+    passenger_id: z.number().min(1, "Необходимо указать пассажира"),
     station_from_id: z
       .number()
       .min(1, "Необходимо указать станцию отправления"),
@@ -113,7 +75,7 @@ export namespace RequestsDto {
       .default(0),
     additional_information: z.string(),
     baggage_type: z.string().optional(),
-    baggage_weight: z.number().min(0, "Вес багажа не может быть отрицательным"),
+    baggage_weight: z.number().optional().default(0),
     baggage_help: z.boolean(),
   });
 

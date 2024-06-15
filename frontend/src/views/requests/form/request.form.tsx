@@ -8,13 +8,16 @@ import { theme } from "src/assets/theme.ts";
 import { Text } from "components/text.ts";
 import { Stack } from "components/stack.ts";
 import { Input } from "components/input";
-import { CustomDropdown, SearchableDropdown } from "components/dropdown.tsx";
+import {
+  CustomDropdown,
+  SearchableInfiniteDropdown,
+} from "components/dropdown.tsx";
 import { Button } from "components/button.tsx";
 import { PageHeader } from "components/pageHeader.tsx";
 import { RequestsDto } from "api/models/requests.model.ts";
 import { PassengerDto } from "api/models/passenger.model.ts";
 import { RequestCreateViewModel } from "src/views/requests/form/request.form.vm.ts";
-import { findLineIconByName, stations } from "src/assets/metro.tsx";
+import { findLineIconByName } from "src/assets/metro.tsx";
 
 const PageLayout = styled.div`
   display: grid;
@@ -59,19 +62,28 @@ const RequestCreatePage = observer(() => {
             style={{ maxWidth: "555px" }}
           >
             <Controller
+              name="passenger_id"
+              control={control}
+              render={({ field }) => (
+                <SearchableInfiniteDropdown
+                  label="Пассажир"
+                  provider={vm.passengerProvider}
+                  onChange={(option) => field.onChange(Number(option.id))}
+                  searchField="name"
+                  error={errors.station_from_id?.message?.toString()}
+                  required
+                  render={(option) => option.name}
+                />
+              )}
+            />
+            <Controller
               name="station_from_id"
               control={control}
               render={({ field }) => (
-                <SearchableDropdown
+                <SearchableInfiniteDropdown
                   label="Станция отправления"
-                  options={stations}
-                  defaultValue={stations[0]}
+                  provider={vm.stationProvider}
                   onChange={(option) => field.onChange(Number(option.id))}
-                  value={stations.find(
-                    (station) =>
-                      station.id ===
-                      (field.value ? field.value.toString() : ""),
-                  )}
                   searchField="name_station"
                   error={errors.station_from_id?.message?.toString()}
                   required
@@ -88,17 +100,12 @@ const RequestCreatePage = observer(() => {
               name="station_to_id"
               control={control}
               render={({ field }) => (
-                <SearchableDropdown
+                <SearchableInfiniteDropdown
                   label="Станция прибытия"
-                  options={stations}
-                  searchField="name_station"
+                  provider={vm.stationProvider}
                   onChange={(option) => field.onChange(Number(option.id))}
-                  value={stations.find(
-                    (station) =>
-                      station.id ===
-                      (field.value ? field.value.toString() : ""),
-                  )}
-                  error={errors.station_to_id?.message?.toString()}
+                  searchField="name_station"
+                  error={errors.station_from_id?.message?.toString()}
                   required
                   render={(option) => (
                     <Stack direction={"row"} gap={5} align={"center"}>
@@ -123,6 +130,7 @@ const RequestCreatePage = observer(() => {
             />
             <Input
               label="Дата и время"
+              type={"datetime-local"}
               placeholder="Введите дату и время"
               error={errors.datetime?.message?.toString()}
               register={register("datetime")}
@@ -133,7 +141,7 @@ const RequestCreatePage = observer(() => {
               control={control}
               render={({ field }) => (
                 <CustomDropdown
-                  label="Способ принятия"
+                  label="Способ получения заявки"
                   options={RequestsDto.acceptationMethods}
                   onChange={field.onChange}
                   value={field.value as RequestsDto.AcceptationMethod}

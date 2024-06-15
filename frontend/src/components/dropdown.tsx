@@ -6,6 +6,8 @@ import { useKeydown } from "src/utils/hooks/keydown.hook.ts";
 import { Text } from "src/components/text.ts";
 import { useOnClickOutside } from "src/utils/hooks/on-click-outside.hook.ts";
 import { useTheme } from "@emotion/react";
+import { InfinityScrollProvider } from "utils/infinity-scroll.tsx";
+import { Loader, LoaderWrapper } from "src/loader.tsx";
 
 const Label = styled.label`
   font-size: 14px;
@@ -151,7 +153,7 @@ const Input = styled.input<{ hasError?: boolean }>`
   font-size: 14px;
   font-weight: 400;
   background: ${(p) => p.theme.colors.background};
-    border:  none;
+  border: none;
 
   &:focus {
     outline: none;
@@ -314,3 +316,152 @@ const Option = styled.div<{
     background: #f0f0f0;
   }
 `;
+
+interface InfiniteDropdownProps<T> {
+  label: string;
+  onChange: (v: T) => void;
+  value?: T | undefined;
+  defaultValue?: T;
+  required?: boolean;
+  provider: InfinityScrollProvider<T>;
+  disabledOptions?: T[];
+  id?: string;
+  error?: string | null;
+  render?: (option: T) => React.ReactNode;
+  searchField?: keyof T;
+}
+
+export const SearchableInfiniteDropdown = observer(
+  <T extends NonNullable<unknown>>(x: InfiniteDropdownProps<T>) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [curOption, setCurOption] = useState<T | undefined>(x.value);
+    const [searchTerm, setSearchTerm] = useState("");
+    const ref = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const optionsListRef = useRef<HTMLDivElement>(null);
+    const theme = useTheme();
+
+    useOnClickOutside([ref], () => setIsOpen(false));
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+      setCurOption(x.value);
+    }, [x.value]);
+
+    useEffect(() => {
+      if (isOpen && inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, [isOpen]);
+
+    const handleSelect = (option: T) => {
+      setCurOption(option);
+      x.onChange(option as T);
+      setIsOpen(false);
+    };
+
+    const handleScroll = () => {
+      if (
+        optionsListRef.current &&
+        optionsListRef.current.scrollTop +
+          optionsListRef.current.clientHeight >=
+          optionsListRef.current.scrollHeight - 256
+      ) {
+        if (x.provider.hasMore && !x.provider.isLoading) {
+          x.provider.loadMore();
+        }
+      }
+    };
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      setSearchTerm(newValue);
+
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+
+      debounceTimeout.current = setTimeout(() => {
+        x.provider.search(newValue);
+      }, 300);
+    };
+
+    return (
+      <CustomDropdownWrapper
+        direction="column"
+        gap={4}
+        ref={ref}
+        key={x.label}
+        spellCheck={false}
+      >
+        <Label>
+          {x.label}
+          <Text color={"#B91827"}>{x.required ? "*" : ""}</Text>
+        </Label>
+        <DropdownButton
+          type="button"
+          hasError={!!x.error}
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? (
+            <Input
+              ref={inputRef}
+              placeholder="Поиск..."
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          ) : curOption ? (
+            x.render ? (
+              x.render(curOption)
+            ) : (
+              (curOption as unknown as string)
+            )
+          ) : (
+            "Не выбрано"
+          )}
+          <DropdownOpenButton isOpen={isOpen}>
+            <Text fontFamily={"IcoMoon"} size={10}>
+              
+            </Text>
+          </DropdownOpenButton>
+        </DropdownButton>
+        {isOpen && (
+          <Stack
+            direction="column"
+            gap={4}
+            style={{
+              display: "contents",
+              height: "200px",
+              overflow: "auto",
+              backgroundColor: "#fff",
+            }}
+          >
+            <OptionsList ref={optionsListRef} onScroll={handleScroll}>
+              {x.provider.data.map((option, index) => (
+                <Option
+                  key={Math.random()}
+                  onClick={() => handleSelect(option)}
+                  aria-selected={option === curOption}
+                  aria-disabled={x.disabledOptions?.includes(option)}
+                  tabIndex={index}
+                >
+                  {x.render ? x.render(option) : (option as unknown as string)}
+                </Option>
+              ))}
+              {x.provider.isLoading && (
+                <LoaderWrapper>
+                  <Loader />
+                </LoaderWrapper>
+              )}
+            </OptionsList>
+          </Stack>
+        )}
+        {x.error && (
+          <Text color={theme.colors.error} size={12}>
+            {x.error}
+          </Text>
+        )}
+      </CustomDropdownWrapper>
+    );
+  },
+);
