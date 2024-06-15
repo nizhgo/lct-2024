@@ -60,6 +60,7 @@ const RequestsPage = observer(() => {
   const navigate = useNavigate();
 
   const columns: ColumnConfig[] = [
+    { header: "ID", size: "80px" },
     { header: "ФИО пассажира" },
     { header: "Откуда" },
     { header: "Куда" },
@@ -72,9 +73,13 @@ const RequestsPage = observer(() => {
     request: RequestsDto.Request,
   ) => {
     switch (columnHeader) {
+      case "ID":
+        return <Link to={`/requests/${request.id}`}>{request.id}</Link>;
       case "ФИО пассажира":
         return (
-          <Link to={`/requests/${request.id}`}>{request.passenger.name}</Link>
+          <Link to={`/passengers/${request.passenger_id}`}>
+            {request.passenger.name}
+          </Link>
         );
       case "Откуда": {
         return (

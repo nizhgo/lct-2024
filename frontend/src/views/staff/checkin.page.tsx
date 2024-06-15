@@ -12,7 +12,7 @@ import { useTheme } from "@emotion/react";
 import { Tooltip } from "components/tooltip.tsx";
 import InfinityTable from "components/infinity-table.tsx";
 import { CustomDropdown } from "components/dropdown.tsx";
-import {Svg} from "components/svg.tsx";
+import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 const ContentHeader = styled.div`

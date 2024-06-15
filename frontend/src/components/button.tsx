@@ -30,7 +30,7 @@ const buttonStyles = (x: ButtonProps) => `
   justify-content: center;
   outline: none;
   border-radius: 4px;
-  transition: background-color 0.3s, border-color 0.3s, opacity 0.3s;
+  transition: 0.24s;
 
   &:disabled {
     cursor: not-allowed;
@@ -50,7 +50,7 @@ const buttonStyles = (x: ButtonProps) => `
   }
   
   &:hover {
-    filter: brightness(1.15);
+    filter: opacity(0.92) brightness(1.12);
   }
 `;
 
