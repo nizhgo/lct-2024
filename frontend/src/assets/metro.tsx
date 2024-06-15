@@ -2685,8 +2685,7 @@ export const stations: Station[] = [
 //   color: ef161e
 // 15NL:
 //   color: de64a1
-//@ts-expect-error
-const lineAndColor: Record<Line, string> = {
+const lineAndColor: Record<StationsDto.Line, string> = {
   "1": "#ef161e",
   "2": "#2dbe2c",
   "3": "#0078be",
@@ -2707,10 +2706,14 @@ const lineAndColor: Record<Line, string> = {
   Д2: "#E74280",
   Д3: "#E95B0C",
   Д4: "#40B280",
+  "4А": "",
+  13: "#FFA600",
+  14: "#E74280",
+  БКЛ: "#82c0c0",
+  "БКЛ(А)": "#82c0c0",
 };
 
-//@ts-expect-error
-export const lineAndIcon: Record<Line, JSX.Element> = {
+export const lineAndIcon: Record<StationsDto.Line, JSX.Element> = {
   "1": (
     <Text fontFamily={"IcoMoon"} size={14} color={lineAndColor["1"]}>
       
@@ -2727,6 +2730,11 @@ export const lineAndIcon: Record<Line, JSX.Element> = {
     </Text>
   ),
   "4": (
+    <Text fontFamily={"IcoMoon"} size={14} color={lineAndColor["4"]}>
+      
+    </Text>
+  ),
+  "4А": (
     <Text fontFamily={"IcoMoon"} size={14} color={lineAndColor["4"]}>
       
     </Text>
@@ -2766,6 +2774,16 @@ export const lineAndIcon: Record<Line, JSX.Element> = {
       
     </Text>
   ),
+  БКЛ: (
+    <Text fontFamily={"IcoMoon"} size={14} color={lineAndColor["11"]}>
+      
+    </Text>
+  ),
+  "БКЛ(А)": (
+    <Text fontFamily={"IcoMoon"} size={14} color={lineAndColor["11"]}>
+      
+    </Text>
+  ),
   "11": (
     <Text fontFamily={"IcoMoon"} size={14} color={lineAndColor["11"]}>
       
@@ -2798,7 +2816,7 @@ export const lineAndIcon: Record<Line, JSX.Element> = {
   ),
   Л1: (
     <Text fontFamily={"IcoMoon"} size={14} color={lineAndColor["Л1"]}>
-      
+      
     </Text>
   ),
   Д1: (
@@ -2831,6 +2849,6 @@ export const findLineIconByName = (
 
 export const findStationById = (id: string) => {
   return stations.find((station) => station.id === id);
-}
+};
 
 //todo this is so cringe, do it on backend later

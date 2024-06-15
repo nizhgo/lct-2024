@@ -25,7 +25,6 @@ export namespace StationsDto {
     "Д2",
     "Д3",
     "Д4",
-    "Д5",
     "МЦК",
     "Л1",
   ]);
