@@ -16,25 +16,33 @@ export default defineConfig({
         writeFileSync("public/version.txt", version);
       }
     },
-    VitePWA({ registerType: 'autoUpdate',
+    VitePWA({
+      registerType: 'autoUpdate',
       manifest: {
-      name: "M Project",
-      short_name: "M Project",
+        name: 'M Project',
+        orientation: 'portrait',
+        short_name: 'M Project',
+        description: 'Сервис мониторинга и адаптивного распределения заявок на обслуживание от маломобильных пассажиров',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#ffffff',
+        theme_color: '#D9282F',
         icons: [
           {
-            src: "192logo.png",
-            sizes: "192x192",
-            type: "image/png",
+            src: '192logo.png',
+            sizes: '192x192',
+            type: 'image/png'
           },
           {
-            src: "512logo.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
+            src: '512logo.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
         ],
-        display: "standalone",
-        theme_color: "#D9282F",
-        description: "Сервис мониторинга и адаптивного распределения заявок на обслуживание от маломобильных пассажиров",
+      },
+      workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
       },
     }),
   ],
