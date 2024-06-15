@@ -1,24 +1,24 @@
 import { makeAutoObservable } from "mobx";
 import { RequestsEndpoint } from "api/endpoints/requests.endpoint";
 import { RequestsDto } from "api/models/requests.model";
+import { InfinityScrollProvider } from "utils/infinity-scroll.tsx";
 
 export class RequestsPageViewModel {
-  requests: RequestsDto.Request[] = [];
+  provider: InfinityScrollProvider<RequestsDto.Request>;
   isLoading: boolean = true;
 
   constructor() {
     makeAutoObservable(this);
-    this.loadRequests();
+    this.provider = new InfinityScrollProvider(this.fetchRequests.bind(this));
   }
 
-  async loadRequests() {
-    this.isLoading = true;
+  async fetchRequests(offset: number, limit: number, search?: string) {
     try {
-      this.requests = await RequestsEndpoint.findAll();
+      const response = await RequestsEndpoint.findAll(offset, limit, search);
+      return response;
     } catch (e) {
       console.error("Failed to load requests", e);
-    } finally {
-      this.isLoading = false;
+      return [];
     }
   }
 }

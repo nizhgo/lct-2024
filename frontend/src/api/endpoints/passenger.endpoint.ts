@@ -4,12 +4,9 @@ import { z } from "zod";
 
 export const PassengerEndpoint = new (class PassengerEndpoint {
   //find all passengers
-  findAll = async () => {
-    // const passengers = Array.from({length: 40}, generatePassenger);
-    // //wait for 1 second to simulate network delay
-    // await new Promise((resolve) => setTimeout(resolve, 500));
-    // return passengers;
+  findAll = async (offset: number, limit: number, search?: string) => {
     return await Http.request("/passengers/")
+      .withSearch({ offset, limit, search })
       .expectJson(z.array(PassengerDto.Passenger))
       .get();
   };

@@ -9,7 +9,7 @@ class HttpRequest<T> {
   readonly #path: string;
   readonly #config?: AxiosRequestConfig<unknown>;
   #schema?: ZodSchema<T>;
-  #queryParams?: Record<string, string>;
+  #queryParams?: Record<string, string | number | undefined>;
   #showErrors = true;
 
   constructor(path: string, config?: AxiosRequestConfig<unknown>) {
@@ -24,7 +24,9 @@ class HttpRequest<T> {
     return newRequest;
   }
 
-  public withSearch(queryParams: Record<string, string>) {
+  public withSearch(
+    queryParams: Record<string, string | number | undefined>,
+  ): HttpRequest<T> {
     this.#queryParams = queryParams;
     return this;
   }

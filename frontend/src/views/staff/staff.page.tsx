@@ -4,15 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Stack } from "components/stack.ts";
 import { useState } from "react";
 import { StaffPageViewModel } from "src/views/staff/staff.vm.ts";
-import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { observer } from "mobx-react-lite";
 import { PageHeader } from "components/pageHeader.tsx";
-import { Input } from "components/input.tsx";
-import { ColumnConfig, GridCell, ResponsiveTable } from "components/table.tsx";
+import { ColumnConfig, GridCell } from "components/table.tsx";
 import { UsersDto } from "api/models/users.model.ts";
 import { Text } from "components/text.ts";
 import { useTheme } from "@emotion/react";
 import { Tooltip } from "components/tooltip.tsx";
+import InfinityTable from "components/infinity-table.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -117,23 +116,11 @@ const StaffPage = observer(() => {
         <PageHeader>Сотрудники</PageHeader>
         <Button onClick={handleAdd}>Добавить сотрудника</Button>
       </ContentHeader>
-
-      {vm.isLoading ? (
-        <LoaderWrapper height={"100%"}>
-          <Loader />
-        </LoaderWrapper>
-      ) : (
-        <>
-          <Stack direction={"row"} align={"center"} gap={10}>
-            <Input placeholder={"Поиск"} style={{ width: "300px" }} />
-          </Stack>
-          <ResponsiveTable
-            columns={columns}
-            data={vm.staff}
-            renderRow={renderRow}
-          />
-        </>
-      )}
+      <InfinityTable
+        columns={columns}
+        provider={vm.provider}
+        renderRow={renderRow}
+      />
     </Stack>
   );
 });

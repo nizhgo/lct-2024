@@ -1,18 +1,21 @@
 import { makeAutoObservable } from "mobx";
 import { UsersDto } from "api/models/users.model.ts";
 import { UsersEndpoint } from "api/endpoints/users.endpoint.ts";
+import { InfinityScrollProvider } from "utils/infinity-scroll.tsx";
 
 export class StaffPageViewModel {
+  provider: InfinityScrollProvider<UsersDto.User>;
   constructor() {
-    void this.#init();
+    this.provider = new InfinityScrollProvider(this.fetchRequests.bind(this));
     makeAutoObservable(this);
   }
-  isLoading = true;
-  staff: UsersDto.User[] = [];
 
-  async #init() {
-    const res = await UsersEndpoint.findAll();
-    this.staff = res as unknown as UsersDto.User[];
-    this.isLoading = false;
+  async fetchRequests(offset: number, limit: number, search?: string) {
+    try {
+      return await UsersEndpoint.findAll(offset, limit, search);
+    } catch (e) {
+      console.error("Failed to load staff", e);
+      return [];
+    }
   }
 }

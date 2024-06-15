@@ -2,15 +2,14 @@ import styled from "@emotion/styled";
 import { Button } from "components/button.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import { Stack } from "components/stack.ts";
-import { useState } from "react";
-import { RequestsPageViewModel } from "src/views/requests/requests.vm.ts";
-import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { observer } from "mobx-react-lite";
 import { PageHeader } from "components/pageHeader.tsx";
-import { Input } from "components/input.tsx";
-import { ColumnConfig, GridCell, ResponsiveTable } from "components/table.tsx";
+import { ColumnConfig, GridCell } from "components/table.tsx";
 import { RequestsDto } from "api/models/requests.model.ts";
 import { findLineIconByName } from "src/assets/metro.tsx";
+import { RequestsPageViewModel } from "src/views/requests/requests.vm.ts";
+import { useState } from "react";
+import InfinityTable from "components/infinity-table.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -125,22 +124,12 @@ const RequestsPage = observer(() => {
         </Button>
       </ContentHeader>
 
-      {vm.isLoading ? (
-        <LoaderWrapper height={"100%"}>
-          <Loader />
-        </LoaderWrapper>
-      ) : (
-        <>
-          <Stack direction={"row"} align={"center"} gap={10}>
-            <Input placeholder={"Поиск"} style={{ width: "300px" }} />
-          </Stack>
-          <ResponsiveTable
-            columns={columns}
-            data={vm.requests}
-            renderRow={renderRow}
-          />
-        </>
-      )}
+      <InfinityTable
+        provider={vm.provider}
+        columns={columns}
+        renderRow={renderRow}
+        searchPlaceholder={"Поиск"}
+      />
     </Stack>
   );
 });

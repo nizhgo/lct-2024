@@ -163,6 +163,7 @@ export const InputBase = forwardRef<HTMLInputElement, InputProps>(
             onFocus={props.onFocus}
             onBlur={props.onBlur}
             onKeyDown={props.onKeyDown}
+            onChange={(e) => props.onChange?.(e.target.value)}
             ref={ref}
             hasError={!!props.error}
             {...props.register}
