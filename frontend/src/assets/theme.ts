@@ -27,7 +27,7 @@ export const theme = {
       text: "#ffffff",
       red: "#D9282F",
       blue: "#04c",
-      black: "#000000",
+      black: "#272727",
     },
     status: {
       active: "#008767", // зеленый
