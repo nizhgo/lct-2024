@@ -51,7 +51,7 @@ export const LoginPage = observer(() => {
     const isLoggedIn = await vm.onSubmit(data);
     console.log("isLoggedIn", isLoggedIn ? "true" : "false");
     if (isLoggedIn) {
-      navigate("/");
+      navigate("/requests");
     }
   };
 

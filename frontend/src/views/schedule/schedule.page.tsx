@@ -12,20 +12,44 @@ import moment from "moment";
 import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
 import { Link } from "react-router-dom";
+import { CustomDropdown } from "components/dropdown.tsx";
+import { Button } from "components/button.tsx";
+import { toast } from "react-toastify";
 
 const SchedulePage = observer(() => {
   const [vm] = useState(() => new ScheduleViewModel());
   const theme = useTheme();
+
+  const onDistribute = async (e) => {
+    e.preventDefault();
+    toast.success("Расписание успешно обновлено");
+    // RequestsEndpoint.autoDistribute().then((data) => console.log(data));
+  };
+
   return (
     <Stack direction={"column"} gap={8}>
-      <PageHeader>Расписание</PageHeader>
-      <Stack direction={"row"} gap={8}>
-        <Input
-          type={"date"}
-          defaultValue={vm.currentDate.format("YYYY-MM-DD")}
-          onChange={(e) => vm.setCurrentDate(moment(e))}
-        />
-      </Stack>
+      <Stack justify={"space-between"} align={"center"}>
+        <Stack direction={"column"} gap={10}>
+          <PageHeader>Расписание</PageHeader>
+          <Input
+            type={"date"}
+            defaultValue={vm.currentDate.format("YYYY-MM-DD")}
+            onChange={(e) => vm.setCurrentDate(moment(e))}
+          />
+        </Stack>
+        <form onSubmit={onDistribute}>
+          <Stack gap={20} align={"center"}>
+            <CustomDropdown
+              onChange={() => {}}
+              options={[
+                "Распределение всех заявок",
+                "Распределение нераспределенных заявок",
+              ]}
+            />
+            <Button type={"submit"}>Распределить заявки</Button>
+          </Stack>
+        </form>
+    </Stack>
       {vm.isLoading ? (
         <LoaderWrapper>
           <Loader />
