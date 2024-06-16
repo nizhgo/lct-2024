@@ -1,8 +1,8 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import { theme } from "src/assets/theme.ts";
 import { Text } from "components/text.ts";
@@ -32,23 +32,35 @@ const PageLayout = styled.div`
 
 const RequestEditPage = observer(() => {
   const { id } = useParams<{ id: string }>();
-  const [vm] = useState(() => new RequestEditViewModel());
+  const [vm] = useState(() => new RequestEditViewModel(id!));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    vm.loadRequest();
+  }, [vm]);
 
   const {
     control,
     handleSubmit,
     register,
+    reset,
     formState: { errors },
   } = useForm<RequestsDto.RequestForm>({
     resolver: zodResolver(RequestsDto.RequestForm),
   });
 
+  useEffect(() => {
+    if (vm.data) {
+      reset(vm.data);
+    }
+  }, [vm.data, reset]);
+
   const onSubmit = async (data: RequestsDto.RequestForm) => {
     console.log("onSubmit", data);
-    // const isRegistered = await vm.onSubmit(data);
-    // if (isRegistered) {
-    //   navigate(`/passengers/${id}`);
-    // }
+    const isRegistered = await vm.onSubmit(data);
+    if (isRegistered) {
+      navigate(`/requests/${id}`);
+    }
   };
 
   return (

@@ -147,7 +147,7 @@ const TimelineWrapper = styled.div`
     vertical-align: top;
     position: relative;
     box-sizing: border-box;
-    border-right: 1px solid #bbb;
+    border-right: 1px solid ${(p) => p.theme.colors.inputBorder};
   }
 
   .react-calendar-timeline .rct-sidebar .rct-sidebar-row {
@@ -157,7 +157,7 @@ const TimelineWrapper = styled.div`
     text-overflow: ellipsis;
     box-sizing: border-box;
     margin: 0;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid ${(p) => p.theme.colors.inputBorder};
   }
 
   .react-calendar-timeline .rct-sidebar .rct-sidebar-row.rct-sidebar-row-odd {
@@ -170,7 +170,7 @@ const TimelineWrapper = styled.div`
 
   .react-calendar-timeline .rct-vertical-lines .rct-vl {
     position: absolute;
-    border-left: 1px solid #bbb;
+    border-left: 1px solid ${(p) => p.theme.colors.inputBorder};
     z-index: 30;
   }
 
@@ -183,7 +183,7 @@ const TimelineWrapper = styled.div`
 
   .react-calendar-timeline .rct-horizontal-lines .rct-hl-even,
   .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid ${(p) => p.theme.colors.inputBorder};
     box-sizing: border-box;
     z-index: 40;
   }
@@ -208,27 +208,27 @@ const TimelineWrapper = styled.div`
     align-items: center;
     justify-content: center;
     height: 100%;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid ${(p) => p.theme.colors.inputBorder};
     cursor: pointer;
     font-size: 14px;
     background-color: #fff;
-    border-left: 1px solid #bbb;
+    border-left: 1px solid ${(p) => p.theme.colors.inputBorder};
   }
 
   .react-calendar-timeline .rct-dateHeader-primary {
     background-color: #fff;
-    border-left: 1px solid #bbb;
-    border-right: 1px solid #bbb;
+    border-left: 1px solid ${(p) => p.theme.colors.inputBorder};
+    border-right: 1px solid ${(p) => p.theme.colors.inputBorder};
     color: #000;
     font-weight: 700;
   }
 
   .react-calendar-timeline .rct-header-root {
     background: #fff;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid ${(p) => p.theme.colors.inputBorder};
   }
 
   .react-calendar-timeline .rct-calendar-header {
-    border: 1px solid #bbb;
+    border: 1px solid ${(p) => p.theme.colors.inputBorder};
   }
 `;
