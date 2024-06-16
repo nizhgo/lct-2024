@@ -246,15 +246,6 @@ export const AppLayout = () => {
               <Text>Пассажиры</Text>
             </SidebarItem>
           </Link>
-          <Link to="/notValidRoute">
-            <SidebarItem
-              active={location.pathname.startsWith("/notValidRoute")}
-              onClick={onLinkClick}
-            >
-              <Svg src={UsersIcon} width={24} />
-              <Text>Not valid route</Text>
-            </SidebarItem>
-          </Link>
         </Stack>
         <Stack gap={14} direction={"column"} style={{ marginTop: "56px" }}>
           <Link to="/logout">

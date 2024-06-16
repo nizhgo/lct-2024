@@ -54,8 +54,7 @@ export namespace PassengerDto {
       .min(1, { message: "Контактные данные обязательны" }),
     sex: UsersDto.Genders,
     category: PassengerCategory,
-    additional_information: z
-      .string().optional(),
+    additional_information: z.string().optional(),
     has_cardiac_pacemaker: z.boolean().default(false),
   });
 

@@ -12,6 +12,6 @@ export const AuthEndpoint = new (class AuthEndpoint {
     return await Http.request("/users/me")
       .expectJson(AuthDto.AuthUser)
       .silent()
-      .get()
-  }
+      .get();
+  };
 })();

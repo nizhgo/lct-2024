@@ -1,7 +1,7 @@
 import { RequestsDto } from "api/models/requests.model.ts";
 import { Http } from "utils/api/http.ts";
 import { z } from "zod";
-export const RequestsEndpoint = new (class PassengerEndpoint {
+export const RequestsEndpoint = new (class RequestsEndpoint {
   findAll = async (offset: number, limit: number, search?: string) => {
     return await Http.request("/requests/")
       .withSearch({ offset, limit, search })

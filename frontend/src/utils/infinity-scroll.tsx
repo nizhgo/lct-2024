@@ -25,7 +25,11 @@ export class InfinityScrollProvider<T> {
     if (this.hasMore && !this.isLoading) {
       this.isLoading = true;
       try {
-        const newData = await this.fetchData(this.offset, this.limit, this.searchValue);
+        const newData = await this.fetchData(
+          this.offset,
+          this.limit,
+          this.searchValue,
+        );
         if (newData.length < this.limit) {
           this.hasMore = false;
         }

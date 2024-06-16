@@ -1,5 +1,9 @@
 import { AuthDto } from "api/models/auth.model";
-import { getStoredAuthToken, removeStoredAuthToken, setStoredAuthToken } from "utils/api/authToken";
+import {
+  getStoredAuthToken,
+  removeStoredAuthToken,
+  setStoredAuthToken,
+} from "utils/api/authToken";
 import { AuthEndpoint } from "api/endpoints/auth.endpoint";
 import { makeAutoObservable } from "mobx";
 
@@ -12,16 +16,16 @@ const AuthService = new (class AuthService {
     makeAutoObservable(this);
   }
 
-   async init() {
+  async init() {
     this._token = getStoredAuthToken();
     if (this._token) {
       try {
         this._user = await AuthEndpoint.findMe();
       } catch (error) {
-        console.warn('Error during user initialization:', error);
+        console.warn("Error during user initialization:", error);
       }
     }
-     console.log("Init is done, user is", this._user || "not logged in");
+    console.log("Init is done, user is", this._user || "not logged in");
     this._isLoading = false;
   }
 

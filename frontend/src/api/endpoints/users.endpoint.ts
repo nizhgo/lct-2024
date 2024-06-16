@@ -2,7 +2,7 @@ import { UsersDto } from "api/models/users.model.ts";
 import { Http } from "utils/api/http.ts";
 import { z } from "zod";
 
-export const UsersEndpoint = new (class WorkersEndpoint {
+export const UsersEndpoint = new (class UsersEndpoint {
   //find all staff
   findAll = async (offset?: number, limit?: number, search?: string) => {
     const res = await Http.request("/users/")
@@ -22,8 +22,7 @@ export const UsersEndpoint = new (class WorkersEndpoint {
 
   //create worker
   create = async (data: UsersDto.UserForm) => {
-    return await Http.request("/users/")
-      .post(data);
+    return await Http.request("/users/").post(data);
   };
 
   //update worker

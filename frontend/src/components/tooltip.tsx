@@ -24,7 +24,7 @@ const TooltipContent = styled.div<{ isVisible: boolean }>`
   border-radius: 4px;
   padding: 4px;
   position: absolute;
-  z-index: 1;
+  z-index: 999;
   white-space: nowrap;
   transition: opacity 0.2s ease-in-out;
   font-size: 14px;

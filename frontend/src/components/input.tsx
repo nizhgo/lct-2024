@@ -5,7 +5,8 @@ import {
   forwardRef,
   KeyboardEventHandler,
   MouseEventHandler,
-  ReactNode, useEffect
+  ReactNode,
+  useEffect,
 } from "react";
 import { Text } from "components/text";
 import { useTheme } from "@emotion/react";
@@ -93,7 +94,7 @@ const ClearButton = styled.button`
 
 // Input component props
 export interface InputProps {
-  type?: "text" | "number" | "password" | "datetime-local" | "date";
+  type?: "text" | "number" | "password" | "datetime-local" | "date" | "time";
   defaultValue?: string | null;
   onChange?: (value: string) => void;
   readonly?: boolean;

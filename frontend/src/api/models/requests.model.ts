@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { PassengerDto } from "api/models/passenger.model.ts";
 import { StationsDto } from "api/models/stations.models.ts";
+import { TicketsDto } from "api/models/tickets.model.ts";
 
 export namespace RequestsDto {
   export const RequestsStatus = z.enum([
@@ -42,7 +43,7 @@ export namespace RequestsDto {
     baggage_help: z.boolean(),
     id: z.number(),
     passenger: PassengerDto.Passenger,
-    ticket: z.object({}).nullable(),
+    ticket: TicketsDto.TicketShort.nullable(),
     station_from: StationsDto.Station,
     station_to: StationsDto.Station,
   });

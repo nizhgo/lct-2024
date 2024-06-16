@@ -18,8 +18,7 @@ export const ProfilePage = () => {
         <Stack direction={"row"} gap={6}>
           <Text weight={900}>ФИО:</Text>
           <Text color={theme.colors.textSecondary}>
-            {AuthService.user?.second_name}{" "}
-            {AuthService.user?.first_name}{" "}
+            {AuthService.user?.second_name} {AuthService.user?.first_name}{" "}
             {AuthService.user?.patronymic}
           </Text>
         </Stack>
