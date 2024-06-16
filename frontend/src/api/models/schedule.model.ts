@@ -7,7 +7,7 @@ export namespace ScheduleDto {
   export const Item = z.object({
     user: UsersDto.User,
     gaps: z.array(GapsDto.Gap),
-    tickets: z.array(TicketsDto.Ticket),
+    tickets: z.array(TicketsDto.Ticket).optional(),
   });
 
   export type Item = z.infer<typeof Item>;
