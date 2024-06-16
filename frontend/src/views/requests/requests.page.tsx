@@ -10,7 +10,6 @@ import { findLineIconByName } from "src/assets/metro.tsx";
 import { RequestsPageViewModel } from "src/views/requests/requests.vm.ts";
 import { useState } from "react";
 import InfinityTable from "components/infinity-table.tsx";
-import {RequestsEndpoint} from "api/endpoints/requests.endpoint.ts";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -121,16 +120,11 @@ const RequestsPage = observer(() => {
     </>
   );
 
-  const onDistribute = async () => {
-    RequestsEndpoint.autoDistribute().then((data) => console.log(data));
-  };
-
   return (
     <Stack wFull hFull direction={"column"} gap={20}>
       <ContentHeader>
         <PageHeader>Заявки</PageHeader>
         <Stack gap={20}>
-          <Button onClick={onDistribute}>Распределить заявки</Button>
           <Button onClick={() => navigate("/requests/new")}>
             Добавить заявку
           </Button>
