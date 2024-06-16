@@ -49,7 +49,7 @@ export class ScheduleViewModel {
           color: "black",
         }));
 
-        const tickets = item.tickets.map((ticket) => ({
+        const tickets = item.tickets?.map((ticket) => ({
           id: `ticket-${ticket.request_id}-${item.user.id}`,
           group: item.user.id,
           title: `#${ticket.request_id}`,
@@ -59,7 +59,7 @@ export class ScheduleViewModel {
           color: "#D9282F",
         }));
 
-        return [...gaps, ...tickets];
+        return [...gaps, ...(tickets || [])];
       });
     } catch (error) {
       console.error("Failed to load schedule", error);
