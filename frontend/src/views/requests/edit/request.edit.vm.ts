@@ -1,5 +1,5 @@
 import { RequestsDto } from "api/models/requests.model.ts";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { RequestsEndpoint } from "api/endpoints/requests.endpoint.ts";
 import { InfinityScrollProvider } from "utils/infinity-scroll.tsx";
 import { StationsDto } from "api/models/stations.models.ts";
@@ -45,13 +45,18 @@ export class RequestEditViewModel {
   }
 
   async loadRequest() {
+    this.loading = true;
     try {
-      this.loading = true;
-      this.data = await RequestsEndpoint.findById(this.id);
+      const response = await RequestsEndpoint.findById(this.id);
+      runInAction(() => {
+        this.data = response;
+      });
     } catch (error) {
       console.error(error);
     } finally {
-      this.loading = false;
+      runInAction(() => {
+        this.loading = false;
+      });
     }
   }
 

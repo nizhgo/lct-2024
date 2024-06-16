@@ -102,19 +102,21 @@ export namespace RequestsDto {
   export const localizeAcceptationMethod = (method: AcceptationMethod) =>
     acceptationMethodLocalizations[method];
 
-  export const convertRequestToForm = (request: Request): RequestForm => ({
-    passenger_id: request.passenger_id,
-    station_from_id: request.station_from.id,
-    station_to_id: request.station_to.id,
-    description_from: request.description_from,
-    description_to: request.description_to,
-    datetime: request.datetime,
-    acceptation_method: request.acceptation_method,
-    passengers_count: request.passengers_count,
-    category: request.category,
-    male_users_count: request.male_users_count,
-    female_users_count: request.female_users_count,
-    baggage_weight: request.baggage_weight,
-    baggage_help: request.baggage_help,
-  });
+  export const convertRequestToForm = (request: Request): RequestForm => {
+    return {
+      passenger_id: request.passenger_id,
+      station_from_id: request.station_from.id,
+      station_to_id: request.station_to.id,
+      description_from: request.description_from,
+      description_to: request.description_to,
+      datetime: request.datetime,
+      acceptation_method: request.acceptation_method,
+      passengers_count: request.passengers_count,
+      category: request.category,
+      male_users_count: request.male_users_count,
+      female_users_count: request.female_users_count,
+      baggage_weight: request.baggage_weight,
+      baggage_help: request.baggage_help,
+    };
+  };
 }
