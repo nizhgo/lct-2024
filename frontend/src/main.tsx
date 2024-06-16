@@ -10,14 +10,14 @@ import {
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./assets/theme.ts";
 import PassengersPage from "src/views/passengers/passengers.page.tsx";
-import StaffRegPage from "src/views/staff/resigtration/staffRegPage.tsx";
+import StaffRegPage from "src/views/staff/form/staff.form.page.tsx";
 import StaffPage from "src/views/staff/staff.page.tsx";
 import { LoginPage } from "src/views/login/login.page.tsx";
 import { NotFoundPage } from "src/views/404/notFound.page.tsx";
 import { ErrorTemplate } from "components/error.tsx";
 import { AppLayout } from "src/views/layout.tsx";
 import MainPage from "src/mainPage.tsx";
-import { PassengerDetails } from "src/views/passengers/details/passenger.detail.tsx";
+import { PassengerDetails } from "src/views/passengers/details/passenger.detail.page.tsx";
 import { ProfilePage } from "src/views/profile/profile.detail.tsx";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
@@ -25,9 +25,9 @@ import AuthService from "src/stores/auth.service.ts";
 import { observer } from "mobx-react-lite";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { PassengerEditPage } from "src/views/passengers/edit/passenger.edit.page.tsx";
-import PassengerForm from "src/views/passengers/form/passenger-form.tsx";
+import PassengerFormPage from "src/views/passengers/form/passenger.form.page.tsx";
 import StaffEditPage from "src/views/staff/edit/staff.edit.page.tsx";
-import StaffDetail from "src/views/staff/detail/staff.detail.tsx";
+import StaffDetail from "src/views/staff/detail/staff.detail.page.tsx";
 import RequestsPage from "src/views/requests/requests.page.tsx";
 import RequestDetail from "src/views/requests/details/request.detail.tsx";
 import RequestCreatePage from "src/views/requests/form/request.form.tsx";
@@ -75,7 +75,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/passengers/new",
-            element: <PassengerForm />,
+            element: <PassengerFormPage />,
           },
         ],
       },

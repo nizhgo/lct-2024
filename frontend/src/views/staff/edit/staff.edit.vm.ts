@@ -42,4 +42,17 @@ export class StaffEditViewModel {
       return false;
     }
   }
+
+  async onDelete(): Promise<boolean> {
+    try {
+      await UsersEndpoint.delete(this.id);
+      toast.success("Сотрудник успешно удален");
+      return true;
+    } catch (e) {
+      if (e instanceof Error)
+        toast.error(`Ошибка при удалении сотрудника: ${e.message}`);
+      console.error(e);
+      return false;
+    }
+  }
 }
