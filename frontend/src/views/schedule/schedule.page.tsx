@@ -39,8 +39,8 @@ const SchedulePage = observer(() => {
           <Timeline
             groups={vm.groups}
             traditionalZoom={true}
-            minZoom={60 * 30 * 1000 * 9}
-            maxZoom={60 * 60 * 1000 * 24 * 10}
+            minZoom={60 * 30 * 1000 * 11}
+            maxZoom={60 * 60 * 1000 * 24 * 13}
             sidebarWidth={200}
             groupRenderer={({ group }) => {
               return (
@@ -98,7 +98,7 @@ const SchedulePage = observer(() => {
               );
             }}
             defaultTimeStart={vm.currentDate.clone().add(6, "hours")}
-            defaultTimeEnd={vm.currentDate.clone().add(12, "hours")}
+            defaultTimeEnd={vm.currentDate.clone().add(14, "hours")}
           />
         </TimelineWrapper>
       )}
