@@ -100,7 +100,9 @@ export const LoginPage = observer(() => {
                 backgroundColor: "#fff",
                 padding: "10px",
                 borderRadius: "4px",
-                border: "1px solid #DBDBDB"}}>
+                border: "1px solid #DBDBDB",
+              }}
+            >
               <Text>Аккаунт администратора</Text>
               <Text>Номер телефона: 2</Text>
               <Text>Пароль: 2</Text>
