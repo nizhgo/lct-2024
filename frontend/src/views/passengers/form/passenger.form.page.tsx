@@ -11,7 +11,7 @@ import { BackButton, Button } from "components/button.tsx";
 import { PageHeader } from "components/pageHeader.tsx";
 import { useState } from "react";
 import { PassengerDto } from "api/models/passenger.model.ts";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UsersDto } from "api/models/users.model.ts";
 import { PassengerFormViewModel } from "src/views/passengers/form/passanger.form.vm.ts";
 import { Svg } from "components/svg.tsx";
@@ -82,8 +82,8 @@ const PassengerFormPage = observer(() => {
               style={{ maxWidth: "555px" }}
             >
               <Input
-                label="Имя"
-                placeholder="Введите имя"
+                label="ФИО"
+                placeholder="Введите ФИО"
                 error={errors.name?.message?.toString()}
                 register={register("name")}
                 required

@@ -1,12 +1,12 @@
 import { PageHeader } from "components/pageHeader.tsx";
 import { Stack } from "components/stack.ts";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { Input } from "components/input.tsx";
 import { CustomDropdown } from "components/dropdown.tsx";
 import { Text } from "components/text.ts";
-import { Button } from "components/button.tsx";
+import { BackButton, Button } from "components/button.tsx";
 import { PassengerDto } from "api/models/passenger.model.ts";
 import { PassengerEditViewModel } from "src/views/passengers/edit/passenger.edit.vm.ts";
 import { Controller, useForm } from "react-hook-form";
@@ -103,12 +103,12 @@ export const PassengerEditPage = observer(() => {
 
   return (
     <>
-      <Link to={`/passengers/${id}`}>
+      <BackButton onClick={() => navigate(-1)}>
         <Stack align={"center"} gap={6}>
-          <Svg src={BackArrowIcon} width={20} />
-          <Text size={16}>К информации пассажира</Text>
+          <Svg src={BackArrowIcon} width={20} color={"black"} />
+          <Text size={16}>Назад</Text>
         </Stack>
-      </Link>
+      </BackButton>
       <Stack direction={"column"} gap={14} wFull style={{ maxWidth: "555px" }}>
         <PageHeader style={{ marginBottom: 16 }}>Пассажир #{id}</PageHeader>
         <PageLayout>
@@ -120,8 +120,8 @@ export const PassengerEditPage = observer(() => {
               style={{ maxWidth: "555px" }}
             >
               <Input
-                label="Имя"
-                placeholder="Введите имя"
+                label="ФИО"
+                placeholder="Введите ФИО"
                 error={errors.name?.message?.toString()}
                 register={register("name")}
                 required
