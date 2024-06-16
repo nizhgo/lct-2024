@@ -39,9 +39,9 @@ const SchedulePage = observer(() => {
           <Timeline
             groups={vm.groups}
             traditionalZoom={true}
-            minZoom={60 * 30 * 1000 * 11}
-            maxZoom={60 * 60 * 1000 * 24 * 13}
-            sidebarWidth={200}
+            minZoom={60 * 30 * 1000 * 13}
+            maxZoom={60 * 60 * 1000 * 24 * 15}
+            sidebarWidth={164}
             groupRenderer={({ group }) => {
               return (
                 <div>
@@ -63,7 +63,7 @@ const SchedulePage = observer(() => {
                       background: "transparent",
                       height: "100%",
                       borderRadius: "4px",
-                      border: "2px solid #D9282F",
+                      border: `2px solid ${item.color}`,
                       fontSize: "24px",
                       cursor: "pointer",
                       pointerEvents: "auto",

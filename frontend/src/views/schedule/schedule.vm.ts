@@ -10,6 +10,7 @@ interface TimelessItem {
   start_time: moment.Moment;
   end_time: moment.Moment;
   link: string;
+  color: string;
 }
 
 export class ScheduleViewModel {
@@ -45,6 +46,7 @@ export class ScheduleViewModel {
           start_time: moment(gap.start_time),
           end_time: moment(gap.end_time),
           link: `/staff/${item.user.id}`,
+          color: "black",
         }));
 
         const tickets = item.tickets.map((ticket) => ({
@@ -54,6 +56,7 @@ export class ScheduleViewModel {
           start_time: moment(ticket.start_time),
           end_time: moment(ticket.real_end_time || ticket.end_time),
           link: `/requests/${ticket.request_id}`,
+          color: "#D9282F",
         }));
 
         return [...gaps, ...tickets];
