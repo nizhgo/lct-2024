@@ -177,7 +177,7 @@ export const PassengerDetails = observer(() => {
     <>
       <Link to={"/passengers"}>
         <Stack align={"center"} gap={6}>
-          <Svg src={BackArrowIcon} width={20} color={"black"} />
+          <Svg src={BackArrowIcon} width={20} />
           <Text size={16}>К списку пассажиров</Text>
         </Stack>
       </Link>

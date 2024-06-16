@@ -1,22 +1,20 @@
-import { PageHeader } from "components/pageHeader.tsx";
-import { Stack } from "components/stack.ts";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Loader, LoaderWrapper } from "src/loader.tsx";
-import { Input } from "components/input.tsx";
-import { CustomDropdown } from "components/dropdown.tsx";
-import { Text } from "components/text.ts";
-import { Button } from "components/button.tsx";
-import { PassengerDto } from "api/models/passenger.model.ts";
-import { PassengerEditViewModel } from "src/views/passengers/edit/passenger.edit.vm.ts";
-import { Controller, useForm } from "react-hook-form";
-import { UsersDto } from "api/models/users.model.ts";
-import styled from "@emotion/styled";
-import { theme } from "src/assets/theme.ts";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { observer } from "mobx-react-lite";
-import { NotFoundPage } from "src/views/404/notFound.page.tsx";
-import { Svg } from "components/svg.tsx";
+import styled from "@emotion/styled";
+import { theme } from "src/assets/theme.ts";
+import { Text } from "components/text.ts";
+import { Stack } from "components/stack.ts";
+import { Input } from "components/input";
+import { CustomDropdown } from "components/dropdown.tsx";
+import { Button } from "components/button.tsx";
+import { PageHeader } from "components/pageHeader.tsx";
+import { useState } from "react";
+import { PassengerDto } from "api/models/passenger.model.ts";
+import {Link, useNavigate} from "react-router-dom";
+import { UsersDto } from "api/models/users.model.ts";
+import { PassengerFormViewModel } from "src/views/passengers/form/passanger.form.vm.ts";
+import {Svg} from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 const PageLayout = styled.div`
@@ -45,72 +43,36 @@ const TextArea = styled.textarea`
   }
 `;
 
-export const PassengerEditPage = observer(() => {
-  const { id } = useParams<{ id: string }>();
+const PassengerFormPage = observer(() => {
+  const [vm] = useState(() => new PassengerFormViewModel());
   const navigate = useNavigate();
-
-  const [vm] = useState(() => new PassengerEditViewModel(id!));
-
-  useEffect(() => {
-    vm.loadPassenger();
-  }, [vm]);
-
   const {
     control,
     handleSubmit,
     register,
     formState: { errors },
-    reset,
   } = useForm<PassengerDto.PassengerForm>({
     resolver: zodResolver(PassengerDto.PassengerForm),
   });
-
-  useEffect(() => {
-    if (vm.data) {
-      reset(vm.data);
-    }
-  }, [vm.data, reset]);
 
   const onSubmit = async (data: PassengerDto.PassengerForm) => {
     console.log("onSubmit", data);
     const isRegistered = await vm.onSubmit(data);
     if (isRegistered) {
-      navigate(`/passengers/${id}`);
-    }
-  };
-  const onDelete = async () => {
-    const isRegistered = await vm.onDelete();
-    if (isRegistered) {
       navigate("/passengers");
     }
   };
 
-  if (!id) {
-    return <Text>Пассажир не найден</Text>;
-  }
-
-  if (vm.loading && !vm.data) {
-    return (
-      <LoaderWrapper height={"100%"}>
-        <Loader />
-      </LoaderWrapper>
-    );
-  }
-
-  if (!vm.data) {
-    return <NotFoundPage />;
-  }
-
   return (
     <>
-      <Link to={`/passengers/${id}`}>
+      <Link to={"/passengers"}>
         <Stack align={"center"} gap={6}>
-          <Svg src={BackArrowIcon} width={20} />
-          <Text size={16}>К информации пассажира</Text>
+          <Svg src={BackArrowIcon} width={20} color={"black"} />
+          <Text size={16}>К списку пассажиров</Text>
         </Stack>
       </Link>
-      <Stack direction={"column"} gap={14} wFull style={{ maxWidth: "555px" }}>
-        <PageHeader style={{ marginBottom: 16 }}>Пассажир #{id}</PageHeader>
+      <Stack wFull hFull direction={"column"} gap={20}>
+        <PageHeader>Регистрация пассажира</PageHeader>
         <PageLayout>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack
@@ -177,12 +139,7 @@ export const PassengerEditPage = observer(() => {
                   placeholder="Введите дополнительную информацию"
                 />
               </Stack>
-              <Stack gap={20}>
-                <Button type={"submit"}>Сохранить</Button>
-                <Button type={"button"} variant={"black"} onClick={onDelete}>
-                  Удалить
-                </Button>
-              </Stack>
+              <Button type="submit">Зарегистрировать</Button>
             </Stack>
           </form>
         </PageLayout>
@@ -190,3 +147,5 @@ export const PassengerEditPage = observer(() => {
     </>
   );
 });
+
+export default PassengerFormPage;

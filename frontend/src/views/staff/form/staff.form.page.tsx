@@ -9,12 +9,11 @@ import { Input } from "components/input";
 import { CustomDropdown } from "components/dropdown.tsx";
 import { Button } from "components/button.tsx";
 import { PageHeader } from "components/pageHeader.tsx";
-import { useEffect, useState } from "react";
-import { StaffEditViewModel } from "src/views/staff/edit/staff.edit.vm.ts";
+import { useState } from "react";
+import { WorkerRegPageViewModel } from "src/views/staff/form/staff.form.vm.ts";
 import { UsersDto } from "api/models/users.model.ts";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import { Loader, LoaderWrapper } from "src/loader.tsx";
-import {Svg} from "components/svg.tsx";
+import { Link, useNavigate } from "react-router-dom";
+import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 export const ShiftButton = styled(Button)<{ active?: boolean }>`
@@ -39,74 +38,47 @@ const PageLayout = styled.div`
   }
 `;
 
-const StaffEditPage = observer(() => {
-  const { id } = useParams<{ id: string }>();
+const WorkerRegPage = observer(() => {
+  const [vm] = useState(() => new WorkerRegPageViewModel());
   const navigate = useNavigate();
-  const [vm] = useState(() => new StaffEditViewModel(id!));
-
-  useEffect(() => {
-    vm.loadStaff();
-  }, [vm]);
-
   const {
     control,
-    reset,
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<UsersDto.UserUpdateForm>({
-    resolver: zodResolver(UsersDto.UserUpdateForm),
+  } = useForm<UsersDto.UserForm>({
+    resolver: zodResolver(UsersDto.UserForm),
   });
-
-  useEffect(() => {
-    if (vm.data) {
-      reset(vm.data);
-    }
-  }, [vm.data, reset]);
-
-  const onSubmit = async (data: UsersDto.UserUpdateForm) => {
-    console.log("onSubmit", data);
-    const isUpdated = await vm.onSubmit(data);
-    if (isUpdated) {
-      navigate(`/staff/${id}`);
-    }
-  };
-  const onDelete = async () => {
-    const isUpdated = await vm.onDelete();
-    if (isUpdated) {
-      navigate("/staff");
-    }
-  };
-
   const selectedArea = useWatch({
     control,
     name: "area",
   });
 
-  if (vm.loading && !vm.data) {
-    return (
-      <LoaderWrapper height={"100%"}>
-        <Loader />
-      </LoaderWrapper>
-    );
-  }
-
-  if (!vm.data) {
-    return <Text>Сотрудник не найден</Text>;
-  }
+  const onSubmit = async (data: UsersDto.UserForm) => {
+    console.log("onSubmit", data);
+    const isRegistered = await vm.onSubmit(data);
+    if (isRegistered) {
+      navigate("/staff");
+    }
+  };
 
   return (
     <>
-      <Link to={`/staff/${id}`}>
+      <Link to={"/staff"}>
         <Stack align={"center"} gap={6}>
           <Svg src={BackArrowIcon} width={20} />
-          <Text size={16}>К информации сотрудника</Text>
+          <Text size={16}>К списку сотрудников</Text>
         </Stack>
       </Link>
       <Stack wFull hFull direction={"column"} gap={20}>
-        <PageHeader>Редактировать сотрудника</PageHeader>
+        <PageHeader>Регистрация сотрудника</PageHeader>
         <PageLayout>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
+            {/*{Object.keys(errors).map((key, index) => (*/}
+            {/*  <Text key={index} color={theme.colors.error} size={12}>*/}
+            {/*    {errors[key]?.message?.toString()}*/}
+            {/*  </Text>*/}
+            {/*))}*/}
             <Stack
               direction="column"
               gap={20}
@@ -141,8 +113,9 @@ const StaffEditPage = observer(() => {
                   <CustomDropdown
                     label="Пол"
                     options={UsersDto.genderValues}
+                    disabledOptions={["Не выбрано" as UsersDto.Genders]} //cringe
                     onChange={field.onChange}
-                    value={field.value}
+                    value={field.value as UsersDto.Genders}
                     error={errors.sex?.message?.toString()}
                     required
                     render={(option) => UsersDto.localizeGender(option)}
@@ -209,8 +182,8 @@ const StaffEditPage = observer(() => {
                   <Stack direction="row" gap={10}>
                     {UsersDto.shiftsValues.map((shift, index) => (
                       <ShiftButton
-                        type={"button"}
                         key={index}
+                        type="button"
                         active={field.value === shift}
                         onClick={() => field.onChange(shift)}
                       >
@@ -242,10 +215,12 @@ const StaffEditPage = observer(() => {
                 render={({ field }) => (
                   <CustomDropdown
                     label="Время работы"
+                    //depends on area
                     options={UsersDto.getWorkingHours(selectedArea)}
                     onChange={field.onChange}
+                    disabledOptions={["Не выбрано"]}
                     value={field.value}
-                    error={errors.working_hours?.message?.toString()}
+                    error={errors.area?.message?.toString()}
                     required
                   />
                 )}
@@ -254,12 +229,15 @@ const StaffEditPage = observer(() => {
                 <input type="checkbox" {...register("is_lite")} />
                 <Text size={14}>Легкий труд</Text>
               </Stack>
-              <Stack gap={20}>
-                <Button type={"submit"}>Сохранить</Button>
-                <Button onClick={onDelete} type={"button"} variant={"black"}>
-                  Удалить
-                </Button>
-              </Stack>
+              <Input
+                label="Пароль"
+                type="password"
+                placeholder="Введите пароль"
+                error={errors.password?.message?.toString()}
+                register={register("password")}
+                required
+              />
+              <Button type="submit">Зарегистрировать</Button>
             </Stack>
           </form>
         </PageLayout>
@@ -268,4 +246,4 @@ const StaffEditPage = observer(() => {
   );
 });
 
-export default StaffEditPage;
+export default WorkerRegPage;
