@@ -2,10 +2,10 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import {
-  createBrowserRouter,
+  createBrowserRouter, Navigate,
   Outlet,
   redirect,
-  RouterProvider,
+  RouterProvider
 } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./assets/theme.ts";
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <MainPage />,
+        element: <Navigate to={"/requests"} />,
         errorElement: <ErrorTemplate />,
         loader: nonAuthCheck,
       },
