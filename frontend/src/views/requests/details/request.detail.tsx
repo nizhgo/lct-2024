@@ -1,6 +1,6 @@
 import { PageHeader } from "components/pageHeader.tsx";
 import { Stack } from "components/stack.ts";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Text } from "components/text.ts";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
@@ -10,6 +10,7 @@ import { useTheme } from "@emotion/react";
 import { RequestDetailsViewModel } from "src/views/requests/details/request.detail.vm.ts";
 import { RequestsDto } from "api/models/requests.model.ts";
 import { findLineIconByName } from "src/assets/metro.tsx";
+import styled from "@emotion/styled";
 
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
@@ -30,11 +31,28 @@ const Tab = (x: { color: string; children: React.ReactNode }) => {
   );
 };
 
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 64px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const GridItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
 const RequestDetails = observer(() => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [vm] = useState(() => new RequestDetailsViewModel(id!));
   const theme = useTheme();
+
   useEffect(() => {
     vm.loadRequest();
   }, [vm]);
@@ -58,8 +76,8 @@ const RequestDetails = observer(() => {
   return (
     <Stack direction={"column"} gap={30}>
       <PageHeader>Заявка #{id}</PageHeader>
-      <Stack gap={200}>
-        <Stack direction={"column"} gap={20}>
+      <GridContainer>
+        <GridItem>
           <Text size={24}>Данные заявки</Text>
           <Stack direction={"column"} gap={6}>
             <ParamName>ФИО пассажира</ParamName>
@@ -134,8 +152,63 @@ const RequestDetails = observer(() => {
           <Button style={{ width: "fit-content" }} onClick={handleEdit}>
             Редактировать
           </Button>
-        </Stack>
-      </Stack>
+        </GridItem>
+        {vm.data.ticket && (
+          <GridItem>
+            <Text size={24}>Данные задачи</Text>
+            <Stack direction={"column"} gap={6}>
+              <ParamName>Маршрут</ParamName>
+              <Text size={14}>{vm.data.ticket.route.join(" → ")}</Text>
+            </Stack>
+            <Stack direction={"column"} gap={6}>
+              <ParamName>Дата и время начала</ParamName>
+              <Text size={18}>
+                {new Date(vm.data.ticket.start_time).toLocaleString()}
+              </Text>
+            </Stack>
+            <Stack direction={"column"} gap={6}>
+              <ParamName>Дата и время окончания</ParamName>
+              <Text size={18}>
+                {vm.data.ticket.end_time
+                  ? new Date(vm.data.ticket.end_time).toLocaleString()
+                  : "Не завершено"}
+              </Text>
+            </Stack>
+            <Stack direction={"column"} gap={6}>
+              <ParamName>Фактическое время окончания</ParamName>
+              <Text size={18}>
+                {vm.data.ticket.real_end_time
+                  ? new Date(vm.data.ticket.real_end_time).toLocaleString()
+                  : "Не завершено"}
+              </Text>
+            </Stack>
+            <Stack direction={"column"} gap={6}>
+              <ParamName>Дополнительная информация</ParamName>
+              <Text size={18}>
+                {vm.data.ticket.additional_information ||
+                  "Информация отсутствует"}
+              </Text>
+            </Stack>
+            <Stack direction={"column"} gap={10}>
+              <ParamName>Статус</ParamName>
+              <Tab color={theme.colors.status.processed_auto}>
+                <Text color={theme.colors.text}>{vm.data.ticket.status}</Text>
+              </Tab>
+            </Stack>
+            <Stack direction={"column"} gap={6}>
+              <ParamName>Исполнители</ParamName>
+              {vm.data.ticket.users.map((user) => (
+                <Link to={`/staff/${user.id}`}>
+                  <Text
+                    key={user.id}
+                    size={18}
+                  >{`${user.second_name} ${user.first_name} ${user.patronymic}`}</Text>
+                </Link>
+              ))}
+            </Stack>
+          </GridItem>
+        )}
+      </GridContainer>
     </Stack>
   );
 });
