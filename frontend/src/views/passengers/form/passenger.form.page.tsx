@@ -7,14 +7,14 @@ import { Text } from "components/text.ts";
 import { Stack } from "components/stack.ts";
 import { Input } from "components/input";
 import { CustomDropdown } from "components/dropdown.tsx";
-import { Button } from "components/button.tsx";
+import { BackButton, Button } from "components/button.tsx";
 import { PageHeader } from "components/pageHeader.tsx";
 import { useState } from "react";
 import { PassengerDto } from "api/models/passenger.model.ts";
-import {Link, useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { UsersDto } from "api/models/users.model.ts";
 import { PassengerFormViewModel } from "src/views/passengers/form/passanger.form.vm.ts";
-import {Svg} from "components/svg.tsx";
+import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 const PageLayout = styled.div`
@@ -65,12 +65,12 @@ const PassengerFormPage = observer(() => {
 
   return (
     <>
-      <Link to={"/passengers"}>
+      <BackButton onClick={() => navigate(-1)}>
         <Stack align={"center"} gap={6}>
           <Svg src={BackArrowIcon} width={20} color={"black"} />
-          <Text size={16}>К списку пассажиров</Text>
+          <Text size={16}>Назад</Text>
         </Stack>
-      </Link>
+      </BackButton>
       <Stack wFull hFull direction={"column"} gap={20}>
         <PageHeader>Регистрация пассажира</PageHeader>
         <PageLayout>

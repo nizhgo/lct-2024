@@ -76,3 +76,14 @@ export const TransparentButton = styled.button<ButtonProps>`
 export const Button = Object.assign(PrimaryButton, {
   Transparent: TransparentButton,
 });
+
+export const BackButton = styled.button`
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: ${(p) => p.theme.colors.link};
+  text-decoration: underline;
+  text-decoration-style: dotted;
+`;

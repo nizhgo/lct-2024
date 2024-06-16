@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Text } from "components/text.ts";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
-import { Button } from "components/button.tsx";
+import { BackButton, Button } from "components/button.tsx";
 import { observer } from "mobx-react-lite";
 import { useTheme } from "@emotion/react";
 import { RequestDetailsViewModel } from "src/views/requests/details/request.detail.vm.ts";
@@ -12,6 +12,8 @@ import { RequestsDto } from "api/models/requests.model.ts";
 import { findLineIconByName } from "src/assets/metro.tsx";
 import styled from "@emotion/styled";
 import { Tooltip } from "components/tooltip.tsx";
+import { Svg } from "components/svg.tsx";
+import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
@@ -76,6 +78,12 @@ const RequestDetails = observer(() => {
 
   return (
     <Stack direction={"column"} gap={30}>
+      <BackButton onClick={() => navigate(-1)}>
+        <Stack align={"center"} gap={6}>
+          <Svg src={BackArrowIcon} width={20} color={"black"} />
+          <Text size={16}>Назад</Text>
+        </Stack>
+      </BackButton>
       <PageHeader>Заявка #{id}</PageHeader>
       <GridContainer>
         <GridItem>
@@ -164,7 +172,10 @@ const RequestDetails = observer(() => {
             <Stack direction={"column"} gap={6}>
               <ParamName>Дата и время начала</ParamName>
               {vm.data.datetime !== vm.data.ticket.start_time ? (
-                <Tooltip content="Время поездки было перенесено" action={"hover"}>
+                <Tooltip
+                  content="Время поездки было перенесено"
+                  action={"hover"}
+                >
                   <Text size={18} color={theme.colors.error}>
                     {new Date(vm.data.ticket.start_time).toLocaleString()}
                   </Text>

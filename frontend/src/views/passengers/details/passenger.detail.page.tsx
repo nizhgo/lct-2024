@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Text } from "components/text.ts";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
-import { Button } from "components/button.tsx";
+import { BackButton, Button } from "components/button.tsx";
 import { observer } from "mobx-react-lite";
 import styled from "@emotion/styled";
 import { theme } from "src/assets/theme.ts";
@@ -175,12 +175,12 @@ export const PassengerDetails = observer(() => {
 
   return (
     <>
-      <Link to={"/passengers"}>
+      <BackButton onClick={() => navigate(-1)}>
         <Stack align={"center"} gap={6}>
-          <Svg src={BackArrowIcon} width={20} />
-          <Text size={16}>К списку пассажиров</Text>
+          <Svg src={BackArrowIcon} width={20} color={"black"} />
+          <Text size={16}>Назад</Text>
         </Stack>
-      </Link>
+      </BackButton>
       <PassengerDetailsContainer direction={"column"} gap={30}>
         <PageHeader>Пассажир #{id}</PageHeader>
         <PageLayout>

@@ -12,12 +12,14 @@ import {
   CustomDropdown,
   SearchableInfiniteDropdown,
 } from "components/dropdown.tsx";
-import { Button } from "components/button.tsx";
+import { BackButton, Button } from "components/button.tsx";
 import { PageHeader } from "components/pageHeader.tsx";
 import { RequestsDto } from "api/models/requests.model.ts";
 import { PassengerDto } from "api/models/passenger.model.ts";
 import { findLineIconByName } from "src/assets/metro.tsx";
 import { RequestEditViewModel } from "src/views/requests/edit/request.edit.vm.ts";
+import { Svg } from "components/svg.tsx";
+import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 const PageLayout = styled.div`
   display: grid;
@@ -65,6 +67,12 @@ const RequestEditPage = observer(() => {
 
   return (
     <Stack wFull hFull direction={"column"} gap={20}>
+      <BackButton onClick={() => navigate(-1)}>
+        <Stack align={"center"} gap={6}>
+          <Svg src={BackArrowIcon} width={20} color={"black"} />
+          <Text size={16}>Назад</Text>
+        </Stack>
+      </BackButton>
       <PageHeader>Заявка #{id}</PageHeader>
       <PageLayout>
         <form onSubmit={handleSubmit(onSubmit)}>
