@@ -12,11 +12,17 @@ export namespace UsersDto {
 
   export const shiftsValues: Shifts[] = ["1", "2H", "1(Н)", "2(Н)", "5"];
 
-  export const Roles = z.enum(["admin", "worker", "operator"]); //TODO: add all roles
+  //"admin""specialist""operator""worker"
+  export const Roles = z.enum(["admin", "worker", "operator", "specialist"]);
 
   export type Roles = z.infer<typeof UsersDto.Roles>;
 
-  export const rolesValues: Roles[] = ["admin", "worker"];
+  export const rolesValues: Roles[] = [
+    "admin",
+    "worker",
+    "operator",
+    "specialist",
+  ];
 
   export const Ranks = z.enum(["ЦУ", "ЦСИ", "ЦИО", "ЦИ", "ЦА"]);
 
@@ -146,8 +152,9 @@ export namespace UsersDto {
 
   const localizedRole: Record<Roles, string> = {
     admin: "Администратор",
-    worker: "Пользователь",
+    worker: "Сотрудник",
     operator: "Оператор",
+    specialist: "Специалист",
   };
 
   export const localizeRole = (role: Roles) => localizedRole[role];
