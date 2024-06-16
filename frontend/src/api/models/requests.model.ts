@@ -84,40 +84,6 @@ export namespace RequestsDto {
 
   export type RequestForm = z.infer<typeof RequestForm>;
 
-  export const RequestUpdateForm = z.object({
-    passenger_id: z.number().min(1, "Необходимо указать пассажира"),
-    station_from_id: z
-      .number()
-      .min(1, "Необходимо указать станцию отправления"),
-    station_to_id: z.number().min(1, "Необходимо указать станцию прибытия"),
-    description_from: z.string().optional(),
-    description_to: z.string().optional(),
-    datetime: z.string().min(1, "Необходимо указать дату и время"),
-    acceptation_method: z
-      .string()
-      .min(1, "Необходимо указать способ подтверждения"),
-    passengers_count: z
-      .number()
-      .min(1, "Необходимо указать количество пассажиров"),
-    category: PassengerDto.PassengerCategory,
-    male_users_count: z
-      .number()
-      .min(0, "Количество мужчин не может быть отрицательным")
-      .default(0)
-      .optional(),
-    female_users_count: z
-      .number()
-      .min(0, "Количество женщин не может быть отрицательным")
-      .default(0)
-      .optional(),
-    additional_information: z.string().optional(),
-    baggage_type: z.string().optional(),
-    baggage_weight: z.number().optional().default(0),
-    baggage_help: z.boolean().optional().default(false),
-  });
-
-  export type RequestUpdateForm = z.infer<typeof RequestsDto.RequestUpdateForm>;
-
   const statusLocalizations: Record<RequestsStatus, string> = {
     new: "Новая",
     processed_auto: "Обработана автоматически",
@@ -136,7 +102,7 @@ export namespace RequestsDto {
   export const localizeAcceptationMethod = (method: AcceptationMethod) =>
     acceptationMethodLocalizations[method];
 
-  export const convertRequestToForm = (request: Request): RequestUpdateForm => {
+  export const convertRequestToForm = (request: Request): RequestForm => {
     return {
       passenger_id: request.passenger_id,
       station_from_id: request.station_from.id,

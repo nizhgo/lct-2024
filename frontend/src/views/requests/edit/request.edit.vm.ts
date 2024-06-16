@@ -9,7 +9,7 @@ import { PassengerEndpoint } from "api/endpoints/passenger.endpoint.ts";
 import { toast } from "react-toastify";
 
 export class RequestEditViewModel {
-  data: RequestsDto.RequestUpdateForm | null = null;
+  data: RequestsDto.Request | null = null;
   loading = true;
   id: string;
   stationProvider: InfinityScrollProvider<StationsDto.Station>;
@@ -49,7 +49,7 @@ export class RequestEditViewModel {
     try {
       const response = await RequestsEndpoint.findById(this.id);
       runInAction(() => {
-        this.data = RequestsDto.convertRequestToForm(response);
+        this.data = response;
       });
     } catch (error) {
       console.error(error);
@@ -60,7 +60,7 @@ export class RequestEditViewModel {
     }
   }
 
-  async onSubmit(data: RequestsDto.RequestUpdateForm): Promise<boolean> {
+  async onSubmit(data: RequestsDto.RequestForm): Promise<boolean> {
     console.log("data", data);
     try {
       await RequestsEndpoint.update(this.id, data);
