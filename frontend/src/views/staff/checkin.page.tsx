@@ -33,6 +33,10 @@ const CheckinPage = observer(() => {
   const theme = useTheme();
   const navigate = useNavigate();
 
+  const onCheck = async (data: string) => {
+    await vm.onCheck(data);
+  };
+
   const columns: ColumnConfig[] = [
     { header: "ФИО" },
     { header: "Пол", centred: true },
@@ -72,8 +76,8 @@ const CheckinPage = observer(() => {
         return (
           <CustomDropdown
             options={["Да", "Нет"]}
-            onChange={(e) => console.log(e)}
-            value={"Да"}
+            onChange={() => onCheck(String(staff.id))}
+            value={"Нет"}
           />
         );
       default:

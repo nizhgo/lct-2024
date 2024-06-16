@@ -38,4 +38,9 @@ export const UsersEndpoint = new (class UsersEndpoint {
     const res = await Http.request(`/users/${id}`).delete();
     return res;
   };
+
+  check = async (id: string) => {
+    const res = await Http.request(`/users/present/${id}`).post();
+    return res;
+  };
 })();
