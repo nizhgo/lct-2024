@@ -94,6 +94,7 @@ const RequestEditPage = observer(() => {
                 render={({ field }) => (
                   <SearchableInfiniteDropdown
                     label="Пассажир"
+                    value={vm.data?.passenger}
                     provider={vm.passengerProvider}
                     onChange={(option) => field.onChange(Number(option.id))}
                     searchField="name"
@@ -110,6 +111,7 @@ const RequestEditPage = observer(() => {
                   <SearchableInfiniteDropdown
                     label="Станция отправления"
                     provider={vm.stationProvider}
+                    value={vm.data?.station_from}
                     onChange={(option) => field.onChange(Number(option.id))}
                     searchField="name_station"
                     error={errors.station_from_id?.message?.toString()}
@@ -130,6 +132,7 @@ const RequestEditPage = observer(() => {
                   <SearchableInfiniteDropdown
                     label="Станция прибытия"
                     provider={vm.stationProvider}
+                    value={vm.data?.station_to}
                     onChange={(option) => field.onChange(Number(option.id))}
                     searchField="name_station"
                     error={errors.station_from_id?.message?.toString()}

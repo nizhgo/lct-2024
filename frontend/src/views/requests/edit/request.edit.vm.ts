@@ -48,6 +48,8 @@ export class RequestEditViewModel {
     this.loading = true;
     try {
       const response = await RequestsEndpoint.findById(this.id);
+      this.stationProvider.data = [...this.stationProvider.data, response.station_from, response.station_to];
+      this.passengerProvider.data = [...this.passengerProvider.data, response.passenger];
       runInAction(() => {
         this.data = response;
       });
