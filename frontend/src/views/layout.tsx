@@ -201,15 +201,6 @@ export const AppLayout = () => {
           </Stack>
         </Link>
         <Stack gap={14} direction={"column"} wFull>
-          <Link to="/">
-            <SidebarItem
-              active={location.pathname === "/"}
-              onClick={onLinkClick}
-            >
-              <Svg src={ScheduleIcon} width={24} />
-              <Text>Главная</Text>
-            </SidebarItem>
-          </Link>
           <Link to="/requests">
             <SidebarItem
               active={location.pathname.startsWith("/requests")}

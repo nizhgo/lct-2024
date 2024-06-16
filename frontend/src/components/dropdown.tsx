@@ -86,10 +86,13 @@ export const SearchableDropdown = observer(
         key={x.label}
         spellCheck={false}
       >
-        <Label>
-          {x.label}
-          <Text color={"#B91827"}>{x.required ? "*" : ""}</Text>
-        </Label>
+        {!x.label ? null : (
+          <Label>
+            {x.label}
+            <Text color={"#B91827"}>{x.required ? "*" : ""}</Text>
+          </Label>
+        )}
+
         <DropdownButton
           type={"button"}
           hasError={!!x.error}
@@ -193,10 +196,12 @@ export const CustomDropdown = observer(
         key={x.label}
         spellCheck={false}
       >
-        <Label>
-          {x.label}
-          <Text color={"#B91827"}>{x.required ? "*" : ""}</Text>
-        </Label>
+        {!x.label ? null : (
+          <Label>
+            {x.label}
+            <Text color={"#B91827"}>{x.required ? "*" : ""}</Text>
+          </Label>
+        )}
         <DropdownButton
           type={"button"}
           hasError={!!x.error}
