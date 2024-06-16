@@ -11,6 +11,7 @@ import { RequestDetailsViewModel } from "src/views/requests/details/request.deta
 import { RequestsDto } from "api/models/requests.model.ts";
 import { findLineIconByName } from "src/assets/metro.tsx";
 import styled from "@emotion/styled";
+import { Tooltip } from "components/tooltip.tsx";
 
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
@@ -162,9 +163,17 @@ const RequestDetails = observer(() => {
             </Stack>
             <Stack direction={"column"} gap={6}>
               <ParamName>Дата и время начала</ParamName>
-              <Text size={18}>
-                {new Date(vm.data.ticket.start_time).toLocaleString()}
-              </Text>
+              {vm.data.datetime !== vm.data.ticket.start_time ? (
+                <Tooltip content="Время поездки было перенесено" action={"hover"}>
+                  <Text size={18} color={theme.colors.error}>
+                    {new Date(vm.data.ticket.start_time).toLocaleString()}
+                  </Text>
+                </Tooltip>
+              ) : (
+                <Text size={18}>
+                  {new Date(vm.data.ticket.start_time).toLocaleString()}
+                </Text>
+              )}
             </Stack>
             <Stack direction={"column"} gap={6}>
               <ParamName>Дата и время окончания</ParamName>
