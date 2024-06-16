@@ -16,7 +16,6 @@ import { LoginPage } from "src/views/login/login.page.tsx";
 import { NotFoundPage } from "src/views/404/notFound.page.tsx";
 import { ErrorTemplate } from "components/error.tsx";
 import { AppLayout } from "src/views/layout.tsx";
-import MainPage from "src/mainPage.tsx";
 import { PassengerDetails } from "src/views/passengers/details/passenger.detail.page.tsx";
 import { ProfilePage } from "src/views/profile/profile.detail.tsx";
 import { ToastContainer } from "react-toastify";
