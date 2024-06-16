@@ -20,7 +20,7 @@ const SchedulePage = observer(() => {
   const [vm] = useState(() => new ScheduleViewModel());
   const theme = useTheme();
 
-  const onDistribute = async (e) => {
+  const onDistribute = async (e: object) => {
     e.preventDefault();
     toast.success("Расписание успешно обновлено");
     // RequestsEndpoint.autoDistribute().then((data) => console.log(data));
