@@ -93,6 +93,18 @@ export const LoginPage = observer(() => {
             <Button type="submit" variant={"red"}>
               Войти
             </Button>
+            <Stack
+              direction={"column"}
+              gap={10}
+              style={{
+                backgroundColor: "#fff",
+                padding: "10px",
+                borderRadius: "4px",
+                border: "1px solid #DBDBDB"}}>
+              <Text>Аккаунт администратора</Text>
+              <Text>Номер телефона: 2</Text>
+              <Text>Пароль: 2</Text>
+            </Stack>
           </Stack>
         </form>
       </LoginContainer>
