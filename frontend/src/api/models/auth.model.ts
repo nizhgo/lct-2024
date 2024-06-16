@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { UsersDto } from "api/models/users.model.ts";
 
 export namespace AuthDto {
   export const AuthForm = z.object({
@@ -15,9 +16,9 @@ export namespace AuthDto {
     work_phone: z.string(),
     personal_phone: z.string(),
     personnel_number: z.string(),
-    role: z.string(),
-    rank: z.string(),
-    shift: z.string(),
+    role: UsersDto.Roles,
+    rank: UsersDto.Ranks,
+    shift: UsersDto.Shifts,
     working_hours: z.string(),
   });
 

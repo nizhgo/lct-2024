@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Stack } from "components/stack.ts";
 import { useState } from "react";
 import { StaffPageViewModel } from "src/views/staff/staff.vm.ts";
@@ -14,6 +14,7 @@ import InfinityTable from "components/infinity-table.tsx";
 import { CustomDropdown } from "components/dropdown.tsx";
 import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
+import { BackButton } from "components/button.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const ContentHeader = styled.div`
 const CheckinPage = observer(() => {
   const [vm] = useState(() => new StaffPageViewModel());
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const columns: ColumnConfig[] = [
     { header: "ФИО" },
@@ -91,12 +93,12 @@ const CheckinPage = observer(() => {
 
   return (
     <Stack wFull hFull direction={"column"} gap={20}>
-      <Link to={"/staff"}>
+      <BackButton onClick={() => navigate(-1)}>
         <Stack align={"center"} gap={6}>
           <Svg src={BackArrowIcon} width={20} color={"black"} />
-          <Text size={16}>К списку сотрудников</Text>
+          <Text size={16}>Назад</Text>
         </Stack>
-      </Link>
+      </BackButton>
       <ContentHeader>
         <PageHeader>Посещаемость сотрудников</PageHeader>
       </ContentHeader>

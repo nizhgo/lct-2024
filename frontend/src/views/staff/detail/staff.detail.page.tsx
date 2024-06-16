@@ -1,10 +1,10 @@
 import { PageHeader } from "components/pageHeader.tsx";
 import { Stack } from "components/stack.ts";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Text } from "components/text.ts";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
-import { Button } from "components/button.tsx";
+import { BackButton, Button } from "components/button.tsx";
 import { observer } from "mobx-react-lite";
 import styled from "@emotion/styled";
 import { theme } from "src/assets/theme.ts";
@@ -58,12 +58,12 @@ const StaffDetails = observer(() => {
 
   return (
     <>
-      <Link to={"/staff"}>
+      <BackButton onClick={() => navigate(-1)}>
         <Stack align={"center"} gap={6}>
-          <Svg src={BackArrowIcon} width={20} />
-          <Text size={16}>К списку сотрудников</Text>
+          <Svg src={BackArrowIcon} width={20} color={"black"} />
+          <Text size={16}>Назад</Text>
         </Stack>
-      </Link>
+      </BackButton>
       <Stack direction={"column"} gap={30}>
         <PageHeader>Сотрудник #{id}</PageHeader>
         <ResponsiveStack>
