@@ -12,9 +12,9 @@ import { PageHeader } from "components/pageHeader.tsx";
 import { useEffect, useState } from "react";
 import { StaffEditViewModel } from "src/views/staff/edit/staff.edit.vm.ts";
 import { UsersDto } from "api/models/users.model.ts";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
-import {Svg} from "components/svg.tsx";
+import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 export const ShiftButton = styled(Button)<{ active?: boolean }>`

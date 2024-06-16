@@ -11,10 +11,10 @@ import { Button } from "components/button.tsx";
 import { PageHeader } from "components/pageHeader.tsx";
 import { useState } from "react";
 import { PassengerDto } from "api/models/passenger.model.ts";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UsersDto } from "api/models/users.model.ts";
 import { PassengerFormViewModel } from "src/views/passengers/form/passanger.form.vm.ts";
-import {Svg} from "components/svg.tsx";
+import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 const PageLayout = styled.div`

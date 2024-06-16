@@ -1,5 +1,5 @@
 import { RequestsDto } from "api/models/requests.model.ts";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { RequestsEndpoint } from "api/endpoints/requests.endpoint.ts";
 import { InfinityScrollProvider } from "utils/infinity-scroll.tsx";
 import { StationsDto } from "api/models/stations.models.ts";
@@ -9,7 +9,7 @@ import { PassengerEndpoint } from "api/endpoints/passenger.endpoint.ts";
 import { toast } from "react-toastify";
 
 export class RequestEditViewModel {
-  data: RequestsDto.Request | null = null;
+  data: RequestsDto.RequestUpdateForm | null = null;
   loading = true;
   id: string;
   stationProvider: InfinityScrollProvider<StationsDto.Station>;
@@ -45,17 +45,22 @@ export class RequestEditViewModel {
   }
 
   async loadRequest() {
+    this.loading = true;
     try {
-      this.loading = true;
-      this.data = await RequestsEndpoint.findById(this.id);
+      const response = await RequestsEndpoint.findById(this.id);
+      runInAction(() => {
+        this.data = RequestsDto.convertRequestToForm(response);
+      });
     } catch (error) {
       console.error(error);
     } finally {
-      this.loading = false;
+      runInAction(() => {
+        this.loading = false;
+      });
     }
   }
 
-  async onSubmit(data: RequestsDto.RequestForm): Promise<boolean> {
+  async onSubmit(data: RequestsDto.RequestUpdateForm): Promise<boolean> {
     console.log("data", data);
     try {
       await RequestsEndpoint.update(this.id, data);
