@@ -34,7 +34,7 @@ export const theme = {
       inactive: "#DF0404", // красный
       new: "#FF0000", // Red for new requests
       processed_auto: "#FFA500", // Orange for automatically processed requests
-      processed: "#FFFF00", // Yellow for manually processed requests
+      processed: "#24A3FF", // Blue for manually processed requests
       completed: "#008000", // Green for completed requests
     },
     backgrounds: {
