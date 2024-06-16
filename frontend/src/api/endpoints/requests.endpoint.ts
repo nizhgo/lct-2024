@@ -34,4 +34,10 @@ export const RequestsEndpoint = new (class RequestsEndpoint {
       .expectJson(RequestsDto.Request)
       .put(data);
   };
+
+  autoDistribute = async (date: Date = new Date()) => {
+    return await Http.request("/requests/distibute")
+      .expectJson(RequestsDto.Request)
+      .post({ current_time: date, distribution_type: "auto" });
+  };
 })();
