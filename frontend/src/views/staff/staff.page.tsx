@@ -18,6 +18,7 @@ const ContentHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  gap: 10px;
 
   @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
     flex-direction: column;

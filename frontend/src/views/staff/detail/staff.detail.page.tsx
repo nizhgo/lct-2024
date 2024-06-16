@@ -31,6 +31,22 @@ const Tab = (x: { color: string; children: React.ReactNode }) => {
   );
 };
 
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 64px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const GridItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
 const StaffDetails = observer(() => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -66,52 +82,59 @@ const StaffDetails = observer(() => {
       </BackButton>
       <Stack direction={"column"} gap={30}>
         <PageHeader>Сотрудник #{id}</PageHeader>
-        <ResponsiveStack>
-          <Stack direction={"column"} gap={20}>
-            <Text size={24}>Данные сотрудника</Text>
-            <Stack direction={"column"} gap={6}>
-              <ParamName>ФИО</ParamName>
-              <Text size={18}>
-                {vm.data.second_name} {vm.data.first_name} {vm.data.patronymic}
-              </Text>
-            </Stack>
-            <Stack direction={"column"} gap={6}>
-              <ParamName>Пол</ParamName>
-              <Text size={18}>
-                {vm.data.sex === "male" ? "Мужской" : "Женский"}
-              </Text>
-            </Stack>
-            <Stack direction={"column"} gap={6}>
-              <ParamName>Раб. номер телефона</ParamName>
-              <Text size={18}>{vm.data.work_phone}</Text>
-            </Stack>
-            <Stack direction={"column"} gap={6}>
-              <ParamName>Личн. номер телефона</ParamName>
-              <Text size={18}>{vm.data.personal_phone}</Text>
-            </Stack>
-            <Stack direction={"column"} gap={10}>
-              <ParamName>Должность</ParamName>
-              <Tab color={"#FFCED1"}>
-                <Text color={"#D9232E"}>{vm.data.rank}</Text>
-              </Tab>
-            </Stack>
-            <Stack direction={"column"} gap={10}>
-              <ParamName>Только легкий труд?</ParamName>
-              {vm.data.is_lite ? (
-                <Tab color={"#FFCED1"}>
-                  <Text color={"#D9232E"}>Да</Text>
-                </Tab>
-              ) : (
-                <Tab color={"#16C09838"}>
-                  <Text color={"#008767"}>Нет</Text>
-                </Tab>
-              )}
-            </Stack>
-            <Button style={{ width: "fit-content" }} onClick={handleEdit}>
-              Редактировать
-            </Button>
-          </Stack>
-        </ResponsiveStack>
+        <GridContainer>
+          <GridItem>
+            <ResponsiveStack>
+              <Stack direction={"column"} gap={20}>
+                <Text size={24}>Данные сотрудника</Text>
+                <Stack direction={"column"} gap={6}>
+                  <ParamName>ФИО</ParamName>
+                  <Text size={18}>
+                    {vm.data.second_name} {vm.data.first_name} {vm.data.patronymic}
+                  </Text>
+                </Stack>
+                <Stack direction={"column"} gap={6}>
+                  <ParamName>Пол</ParamName>
+                  <Text size={18}>
+                    {vm.data.sex === "male" ? "Мужской" : "Женский"}
+                  </Text>
+                </Stack>
+                <Stack direction={"column"} gap={6}>
+                  <ParamName>Раб. номер телефона</ParamName>
+                  <Text size={18}>{vm.data.work_phone}</Text>
+                </Stack>
+                <Stack direction={"column"} gap={6}>
+                  <ParamName>Личн. номер телефона</ParamName>
+                  <Text size={18}>{vm.data.personal_phone}</Text>
+                </Stack>
+                <Stack direction={"column"} gap={10}>
+                  <ParamName>Должность</ParamName>
+                  <Tab color={"#FFCED1"}>
+                    <Text color={"#D9232E"}>{vm.data.rank}</Text>
+                  </Tab>
+                </Stack>
+                <Stack direction={"column"} gap={10}>
+                  <ParamName>Только легкий труд?</ParamName>
+                  {vm.data.is_lite ? (
+                    <Tab color={"#FFCED1"}>
+                      <Text color={"#D9232E"}>Да</Text>
+                    </Tab>
+                  ) : (
+                    <Tab color={"#16C09838"}>
+                      <Text color={"#008767"}>Нет</Text>
+                    </Tab>
+                  )}
+                </Stack>
+                <Button style={{ width: "fit-content" }} onClick={handleEdit}>
+                  Редактировать
+                </Button>
+              </Stack>
+            </ResponsiveStack>
+          </GridItem>
+          <GridItem>
+            <Text size={24}>Расписание сотрудника</Text>
+          </GridItem>
+        </GridContainer>
       </Stack>
     </>
   );
