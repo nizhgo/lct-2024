@@ -41,4 +41,17 @@ export class PassengerEditViewModel {
       return false;
     }
   }
+
+  async onDelete(): Promise<boolean> {
+    try {
+      await PassengerEndpoint.delete(this.id);
+      toast.success("Пассажир успешно удален");
+      return true;
+    } catch (e) {
+      if (e instanceof Error)
+        toast.error(`Ошибка при удалении пассажира: ${e.message}`);
+      console.error(e);
+      return false;
+    }
+  }
 }
