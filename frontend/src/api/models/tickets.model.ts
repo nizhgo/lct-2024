@@ -32,10 +32,10 @@ export namespace TicketsDto {
     real_end_time: z.string().nullable(),
     additional_information: z.string(),
     status: TicketStatus,
-    users: z.array(UsersDto.User),
+    users: z.array(UsersDto.User).nullable(),
     request: z.object({
       id: z.number(),
-    }),
+    }).optional(),
   });
 
   export const TicketShort = z.object({
@@ -47,7 +47,7 @@ export namespace TicketsDto {
     real_end_time: z.string().nullable(),
     additional_information: z.string(),
     status: TicketStatus,
-    users: z.array(UsersDto.User),
+    users: z.array(UsersDto.User).nullable(),
   });
 
   export type TicketShort = z.infer<typeof TicketShort>;
@@ -74,7 +74,7 @@ export namespace TicketsDto {
       real_end_time: ticket.real_end_time,
       additional_information: ticket.additional_information,
       status: ticket.status,
-      user_ids: ticket.users.map((user) => user.id),
+      user_ids: ticket.users?.map((user) => user.id) ?? [],
     };
   }
 }

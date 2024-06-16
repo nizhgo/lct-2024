@@ -223,7 +223,7 @@ const RequestDetails = observer(() => {
               </Stack>
               <Stack direction={"column"} gap={6}>
                 <ParamName>Исполнители</ParamName>
-                {vm.data.ticket.users.map((user, index) => (
+                {vm.data.ticket.users?.map((user, index) => (
                   <Link key={index} to={`/staff/${user.id}`}>
                     <Text
                       key={user.id}
