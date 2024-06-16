@@ -91,7 +91,7 @@ export const SearchableDropdown = observer(
           <Text color={"#B91827"}>{x.required ? "*" : ""}</Text>
         </Label>
         <DropdownButton
-          type="button"
+          type={"button"}
           hasError={!!x.error}
           onClick={() => setIsOpen(!isOpen)}
         >
@@ -111,8 +111,8 @@ export const SearchableDropdown = observer(
           ) : (
             "Не выбрано"
           )}
-          <DropdownOpenButton isOpen={isOpen}>
-            <Text fontFamily={"IcoMoon"} size={10}>
+          <DropdownOpenButton isOpen={isOpen} type={"button"}>
+            <Text fontFamily={"IcoMoon"} size={8} color={"#272727"}>
               
             </Text>
           </DropdownOpenButton>
@@ -198,7 +198,7 @@ export const CustomDropdown = observer(
           <Text color={"#B91827"}>{x.required ? "*" : ""}</Text>
         </Label>
         <DropdownButton
-          type="button"
+          type={"button"}
           hasError={!!x.error}
           onClick={() => setIsOpen(!isOpen)}
         >
@@ -207,8 +207,8 @@ export const CustomDropdown = observer(
               ? x.render(curOption)
               : (curOption as unknown as string)
             : "Не выбрано"}
-          <DropdownOpenButton isOpen={isOpen}>
-            <Text fontFamily={"IcoMoon"} size={10}>
+          <DropdownOpenButton isOpen={isOpen} type={"button"}>
+            <Text fontFamily={"IcoMoon"} size={8} color={"#272727"}>
               
             </Text>
           </DropdownOpenButton>
@@ -420,7 +420,7 @@ export const SearchableInfiniteDropdown = observer(
             "Не выбрано"
           )}
           <DropdownOpenButton isOpen={isOpen}>
-            <Text fontFamily={"IcoMoon"} size={10}>
+            <Text fontFamily={"IcoMoon"} size={8} color={"#272727"}>
               
             </Text>
           </DropdownOpenButton>
