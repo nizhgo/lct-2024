@@ -350,7 +350,9 @@ export const SearchableInfiniteDropdown = observer(
     const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-      setCurOption(x.value);
+      if (x.value) {
+        handleSelect(x.value);
+      }
     }, [x.value]);
 
     useEffect(() => {
