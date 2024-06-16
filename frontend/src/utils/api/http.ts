@@ -3,7 +3,7 @@ import { ZodError, ZodSchema } from "zod";
 import { toast } from "react-toastify";
 import AuthService from "src/stores/auth.service.ts";
 
-axios.defaults.baseURL = "https://papuas.tech/api/v1";
+axios.defaults.baseURL = "https://api.papuas.tech/api/v1";
 
 class HttpRequest<T> {
   readonly #path: string;
