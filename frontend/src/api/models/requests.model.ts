@@ -43,7 +43,7 @@ export namespace RequestsDto {
     baggage_help: z.boolean(),
     id: z.number(),
     passenger: PassengerDto.Passenger,
-    ticket: z.union([z.null(), TicketsDto.TicketShort]),
+    ticket: TicketsDto.TicketShort.nullable(),
     station_from: StationsDto.Station,
     station_to: StationsDto.Station,
   });
