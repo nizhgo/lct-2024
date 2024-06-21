@@ -7,6 +7,8 @@ import { PassengerDto } from "api/models/passenger.model.ts";
 import { StationsEndpoint } from "api/endpoints/stations.endpoint.ts";
 import { PassengerEndpoint } from "api/endpoints/passenger.endpoint.ts";
 import { toast } from "react-toastify";
+import { TicketsDto } from "api/models/tickets.model.ts";
+import { TicketsEndpoint } from "api/endpoints/tickets.endpoint.ts";
 
 export class RequestEditViewModel {
   data: RequestsDto.Request | null = null;
@@ -48,8 +50,15 @@ export class RequestEditViewModel {
     this.loading = true;
     try {
       const response = await RequestsEndpoint.findById(this.id);
-      this.stationProvider.data = [...this.stationProvider.data, response.station_from, response.station_to];
-      this.passengerProvider.data = [...this.passengerProvider.data, response.passenger];
+      this.stationProvider.data = [
+        ...this.stationProvider.data,
+        response.station_from,
+        response.station_to,
+      ];
+      this.passengerProvider.data = [
+        ...this.passengerProvider.data,
+        response.passenger,
+      ];
       runInAction(() => {
         this.data = response;
       });
@@ -66,6 +75,24 @@ export class RequestEditViewModel {
     console.log("data", data);
     try {
       await RequestsEndpoint.update(this.id, data);
+      toast.success("Заявка успешно обновлена");
+      return true;
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(`Ошибка при обновлении заявки: ${e.message}`);
+      }
+      console.error(e);
+      return false;
+    }
+  }
+
+  async onTicketSubmit(
+    ticketId: string,
+    data: TicketsDto.TicketForm,
+  ): Promise<boolean> {
+    console.log("data", data);
+    try {
+      await TicketsEndpoint.update(ticketId, data);
       toast.success("Заявка успешно обновлена");
       return true;
     } catch (e) {
