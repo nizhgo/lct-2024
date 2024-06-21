@@ -43,7 +43,7 @@ export namespace RequestsDto {
     baggage_help: z.boolean(),
     id: z.number(),
     passenger: PassengerDto.Passenger,
-    ticket: TicketsDto.TicketShort.nullable(),
+    ticket: TicketsDto.TicketShort.optional(),
     station_from: StationsDto.Station,
     station_to: StationsDto.Station,
   });

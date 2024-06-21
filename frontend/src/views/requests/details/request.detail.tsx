@@ -1,6 +1,6 @@
 import { PageHeader } from "components/pageHeader.tsx";
 import { Stack } from "components/stack.ts";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Text } from "components/text.ts";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
@@ -11,10 +11,9 @@ import { RequestDetailsViewModel } from "src/views/requests/details/request.deta
 import { RequestsDto } from "api/models/requests.model.ts";
 import { findLineIconByName } from "src/assets/metro.tsx";
 import styled from "@emotion/styled";
+import { Tooltip } from "components/tooltip.tsx";
 import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
-import TicketDetails from "src/views/ticket/detail/ticket.detail.tsx";
-import TicketForm from "src/views/ticket/form/ticket.form.tsx";
 
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
@@ -53,8 +52,6 @@ const GridItem = styled.div`
 
 const RequestDetails = observer(() => {
   const { id } = useParams<{ id: string }>();
-  const [searchParams] = useSearchParams();
-  const distribute = Boolean(searchParams.get("distribute"));
   const navigate = useNavigate();
   const [vm] = useState(() => new RequestDetailsViewModel(id!));
   const theme = useTheme();
@@ -64,6 +61,9 @@ const RequestDetails = observer(() => {
   }, [vm]);
 
   const handleEdit = () => {
+    navigate(`/requests/edit/${id}`);
+  };
+  const handleDistribute = () => {
     navigate(`/requests/edit/${id}`);
   };
 
@@ -87,7 +87,12 @@ const RequestDetails = observer(() => {
           <Text size={16}>Назад</Text>
         </Stack>
       </BackButton>
-      <PageHeader>Заявка #{id} </PageHeader>
+      <Stack justify={"space-between"}>
+        <PageHeader>Заявка #{id} </PageHeader>
+        <Button type={"button"} onClick={handleEdit}>
+          Редактировать
+        </Button>
+      </Stack>
       <GridContainer>
         <GridItem>
           <Text size={24}>Данные заявки</Text>
@@ -161,19 +166,85 @@ const RequestDetails = observer(() => {
             <ParamName>Нужна помощь с багажом</ParamName>
             <Text size={18}>{vm.data.baggage_help ? "Да" : "Нет"}</Text>
           </Stack>
-          <Button
-            type={"button"}
-            onClick={handleEdit}
-            style={{ width: "fit-content" }}
-          >
-            Редактировать
-          </Button>
         </GridItem>
         <GridItem>
-          {!vm.data.ticket && distribute ? (
-            <TicketForm />
+          <Text size={24}>Распределение заявки</Text>
+          {vm.data.ticket ? (
+            <>
+              <Stack direction={"column"} gap={6}>
+                <ParamName>Маршрут</ParamName>
+                <Text size={14}>{vm.data.ticket.route.join(" → ")}</Text>
+              </Stack>
+              <Stack direction={"column"} gap={6}>
+                <ParamName>Дата и время начала</ParamName>
+                {vm.data.datetime !== vm.data.ticket.start_time ? (
+                  <Tooltip
+                    content="Время поездки было перенесено"
+                    action={"hover"}
+                  >
+                    <Text size={18} color={theme.colors.error}>
+                      {new Date(vm.data.ticket.start_time).toLocaleString()}
+                    </Text>
+                  </Tooltip>
+                ) : (
+                  <Text size={18}>
+                    {new Date(vm.data.ticket.start_time).toLocaleString()}
+                  </Text>
+                )}
+              </Stack>
+              <Stack direction={"column"} gap={6}>
+                <ParamName>Дата и время окончания</ParamName>
+                <Text size={18}>
+                  {vm.data.ticket.end_time
+                    ? new Date(vm.data.ticket.end_time).toLocaleString()
+                    : "Не завершено"}
+                </Text>
+              </Stack>
+              <Stack direction={"column"} gap={6}>
+                <ParamName>Фактическое время окончания</ParamName>
+                <Text size={18}>
+                  {vm.data.ticket.real_end_time
+                    ? new Date(vm.data.ticket.real_end_time).toLocaleString()
+                    : "Не завершено"}
+                </Text>
+              </Stack>
+              <Stack direction={"column"} gap={6}>
+                <ParamName>Дополнительная информация</ParamName>
+                <Text size={18}>
+                  {vm.data.ticket.additional_information ||
+                    "Информация отсутствует"}
+                </Text>
+              </Stack>
+              <Stack direction={"column"} gap={10}>
+                <ParamName>Статус</ParamName>
+                <Tab color={theme.colors.status.processed_auto}>
+                  <Text color={theme.colors.text}>{vm.data.ticket.status}</Text>
+                </Tab>
+              </Stack>
+              <Stack direction={"column"} gap={6}>
+                <ParamName>Исполнители</ParamName>
+                {vm.data.ticket.users?.map((user, index) => (
+                  <Link key={index} to={`/staff/${user.id}`}>
+                    <Text
+                      key={user.id}
+                      size={18}
+                    >{`${user.second_name} ${user.first_name} ${user.patronymic}`}</Text>
+                  </Link>
+                ))}
+              </Stack>
+            </>
           ) : (
-            <TicketDetails data={vm.data} />
+            <>
+              <Text color={"#787486"} size={16}>
+                Заявка пока не распределена...
+              </Text>
+              <Button
+                style={{ width: "fit-content" }}
+                onClick={handleDistribute}
+              >
+                Распределить
+              </Button>
+            </>
           )}
         </GridItem>
       </GridContainer>

@@ -10,16 +10,9 @@ export const TicketsEndpoint = new (class TicketsEndpoint {
       .get();
   };
 
-  create = async (data: TicketsDto.TicketForm) => {
-    return await Http.request("/tickets/")
-      .expectJson(TicketsDto.Ticket)
-      .post(data);
-  };
-
-  update = async (id: string, data: TicketsDto.TicketForm) => {
+  update = async (id: number, data: TicketsDto.TicketForm) => {
     return await Http.request(`/tickets/${id}`)
       .expectJson(TicketsDto.Ticket)
       .put(data);
   };
-
 })();
