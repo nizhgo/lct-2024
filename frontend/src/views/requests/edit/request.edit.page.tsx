@@ -2,7 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import { Text } from "components/text.ts";
 import { Stack } from "components/stack.ts";
@@ -19,8 +19,6 @@ import { findLineIconByName } from "src/assets/metro.tsx";
 import { RequestEditViewModel } from "src/views/requests/edit/request.edit.vm.ts";
 import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
-import { TicketsDto } from "api/models/tickets.model.ts";
-import TicketForm from "src/views/ticket/form/ticket.form.tsx";
 
 const GridContainer = styled.div`
   display: grid;
@@ -40,31 +38,28 @@ const GridItem = styled.div`
 
 const RequestEditPage = observer(() => {
   const { id } = useParams<{ id: string }>();
-  const [searchParams] = useSearchParams();
-  const distribute = Boolean(searchParams.get("distribute"));
   const [vm] = useState(() => new RequestEditViewModel(id!));
   const navigate = useNavigate();
 
   useEffect(() => {
-    vm.loadRequest().then(() => console.log(vm.data));
+    vm.loadRequest();
   }, [vm]);
 
-  const requestForm = useForm<RequestsDto.RequestForm>({
+  const {
+    control,
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm<RequestsDto.RequestForm>({
     resolver: zodResolver(RequestsDto.RequestForm),
-  });
-
-  const ticketForm = useForm<TicketsDto.TicketForm>({
-    resolver: zodResolver(TicketsDto.TicketForm),
   });
 
   useEffect(() => {
     if (vm.data) {
-      requestForm.reset(vm.data);
-      if (vm.data.ticket) {
-        ticketForm.reset(TicketsDto.convertTicketShortToForm(vm.data.ticket));
-      }
+      reset(vm.data);
     }
-  }, [vm.data, requestForm.reset, ticketForm.reset]);
+  }, [vm.data, reset]);
 
   const onSubmit = async (data: RequestsDto.RequestForm) => {
     console.log("onSubmit", data);
@@ -72,23 +67,6 @@ const RequestEditPage = observer(() => {
     if (isRegistered) {
       navigate(`/requests/${id}`);
     }
-  };
-
-  const onTicketSubmit = async (data: TicketsDto.TicketForm) => {
-    console.log("onSubmit", data);
-    if (vm.data && vm.data.ticket) {
-      const isRegistered = await vm.onTicketSubmit(
-        String(vm.data.ticket.id),
-        data,
-      );
-      if (isRegistered) {
-        navigate(`/requests/${id}`);
-      }
-    }
-  };
-
-  const handleDistribute = () => {
-    navigate(`/requests/edit/${id}?distribute=1`);
   };
 
   return (
@@ -103,7 +81,7 @@ const RequestEditPage = observer(() => {
       <GridContainer>
         <GridItem>
           <Text size={24}>Данные заявки</Text>
-          <form onSubmit={requestForm.handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Stack
               direction="column"
               gap={20}
@@ -112,7 +90,7 @@ const RequestEditPage = observer(() => {
             >
               <Controller
                 name="passenger_id"
-                control={requestForm.control}
+                control={control}
                 render={({ field }) => (
                   <SearchableInfiniteDropdown
                     label="Пассажир"
@@ -120,7 +98,7 @@ const RequestEditPage = observer(() => {
                     provider={vm.passengerProvider}
                     onChange={(option) => field.onChange(Number(option.id))}
                     searchField="name"
-                    error={requestForm.formState.errors.station_from_id?.message?.toString()}
+                    error={errors.station_from_id?.message?.toString()}
                     required
                     render={(option) => option.name}
                   />
@@ -128,7 +106,7 @@ const RequestEditPage = observer(() => {
               />
               <Controller
                 name="station_from_id"
-                control={requestForm.control}
+                control={control}
                 render={({ field }) => (
                   <SearchableInfiniteDropdown
                     label="Станция отправления"
@@ -136,7 +114,7 @@ const RequestEditPage = observer(() => {
                     value={vm.data?.station_from}
                     onChange={(option) => field.onChange(Number(option.id))}
                     searchField="name_station"
-                    error={requestForm.formState.errors.station_from_id?.message?.toString()}
+                    error={errors.station_from_id?.message?.toString()}
                     required
                     render={(option) => (
                       <Stack direction={"row"} gap={5} align={"center"}>
@@ -149,7 +127,7 @@ const RequestEditPage = observer(() => {
               />
               <Controller
                 name="station_to_id"
-                control={requestForm.control}
+                control={control}
                 render={({ field }) => (
                   <SearchableInfiniteDropdown
                     label="Станция прибытия"
@@ -157,7 +135,7 @@ const RequestEditPage = observer(() => {
                     value={vm.data?.station_to}
                     onChange={(option) => field.onChange(Number(option.id))}
                     searchField="name_station"
-                    error={requestForm.formState.errors.station_from_id?.message?.toString()}
+                    error={errors.station_from_id?.message?.toString()}
                     required
                     render={(option) => (
                       <Stack direction={"row"} gap={5} align={"center"}>
@@ -171,26 +149,26 @@ const RequestEditPage = observer(() => {
               <Input
                 label="Описание отправления"
                 placeholder="Введите описание отправления"
-                error={requestForm.formState.errors.description_from?.message?.toString()}
-                register={requestForm.register("description_from")}
+                error={errors.description_from?.message?.toString()}
+                register={register("description_from")}
               />
               <Input
                 label="Описание прибытия"
                 placeholder="Введите описание прибытия"
-                error={requestForm.formState.errors.description_to?.message?.toString()}
-                register={requestForm.register("description_to")}
+                error={errors.description_to?.message?.toString()}
+                register={register("description_to")}
               />
               <Input
                 label="Дата и время"
                 type={"datetime-local"}
                 placeholder="Введите дату и время"
-                error={requestForm.formState.errors.datetime?.message?.toString()}
-                register={requestForm.register("datetime")}
+                error={errors.datetime?.message?.toString()}
+                register={register("datetime")}
                 required
               />
               <Controller
                 name="acceptation_method"
-                control={requestForm.control}
+                control={control}
                 render={({ field }) => (
                   <CustomDropdown
                     label="Способ получения заявки"
@@ -198,7 +176,7 @@ const RequestEditPage = observer(() => {
                     onChange={field.onChange}
                     value={field.value as RequestsDto.AcceptationMethod}
                     defaultValue={["Не выбрано"]}
-                    error={requestForm.formState.errors.acceptation_method?.message?.toString()}
+                    error={errors.acceptation_method?.message?.toString()}
                     required
                     render={(option) =>
                       RequestsDto.localizeAcceptationMethod(option)
@@ -209,22 +187,20 @@ const RequestEditPage = observer(() => {
               <Input.Number
                 label="Количество пассажиров"
                 placeholder="Введите количество пассажиров"
-                error={requestForm.formState.errors.passengers_count?.message?.toString()}
-                register={requestForm.register("passengers_count", {
-                  valueAsNumber: true,
-                })}
+                error={errors.passengers_count?.message?.toString()}
+                register={register("passengers_count", { valueAsNumber: true })}
                 required
               />
               <Controller
                 name="category"
-                control={requestForm.control}
+                control={control}
                 render={({ field }) => (
                   <CustomDropdown
                     label="Категория"
                     options={PassengerDto.passengerCategoryValues}
                     onChange={field.onChange}
                     value={field.value}
-                    error={requestForm.formState.errors.category?.message?.toString()}
+                    error={errors.category?.message?.toString()}
                     required
                     render={(option) => option}
                   />
@@ -233,45 +209,36 @@ const RequestEditPage = observer(() => {
               <Input.Number
                 label="Количество мужчин"
                 placeholder="Введите количество мужчин"
-                error={requestForm.formState.errors.male_users_count?.message?.toString()}
-                register={requestForm.register("male_users_count", {
-                  valueAsNumber: true,
-                })}
+                error={errors.male_users_count?.message?.toString()}
+                register={register("male_users_count", { valueAsNumber: true })}
               />
               <Input.Number
                 min={0}
                 label="Количество женщин"
                 placeholder="Введите количество женщин"
-                error={requestForm.formState.errors.female_users_count?.message?.toString()}
-                register={requestForm.register("female_users_count", {
-                  valueAsNumber: true,
-                })}
+                error={errors.female_users_count?.message?.toString()}
+                register={register("female_users_count", { valueAsNumber: true })}
               />
               <Input
                 label="Дополнительная информация"
                 placeholder="Введите дополнительную информацию"
-                error={requestForm.formState.errors.additional_information?.message?.toString()}
-                register={requestForm.register("additional_information")}
+                error={errors.additional_information?.message?.toString()}
+                register={register("additional_information")}
               />
               <Input
                 label="Тип багажа"
                 placeholder="Введите тип багажа"
-                error={requestForm.formState.errors.baggage_type?.message?.toString()}
-                register={requestForm.register("baggage_type")}
+                error={errors.baggage_type?.message?.toString()}
+                register={register("baggage_type")}
               />
               <Input.Number
                 label="Вес багажа"
                 placeholder="Введите вес багажа"
-                error={requestForm.formState.errors.baggage_weight?.message?.toString()}
-                register={requestForm.register("baggage_weight", {
-                  valueAsNumber: true,
-                })}
+                error={errors.baggage_weight?.message?.toString()}
+                register={register("baggage_weight", { valueAsNumber: true })}
               />
               <Stack direction="row" align="center" gap={10}>
-                <input
-                  type="checkbox"
-                  {...requestForm.register("baggage_help")}
-                />
+                <input type="checkbox" {...register("baggage_help")} />
                 <Text size={14}>Нужна помощь с багажом</Text>
               </Stack>
               <Button type="submit">Сохранить</Button>
@@ -279,75 +246,16 @@ const RequestEditPage = observer(() => {
           </form>
         </GridItem>
         <GridItem>
+          <Text size={24}>Распределение заявки</Text>
           {vm.data?.ticket ? (
-            <form onSubmit={ticketForm.handleSubmit(onTicketSubmit)}>
-              <Stack
-                direction="column"
-                gap={20}
-                wFull
-                style={{ maxWidth: "555px" }}
-              >
-                <Input
-                  label="Дата и время начала"
-                  type={"datetime-local"}
-                  placeholder="Введите дату и время"
-                  error={ticketForm.formState.errors.start_time?.message?.toString()}
-                  register={ticketForm.register("start_time")}
-                  required
-                />
-                <Input
-                  label="Дата и время окончания"
-                  type={"datetime-local"}
-                  placeholder="Введите дату и время"
-                  error={ticketForm.formState.errors.end_time?.message?.toString()}
-                  register={ticketForm.register("end_time")}
-                  required
-                />
-                <Input
-                  label="Фактическое время окончания"
-                  type={"datetime-local"}
-                  placeholder="Введите дату и время"
-                  error={ticketForm.formState.errors.real_end_time?.message?.toString()}
-                  register={ticketForm.register("real_end_time")}
-                  required
-                />
-                <Input
-                  label="Дополнительная информация"
-                  placeholder="Введите дополнительную информацию"
-                  error={ticketForm.formState.errors.additional_information?.message?.toString()}
-                  register={ticketForm.register("additional_information")}
-                />
-                <Controller
-                  name="status"
-                  control={ticketForm.control}
-                  render={({ field }) => (
-                    <CustomDropdown
-                      label="Статус"
-                      options={TicketsDto.ticketStatus}
-                      onChange={field.onChange}
-                      value={field.value}
-                      error={ticketForm.formState.errors.status?.message?.toString()}
-                      required
-                      render={(option) => option}
-                    />
-                  )}
-                />
-                <Button type="submit">Сохранить</Button>
-              </Stack>
+            <form onSubmit={handleSubmit(onSubmit)}>
             </form>
-          ) : distribute ? (
-            <TicketForm />
           ) : (
             <>
-              <Text size={24}>Распределение заявки</Text>
               <Text color={"#787486"} size={16}>
                 Заявка пока не распределена...
               </Text>
-              <Button
-                type={"button"}
-                style={{ width: "fit-content" }}
-                onClick={handleDistribute}
-              >
+              <Button type={"button"} style={{ width: "fit-content" }}>
                 Распределить
               </Button>
             </>

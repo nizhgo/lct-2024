@@ -33,14 +33,10 @@ export namespace TicketsDto {
     additional_information: z.string(),
     status: TicketStatus,
     users: z.array(UsersDto.User).nullable(),
-    request: z
-      .object({
-        id: z.number(),
-      })
-      .optional(),
+    request: z.object({
+      id: z.number(),
+    }).optional(),
   });
-
-  export type Ticket = z.infer<typeof Ticket>;
 
   export const TicketShort = z.object({
     id: z.number(),
@@ -80,5 +76,5 @@ export namespace TicketsDto {
       status: ticket.status,
       user_ids: ticket.users?.map((user) => user.id) ?? [],
     };
-  };
+  }
 }

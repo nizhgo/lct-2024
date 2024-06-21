@@ -11,14 +11,14 @@ import {
   CustomDropdown,
   SearchableInfiniteDropdown,
 } from "components/dropdown.tsx";
-import { BackButton, Button } from "components/button.tsx";
+import {BackButton, Button} from "components/button.tsx";
 import { PageHeader } from "components/pageHeader.tsx";
 import { RequestsDto } from "api/models/requests.model.ts";
 import { PassengerDto } from "api/models/passenger.model.ts";
 import { RequestCreateViewModel } from "src/views/requests/form/request.form.vm.ts";
 import { findLineIconByName } from "src/assets/metro.tsx";
 import topArrow from "src/assets/icons/arrow_up_md.svg";
-import { Svg } from "components/svg.tsx";
+import {Svg} from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 
 const GridContainer = styled.div`
@@ -250,11 +250,7 @@ const RequestCreatePage = observer(() => {
                   Загрузить файл
                   <img src={topArrow} alt="" style={{ width: "22px" }} />
                 </label>
-                <input
-                  id="file-upload"
-                  type="file"
-                  style={{ display: "none" }}
-                />
+                <input id="file-upload" type="file" style={{ display: "none" }} />
                 <Button type={"submit"}>Обработать</Button>
               </Stack>
             </form>

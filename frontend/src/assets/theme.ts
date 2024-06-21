@@ -40,7 +40,7 @@ export const theme = {
     backgrounds: {
       new: "rgba(255, 0, 0, 0.3)",
       processed_auto: "rgba(255, 165, 0, 0.3)",
-      processed: "rgba(36, 163, 255, 0.3)",
+      processed: "rgba(255, 255, 0, 0.3)",
       completed: "rgba(0, 128, 0, 0.3)",
     },
   },
