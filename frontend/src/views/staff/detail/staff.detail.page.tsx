@@ -188,7 +188,7 @@ const StaffDetails = observer(() => {
               >
                 <Stack direction={"column"} gap={20}>
                   <Text size={24}>Добавление события</Text>
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <Stack direction={"column"} gap={20}>
                       <Input
                         label="Дата начала"
