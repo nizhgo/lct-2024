@@ -26,9 +26,11 @@ export class ScheduleViewModel {
   }
 
   async loadSchedule() {
+    console.log(this.currentDate.startOf("day"));
+    
     this.isLoading = true;
-    const startTime = this.currentDate.toDate();
-    const endTime = this.currentDate.clone().add(24, "hours").toDate();
+    const startTime = this.currentDate.startOf("day").toDate();
+    const endTime = this.currentDate.clone().endOf("day").toDate();
 
     try {
       const scheduleData = await ScheduleEndpoint.findAll(startTime, endTime);
