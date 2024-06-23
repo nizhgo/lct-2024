@@ -4,7 +4,7 @@ import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 
-export const NotFoundPage = () => {
+const NotFoundPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   return (
@@ -25,6 +25,8 @@ export const NotFoundPage = () => {
     </Stack>
   );
 };
+
+export default NotFoundPage;
 
 const PageHeader = styled.h1`
   font-size: 56px;

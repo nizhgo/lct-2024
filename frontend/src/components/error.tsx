@@ -17,3 +17,5 @@ export const ErrorTemplate = () => {
     </Stack>
   );
 };
+
+export default ErrorTemplate;

@@ -183,7 +183,7 @@ const StaffDetails = observer(() => {
           </GridItem>
           <GridItem>
             <Text size={24}>Расписание сотрудника</Text>
-            {vm.gaps ? (
+            {vm.gaps  && vm.gaps.length > 0 && vm.gaps[0].status ? (
               <Stack direction={"row"}>{vm.gaps[0].status}</Stack>
             ) : (
               <Text>В этот день нет пропусков</Text>

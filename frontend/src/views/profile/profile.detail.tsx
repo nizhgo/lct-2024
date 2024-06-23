@@ -68,3 +68,5 @@ export const ProfilePage = () => {
     </Stack>
   );
 };
+
+export default ProfilePage;

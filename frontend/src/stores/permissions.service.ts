@@ -7,16 +7,18 @@ export const Sections = [
   "passengers",
   "staff",
   "schedule",
+  "profile",
 ] as const;
 export type Section = (typeof Sections)[number];
 
-export type Permission = "read" | "create" | "update";
+export type Permission = "read" | "create" | "update" | "delete" | "*" | "none";
 
 export interface RolePermissions {
   requests: Permission[];
   passengers: Permission[];
   staff: Permission[];
   schedule: Permission[];
+  profile: Permission[];
 }
 
 const PermissionsService = new (class PermissionsService {
@@ -25,28 +27,32 @@ const PermissionsService = new (class PermissionsService {
   constructor() {
     this.permissions = {
       admin: {
-        requests: ["read", "create", "update"],
-        passengers: ["read", "create", "update"],
-        staff: ["read", "create", "update"],
-        schedule: ["read"],
+        requests: ["*"],
+        passengers: ["*"],
+        staff: ["*"],
+        schedule: ["*"],
+        profile: ["*"],
       },
       worker: {
         requests: ["read"],
-        passengers: ["read"],
-        staff: ["read"],
-        schedule: ["read"],
+        passengers: ["none"],
+        staff: ["none"],
+        schedule: ["none"],
+        profile: ["read"],
       },
       operator: {
         requests: ["read", "create", "update"],
         passengers: ["read", "create", "update"],
         staff: ["read", "create"],
         schedule: ["read"],
+        profile: ["read", "update"],
       },
       specialist: {
         requests: ["read"],
         passengers: ["read"],
         staff: ["read"],
         schedule: ["read"],
+        profile: ["read"],
       },
     };
     makeAutoObservable(this);
@@ -62,15 +68,27 @@ const PermissionsService = new (class PermissionsService {
   }
 
   canRead(section: Section): boolean {
-    return this.getPermissions(section).includes("read");
+    const permissions = this.getPermissions(section);
+    return permissions.includes("read") || permissions.includes("*");
   }
 
   canCreate(section: Section): boolean {
-    return this.getPermissions(section).includes("create");
+    const permissions = this.getPermissions(section);
+    return permissions.includes("create") || permissions.includes("*");
   }
 
   canUpdate(section: Section): boolean {
-    return this.getPermissions(section).includes("update");
+    const permissions = this.getPermissions(section);
+    return permissions.includes("update") || permissions.includes("*");
+  }
+
+  hasPermissions(section: Section, requiredPermissions: Permission[]): boolean {
+    const permissions = this.getPermissions(section);
+    //check by none
+    if (permissions.includes("none")) {
+      return false;
+    }
+    return requiredPermissions.every((perm) => permissions.includes(perm) || permissions.includes("*"));
   }
 })();
 
