@@ -40,7 +40,7 @@ export const UsersEndpoint = new (class UsersEndpoint {
   };
 
   check = async (id: string) => {
-    const res = await Http.request(`/users/present/${id}`).post();
+    const res = await Http.request(`/users/present/${id}`).patch();
     return res;
   };
 })();
