@@ -86,4 +86,8 @@ export const BackButton = styled.button`
   color: ${(p) => p.theme.colors.link};
   text-decoration: underline;
   text-decoration-style: dotted;
+    
+  &:hover {
+    color: ${(p) => p.theme.colors.linkHover};
+  }
 `;

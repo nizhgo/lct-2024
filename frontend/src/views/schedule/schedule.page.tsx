@@ -75,7 +75,7 @@ const SchedulePage = observer(() => {
                     to={`/staff/${group.id}`}
                     disabled={!PermissionsService.canRead("staff")}
                   >
-                    <Text preWrap={false} size={14} color={theme.colors.text}>
+                    <Text preWrap={false} size={14}>
                       {group.title}
                     </Text>
                   </InternalLink>

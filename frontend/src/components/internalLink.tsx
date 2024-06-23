@@ -10,14 +10,23 @@ const DisabledLinkStyle = styled.span`
   color: ${(p) => p.theme.colors.text};
 `;
 
+const StyledLink = styled(Link)`
+  color: ${(p) => p.theme.colors.link};
+  text-decoration: none;
+
+  &:hover {
+    color: ${(p) => p.theme.colors.linkHover};
+  }
+`;
+
 export const InternalLink: React.FC<ILink> = ({ disabled, to, ...rest }) => {
   if (disabled) {
     return <DisabledLinkStyle {...rest}>{rest.children}</DisabledLinkStyle>;
   }
 
   return (
-    <Link {...rest} to={to as string}>
+    <StyledLink {...rest} to={to as string}>
       {rest.children}
-    </Link>
+    </StyledLink>
   );
 };
