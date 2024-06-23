@@ -11,6 +11,11 @@ import { theme } from "src/assets/theme.ts";
 import { StaffDetailsViewModel } from "src/views/staff/detail/staff.detail.vm.ts";
 import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
+import { Input } from "components/input.tsx";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { GapsDto } from "api/models/gaps.model.ts";
+import { CustomDropdown } from "components/dropdown.tsx";
 
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
@@ -47,18 +52,62 @@ const GridItem = styled.div`
   gap: 20px;
 `;
 
+const TextArea = styled.textarea`
+  border: 1px solid ${(p) => p.theme.colors.inputBorder};
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  color: ${(p) => p.theme.colors.textSecondary};
+  padding: 8px;
+  border-radius: 4px;
+  background-color: ${(p) => p.theme.colors.input.background};
+  &:focus {
+    outline: none;
+    border-color: ${(p) => p.theme.colors.link};
+  }
+`;
+
 const StaffDetails = observer(() => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [vm] = useState(() => new StaffDetailsViewModel(id!));
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const {
+    control,
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors },
+  } = useForm<GapsDto.Gap>({
+    shouldUnregister: false,
+    mode: "all",
+    resolver: zodResolver(GapsDto.GapForm),
+    defaultValues: {
+      status: "отсутствие",
+    },
+  });
   useEffect(() => {
-    vm.loadStaff();
+    vm.loadStaff().then(() => {
+      if (vm.data) {
+        setValue("user_id", vm.data.id);
+      }
+    });
   }, [vm]);
 
   const handleEdit = () => {
     navigate(`/staff/${id}/edit`);
   };
+  const onOpenModal = () => {
+    setIsModalOpen((isModalOpen) => !isModalOpen);
+  };
+
+  const onSubmit = handleSubmit(async (data) => {
+    const isCreated = await vm.addGap(data);
+    if (isCreated) {
+      onOpenModal();
+    }
+  });
 
   if (vm.loading && !vm.data) {
     return (
@@ -90,7 +139,8 @@ const StaffDetails = observer(() => {
                 <Stack direction={"column"} gap={6}>
                   <ParamName>ФИО</ParamName>
                   <Text size={18}>
-                    {vm.data.second_name} {vm.data.first_name} {vm.data.patronymic}
+                    {vm.data.second_name} {vm.data.first_name}{" "}
+                    {vm.data.patronymic}
                   </Text>
                 </Stack>
                 <Stack direction={"column"} gap={6}>
@@ -133,6 +183,104 @@ const StaffDetails = observer(() => {
           </GridItem>
           <GridItem>
             <Text size={24}>Расписание сотрудника</Text>
+            {vm.gaps ? (
+              <Stack direction={"row"}>{vm.gaps[0].status}</Stack>
+            ) : (
+              <Text>В этот день нет пропусков</Text>
+            )}
+            <Button type={"button"} onClick={onOpenModal}>
+              Добавить событие
+            </Button>
+            <div
+              style={{
+                position: "absolute",
+                height: "100vh",
+                width: "100vw",
+                top: "0",
+                left: "0",
+                backgroundColor: "rgba(0,0,0,0.4)",
+                display: isModalOpen ? "flex" : "none",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  width: "60vw",
+                  margin: "auto",
+                  backgroundColor: "#fff",
+                  padding: "20px",
+                }}
+              >
+                <Stack direction={"column"} gap={20}>
+                  <Text size={24}>Добавление события</Text>
+                  <form onSubmit={onSubmit}>
+                    <Stack direction={"column"} gap={20}>
+                      {/*{*/}
+                      {/*  //display all errors + field name*/}
+                      {/*  Object.entries(errors).map(([key, value]) => (*/}
+                      {/*    <Text key={key} color={"#D9232E"}>*/}
+                      {/*      {key}: {value?.message}*/}
+                      {/*    </Text>*/}
+                      {/*  ))*/}
+                      {/*}*/}
+                      <Input
+                        label="Дата начала"
+                        type={"datetime-local"}
+                        placeholder="Введите дату и время"
+                        error={errors.start_time?.message?.toString()}
+                        register={register("start_time")}
+                        required
+                      />
+                      <Input
+                        label="Дата окончания"
+                        type={"datetime-local"}
+                        placeholder="Введите дату и время"
+                        error={errors.end_time?.message?.toString()}
+                        register={register("end_time")}
+                        required
+                      />
+                      <Controller
+                        name="status"
+                        control={control}
+                        render={({ field }) => (
+                          <CustomDropdown
+                            label="Категория"
+                            options={GapsDto.statusValues}
+                            // disabledOptions={["Не выбрано" as GapsDto.statusValues]} //cringe
+                            onChange={field.onChange}
+                            value={field.value as GapsDto.Status}
+                            error={errors.status?.message?.toString()}
+                            required
+                            // render={ option }
+                          />
+                        )}
+                      />
+                      <Stack direction={"column"} gap={10}>
+                        <label htmlFor={"description"}>Комментарий</label>
+                        <TextArea
+                          id="description"
+                          {...register("description")}
+                          aria-rowcount={5}
+                          aria-colcount={33}
+                          placeholder="Введите дополнительную информацию"
+                        />
+                      </Stack>
+                      <Button type={"submit"}>Отправить</Button>
+                    </Stack>
+                  </form>
+                </Stack>
+                <Button.Transparent
+                  onClick={onOpenModal}
+                  variant={"transparent"}
+                  size={"compact"}
+                  style={{ position: "absolute", right: "10px", top: "10px" }}
+                >
+                  <Text fontFamily={"IcoMoon"} color={theme.colors.text}>
+                    
+                  </Text>
+                </Button.Transparent>
+              </div>
+            </div>
           </GridItem>
         </GridContainer>
       </Stack>

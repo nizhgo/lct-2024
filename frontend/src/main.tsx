@@ -2,10 +2,10 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import {
-  createBrowserRouter,
+  createBrowserRouter, Navigate,
   Outlet,
   redirect,
-  RouterProvider,
+  RouterProvider
 } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./assets/theme.ts";
@@ -16,7 +16,6 @@ import { LoginPage } from "src/views/login/login.page.tsx";
 import { NotFoundPage } from "src/views/404/notFound.page.tsx";
 import { ErrorTemplate } from "components/error.tsx";
 import { AppLayout } from "src/views/layout.tsx";
-import MainPage from "src/mainPage.tsx";
 import { PassengerDetails } from "src/views/passengers/details/passenger.detail.page.tsx";
 import { ProfilePage } from "src/views/profile/profile.detail.tsx";
 import { ToastContainer } from "react-toastify";
@@ -51,7 +50,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <MainPage />,
+        element: <Navigate to={"/requests"} />,
         errorElement: <ErrorTemplate />,
         loader: nonAuthCheck,
       },

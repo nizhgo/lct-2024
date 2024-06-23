@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 interface ButtonProps {
   size?: "small" | "medium" | "large" | "compact";
-  variant?: "red" | "blue" | "black";
+  variant?: "red" | "blue" | "black" | "transparent";
   disabled?: boolean;
   pending?: boolean;
 }

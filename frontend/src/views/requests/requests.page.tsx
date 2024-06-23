@@ -66,6 +66,7 @@ const RequestsPage = observer(() => {
     { header: "Куда" },
     { header: "Дата и время", centred: true },
     { header: "Статус", centred: true },
+    { header: "Исполнители" },
   ];
 
   const renderCellContent = (
@@ -104,6 +105,16 @@ const RequestsPage = observer(() => {
           <StatusBadge status={request.status}>
             {RequestsDto.localizeRequestStatus(request.status)}
           </StatusBadge>
+        );
+      case "Исполнители":
+        return (
+          <Stack direction={"column"} gap={5} align={"center"}>
+            {request.ticket?.users?.map((user) => (
+              <Link to={`/staff/${user.id}`} key={user.id}>
+                {user.first_name}.{user.patronymic}. {user.second_name}
+              </Link>
+            ))}
+          </Stack>
         );
       default:
         return null;

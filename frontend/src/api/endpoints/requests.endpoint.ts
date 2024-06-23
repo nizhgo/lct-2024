@@ -2,9 +2,9 @@ import { RequestsDto } from "api/models/requests.model.ts";
 import { Http } from "utils/api/http.ts";
 import { z } from "zod";
 export const RequestsEndpoint = new (class RequestsEndpoint {
-  findAll = async (offset: number, limit: number, search?: string) => {
+  findAll = async (offset: number, limit: number, query?: string) => {
     return await Http.request("/requests/")
-      .withSearch({ offset, limit, search })
+      .withSearch({ offset, limit, query })
       .expectJson(z.array(RequestsDto.Request))
       .get();
   };

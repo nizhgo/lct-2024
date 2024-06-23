@@ -57,6 +57,8 @@ const InfinityTable = observer(
           <Input
             placeholder={searchPlaceholder || "Поиск"}
             style={{ width: "300px" }}
+            withClear
+            value={searchTerm}
             onChange={handleSearch}
           />
         </Stack>

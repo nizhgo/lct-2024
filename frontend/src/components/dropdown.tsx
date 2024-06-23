@@ -350,7 +350,9 @@ export const SearchableInfiniteDropdown = observer(
     const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-      setCurOption(x.value);
+      if (x.value) {
+        handleSelect(x.value);
+      }
     }, [x.value]);
 
     useEffect(() => {
@@ -454,7 +456,9 @@ export const SearchableInfiniteDropdown = observer(
                 </Option>
               ))}
               {x.provider.isLoading && (
-                <LoaderWrapper>
+                <LoaderWrapper
+                  style={{ backgroundColor: "#FFF" }} height={"156px"}
+                >
                   <Loader />
                 </LoaderWrapper>
               )}

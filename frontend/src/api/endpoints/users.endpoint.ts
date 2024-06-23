@@ -4,10 +4,10 @@ import { z } from "zod";
 
 export const UsersEndpoint = new (class UsersEndpoint {
   //find all staff
-  findAll = async (offset?: number, limit?: number, search?: string) => {
+  findAll = async (offset?: number, limit?: number, query?: string) => {
     const res = await Http.request("/users/")
       .expectJson(z.array(UsersDto.User))
-      .withSearch({ offset, limit, search })
+      .withSearch({ offset, limit, query })
       .get();
     return res;
   };
@@ -36,6 +36,11 @@ export const UsersEndpoint = new (class UsersEndpoint {
   //delete worker
   delete = async (id: string) => {
     const res = await Http.request(`/users/${id}`).delete();
+    return res;
+  };
+
+  check = async (id: string) => {
+    const res = await Http.request(`/users/present/${id}`).patch();
     return res;
   };
 })();
