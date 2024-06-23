@@ -16,7 +16,6 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GapsDto } from "api/models/gaps.model.ts";
 import { CustomDropdown } from "components/dropdown.tsx";
-
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
 };
@@ -109,6 +108,10 @@ const StaffDetails = observer(() => {
     }
   });
 
+  const onGapDelete = (gapId: string) => {
+    vm.deleteGap(gapId);
+  };
+
   if (vm.loading && !vm.data) {
     return (
       <LoaderWrapper height={"100%"}>
@@ -183,8 +186,37 @@ const StaffDetails = observer(() => {
           </GridItem>
           <GridItem>
             <Text size={24}>Расписание сотрудника</Text>
-            {vm.gaps  && vm.gaps.length > 0 && vm.gaps[0].status ? (
-              <Stack direction={"row"}>{vm.gaps[0].status}</Stack>
+            {vm.gaps ? (
+              <Stack direction={"row"} gap={20}>
+                {vm.gaps.map((gap) => (
+                  <Stack
+                    key={gap.id}
+                    direction={"column"}
+                    style={{
+                      backgroundColor: "#F8F9FA",
+                      border: "1px solid #CED4DA",
+                      padding: "14px",
+                      borderRadius: "4px",
+                    }}
+                    gap={8}
+                  >
+                    <Text size={20}>Событие #{gap.id}</Text>
+                    <Text>
+                      {gap.start_time} - {gap.end_time}
+                    </Text>
+                    <Text>Категория: {gap.status}</Text>
+                    <Text>{gap.description}</Text>
+                    <Button
+                      variant={"black"}
+                      style={{ width: "fit-content" }}
+                      type={"button"}
+                      onClick={() => onGapDelete(String(gap.id))}
+                    >
+                      Удалить
+                    </Button>
+                  </Stack>
+                ))}
+              </Stack>
             ) : (
               <Text>В этот день нет пропусков</Text>
             )}
