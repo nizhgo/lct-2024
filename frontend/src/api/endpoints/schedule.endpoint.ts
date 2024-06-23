@@ -12,4 +12,10 @@ export const ScheduleEndpoint = new (class ScheduleEndpoint {
       .expectJson(z.array(ScheduleDto.Item))
       .get();
   };
+
+  autoDistribute = async (date: Date = new Date(), type: ScheduleDto.DistributionType) => {
+    return await Http.request("/requests/distribute")
+      .withSearch({ current_time: date.toISOString(), distribution_type: type })
+      .post();
+  };
 })();

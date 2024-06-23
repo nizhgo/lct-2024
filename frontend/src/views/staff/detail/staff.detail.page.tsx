@@ -16,9 +16,6 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GapsDto } from "api/models/gaps.model.ts";
 import { CustomDropdown } from "components/dropdown.tsx";
-import { DateCalendar } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
 };

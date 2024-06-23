@@ -34,7 +34,7 @@ const LoginContainer = styled.div`
   gap: 64px;
 `;
 
-export const LoginPage = observer(() => {
+const LoginPage = observer(() => {
   const [vm] = useState(() => new LoginPageViewModel());
   const navigate = useNavigate();
   const theme = useTheme();
@@ -114,3 +114,5 @@ export const LoginPage = observer(() => {
     </PageLayout>
   );
 });
+
+export default LoginPage;

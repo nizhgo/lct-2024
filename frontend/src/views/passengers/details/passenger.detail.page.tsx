@@ -257,3 +257,5 @@ export const PassengerDetails = observer(() => {
     </>
   );
 });
+
+export default PassengerDetails;

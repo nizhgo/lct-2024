@@ -49,6 +49,7 @@ class HttpRequest<T> {
   public async post(variables?: unknown): Promise<T> {
     try {
       const response: AxiosResponse = await axios.post(this.#path, variables, {
+        params: this.#queryParams,
         headers: {
           ...this.getAuthHeaders(),
           ...this.#config?.headers,

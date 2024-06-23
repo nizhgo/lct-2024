@@ -15,9 +15,9 @@ import styled from "@emotion/styled";
 import { theme } from "src/assets/theme.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { observer } from "mobx-react-lite";
-import { NotFoundPage } from "src/views/404/notFound.page.tsx";
 import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
+import NotFoundPage from "src/views/404/notFound.page.tsx";
 
 const PageLayout = styled.div`
   display: grid;
@@ -190,3 +190,5 @@ export const PassengerEditPage = observer(() => {
     </>
   );
 });
+
+export default PassengerEditPage;

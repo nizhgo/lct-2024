@@ -273,3 +273,5 @@ export const AppLayout = () => {
     </Layout>
   );
 };
+
+export default AppLayout;
