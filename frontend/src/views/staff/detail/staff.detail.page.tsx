@@ -183,6 +183,9 @@ const StaffDetails = observer(() => {
           </GridItem>
           <GridItem>
             <Text size={24}>Расписание сотрудника</Text>
+            <Stack direction={"row"}>
+
+            </Stack>
             <Button type={"button"} onClick={onOpenModal}>
               Добавить событие
             </Button>

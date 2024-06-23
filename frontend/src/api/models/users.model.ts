@@ -90,6 +90,7 @@ export namespace UsersDto {
     sex: Genders,
     area: Areas,
     is_lite: z.boolean(),
+    is_working: z.boolean(),
   });
 
   export type User = z.infer<typeof UsersDto.User>;
