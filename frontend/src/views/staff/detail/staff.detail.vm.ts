@@ -41,4 +41,14 @@ export class StaffDetailsViewModel {
       return false;
     }
   }
+
+  async deleteGap(id: string): Promise<boolean> {
+    try {
+      await GapEndpoint.delete(id);
+      return true;
+    } catch {
+      toast.error("Не удалось добавить событие");
+      return false;
+    }
+  }
 }
