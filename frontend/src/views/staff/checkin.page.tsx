@@ -77,7 +77,7 @@ const CheckinPage = observer(() => {
           <CustomDropdown
             options={["Да", "Нет"]}
             onChange={() => onCheck(String(staff.id))}
-            value={"Нет"}
+            value={staff.is_working ? "Да" : "Нет"}
           />
         );
       default:

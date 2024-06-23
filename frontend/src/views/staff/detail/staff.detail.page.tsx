@@ -183,9 +183,11 @@ const StaffDetails = observer(() => {
           </GridItem>
           <GridItem>
             <Text size={24}>Расписание сотрудника</Text>
-            <Stack direction={"row"}>
-
-            </Stack>
+            {vm.gaps ? (
+              <Stack direction={"row"}>{vm.gaps[0].status}</Stack>
+            ) : (
+              <Text>В этот день нет пропусков</Text>
+            )}
             <Button type={"button"} onClick={onOpenModal}>
               Добавить событие
             </Button>
