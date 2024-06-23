@@ -23,7 +23,7 @@ export default defineConfig({
         orientation: 'portrait',
         short_name: 'M Project',
         description: 'Сервис мониторинга и адаптивного распределения заявок на обслуживание от маломобильных пассажиров',
-        start_url: '/',
+        start_url: ".",
         display: 'fullscreen',
         background_color: '#ffffff',
         theme_color: '#D9282F',
