@@ -75,7 +75,7 @@ const StaffPage = observer(() => {
           <Stack direction={"row"} align={"center"} gap={10}>
             <InternalLink
               to={`/staff/${staff.id}`}
-              disabled={PermissionsService.canRead("staff")}
+              disabled={!PermissionsService.canRead("staff")}
             >
               {staff.second_name} {staff.first_name} {staff.patronymic}
             </InternalLink>

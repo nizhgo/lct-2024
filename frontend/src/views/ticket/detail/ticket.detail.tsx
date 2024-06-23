@@ -91,7 +91,7 @@ const TicketDetails = observer(({ data }: { data: RequestsDto.Request }) => {
               <InternalLink
                 key={index}
                 to={`/staff/${user.id}`}
-                disabled={PermissionsService.canRead("staff")}
+                disabled={!PermissionsService.canRead("staff")}
               >
                 <Text
                   key={user.id}

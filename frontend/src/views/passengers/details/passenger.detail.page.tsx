@@ -127,7 +127,7 @@ export const PassengerDetails = observer(() => {
         return (
           <InternalLink
             to={`/requests/${request.id}`}
-            disabled={PermissionsService.canRead("requests")}
+            disabled={!PermissionsService.canRead("requests")}
           >
             {request.id}
           </InternalLink>

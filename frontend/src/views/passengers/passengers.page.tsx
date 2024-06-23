@@ -52,7 +52,7 @@ const PassengersPage = observer(() => {
         return (
           <InternalLink
             to={`/passengers/${passenger.id}`}
-            disabled={PermissionService.canRead("passengers")}
+            disabled={!PermissionService.canRead("passengers")}
           >
             {passenger.name}
           </InternalLink>

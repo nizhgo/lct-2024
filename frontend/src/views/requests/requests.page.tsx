@@ -80,7 +80,7 @@ const RequestsPage = observer(() => {
         return (
           <InternalLink
             to={`/requests/${request.id}`}
-            disabled={PermissionsService.canRead("requests")}
+            disabled={!PermissionsService.canRead("requests")}
           >
             {request.id}
           </InternalLink>
@@ -89,7 +89,7 @@ const RequestsPage = observer(() => {
         return (
           <InternalLink
             to={`/passengers/${request.passenger_id}`}
-            disabled={PermissionsService.canRead("passengers")}
+            disabled={!PermissionsService.canRead("passengers")}
           >
             {request.passenger.name}
           </InternalLink>
@@ -125,7 +125,7 @@ const RequestsPage = observer(() => {
               <InternalLink
                 to={`/staff/${user.id}`}
                 key={user.id}
-                disabled={PermissionsService.canRead("staff")}
+                disabled={!PermissionsService.canRead("staff")}
               >
                 {user.first_name}.{user.patronymic}. {user.second_name}
               </InternalLink>
