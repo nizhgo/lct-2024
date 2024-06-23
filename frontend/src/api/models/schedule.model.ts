@@ -11,4 +11,19 @@ export namespace ScheduleDto {
   });
 
   export type Item = z.infer<typeof Item>;
+
+  export const DistributionType = z.enum(["hard", "soft"]);
+
+  export type DistributionType = z.infer<typeof DistributionType>;
+
+  export const distributionTypes: { title: string; value: DistributionType }[] = [
+    {
+      title: "Распределение всех заявок",
+      value: "hard",
+    },
+    {
+      title: "Распределение нераспределенных заявок",
+      value: "soft",
+    },
+  ];
 }

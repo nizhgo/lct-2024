@@ -14,9 +14,9 @@ import { useTheme } from "@emotion/react";
 import { Link } from "react-router-dom";
 import { CustomDropdown } from "components/dropdown.tsx";
 import { Button } from "components/button.tsx";
-import { toast } from "react-toastify";
 import { InternalLink } from "components/internalLink.tsx";
 import PermissionsService from "src/stores/permissions.service.ts";
+import { ScheduleDto } from "api/models/schedule.model.ts";
 
 const SchedulePage = observer(() => {
   const [vm] = useState(() => new ScheduleViewModel());
@@ -24,8 +24,7 @@ const SchedulePage = observer(() => {
 
   const onDistribute = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Расписание успешно обновлено");
-    // RequestsEndpoint.autoDistribute().then((data) => console.log(data));
+    await vm.distributeSchedule();
   };
 
   return (
@@ -42,13 +41,15 @@ const SchedulePage = observer(() => {
         <form onSubmit={onDistribute}>
           <Stack gap={20} align={"center"}>
             <CustomDropdown
-              onChange={() => {}}
-              options={[
-                "Распределение всех заявок",
-                "Распределение нераспределенных заявок",
-              ]}
+              onChange={obj => vm.setDistributeType(obj.value)}
+              options={ScheduleDto.distributionTypes}
+              render={obj => obj.title}
             />
-            <Button type={"submit"}>Распределить заявки</Button>
+            <Tooltip content={vm.distributeType ? "" : "Выберите тип распределения"} action={"hover"}>
+            <Button type={"submit"} disabled={vm.isDistributeDisabled}>
+              Распределить записи
+            </Button>
+            </Tooltip>
           </Stack>
         </form>
       </Stack>
