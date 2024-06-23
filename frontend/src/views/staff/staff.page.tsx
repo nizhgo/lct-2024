@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Button } from "components/button.tsx";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Stack } from "components/stack.ts";
 import { useState } from "react";
 import { StaffPageViewModel } from "src/views/staff/staff.vm.ts";
@@ -12,6 +12,8 @@ import { Text } from "components/text.ts";
 import { useTheme } from "@emotion/react";
 import { Tooltip } from "components/tooltip.tsx";
 import InfinityTable from "components/infinity-table.tsx";
+import PermissionsService from "src/stores/permissions.service.ts";
+import { InternalLink } from "components/internalLink.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -71,9 +73,12 @@ const StaffPage = observer(() => {
       case "ФИО":
         return (
           <Stack direction={"row"} align={"center"} gap={10}>
-            <Link to={`/staff/${staff.id}`}>
+            <InternalLink
+              to={`/staff/${staff.id}`}
+              disabled={PermissionsService.canRead("staff")}
+            >
               {staff.second_name} {staff.first_name} {staff.patronymic}
-            </Link>
+            </InternalLink>
             {staff.role === "admin" && (
               <Tooltip content={"Администратор"} action={"hover"}>
                 <Text fontFamily={"IcoMoon"} color={theme.colors.primary}>
@@ -118,7 +123,9 @@ const StaffPage = observer(() => {
         <PageHeader>Сотрудники</PageHeader>
         <Stack gap={20}>
           <Button onClick={handleCheckin}>Посещаемость сотрудников</Button>
-          <Button onClick={handleAdd}>Добавить сотрудника</Button>
+          {PermissionsService.canCreate("staff") && (
+            <Button onClick={handleAdd}>Добавить сотрудника</Button>
+          )}
         </Stack>
       </ContentHeader>
       <InfinityTable

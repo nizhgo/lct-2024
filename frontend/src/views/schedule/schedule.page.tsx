@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import { CustomDropdown } from "components/dropdown.tsx";
 import { Button } from "components/button.tsx";
 import { toast } from "react-toastify";
+import { InternalLink } from "components/internalLink.tsx";
+import PermissionsService from "src/stores/permissions.service.ts";
 
 const SchedulePage = observer(() => {
   const [vm] = useState(() => new ScheduleViewModel());
@@ -49,7 +51,7 @@ const SchedulePage = observer(() => {
             <Button type={"submit"}>Распределить заявки</Button>
           </Stack>
         </form>
-    </Stack>
+      </Stack>
       {vm.isLoading ? (
         <LoaderWrapper>
           <Loader />
@@ -69,11 +71,14 @@ const SchedulePage = observer(() => {
             groupRenderer={({ group }) => {
               return (
                 <div>
-                  <Link to={`/staff/${group.id}`}>
+                  <InternalLink
+                    to={`/staff/${group.id}`}
+                    disabled={PermissionsService.canRead("staff")}
+                  >
                     <Text preWrap={false} size={14} color={theme.colors.text}>
                       {group.title}
                     </Text>
-                  </Link>
+                  </InternalLink>
                 </div>
               );
             }}

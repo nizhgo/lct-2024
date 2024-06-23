@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Stack } from "components/stack.ts";
 import { useState } from "react";
 import { StaffPageViewModel } from "src/views/staff/staff.vm.ts";
@@ -15,6 +15,8 @@ import { CustomDropdown } from "components/dropdown.tsx";
 import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 import { BackButton } from "components/button.tsx";
+import { InternalLink } from "components/internalLink.tsx";
+import PermissionsService from "src/stores/permissions.service.ts";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -51,9 +53,12 @@ const CheckinPage = observer(() => {
       case "ФИО":
         return (
           <Stack direction={"row"} align={"center"} gap={10}>
-            <Link to={`/staff/${staff.id}`}>
+            <InternalLink
+              to={`/staff/${staff.id}`}
+              disabled={PermissionsService.canRead("staff")}
+            >
               {staff.second_name} {staff.first_name} {staff.patronymic}
-            </Link>
+            </InternalLink>
             {staff.role === "admin" && (
               <Tooltip content={"Администратор"} action={"hover"}>
                 <Text fontFamily={"IcoMoon"} color={theme.colors.primary}>

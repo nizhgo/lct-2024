@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Button } from "components/button.tsx";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Stack } from "components/stack.ts";
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
@@ -11,6 +11,8 @@ import { PassengersPageViewModel } from "src/views/passengers/passengers.vm.ts";
 import { Text } from "components/text.ts";
 import { useTheme } from "@emotion/react";
 import InfinityTable from "components/infinity-table.tsx";
+import { InternalLink } from "components/internalLink.tsx";
+import PermissionService from "src/stores/permissions.service.ts";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -47,7 +49,14 @@ const PassengersPage = observer(() => {
   ) => {
     switch (columnHeader) {
       case "ФИО":
-        return <Link to={`/passengers/${passenger.id}`}>{passenger.name}</Link>;
+        return (
+          <InternalLink
+            to={`/passengers/${passenger.id}`}
+            disabled={PermissionService.canRead("passengers")}
+          >
+            {passenger.name}
+          </InternalLink>
+        );
       case "Пол":
         return passenger.sex === "male" ? "Мужчина" : "Женщина";
       case "Категория":
@@ -86,7 +95,9 @@ const PassengersPage = observer(() => {
     <Stack wFull hFull direction={"column"} gap={20}>
       <ContentHeader>
         <PageHeader>Пассажиры</PageHeader>
-        <Button onClick={handleAdd}>Новый пассажир</Button>
+        {PermissionService.canCreate("passengers") && (
+          <Button onClick={handleAdd}>Новый пассажир</Button>
+        )}
       </ContentHeader>
 
       <InfinityTable

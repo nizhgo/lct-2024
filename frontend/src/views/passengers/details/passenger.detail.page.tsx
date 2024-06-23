@@ -1,6 +1,6 @@
 import { PageHeader } from "components/pageHeader.tsx";
 import { Stack } from "components/stack.ts";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Text } from "components/text.ts";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
@@ -14,6 +14,8 @@ import { RequestsDto } from "api/models/requests.model.ts";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
 import { Svg } from "components/svg.tsx";
 import { findLineIconByName } from "src/assets/metro.tsx";
+import { InternalLink } from "components/internalLink.tsx";
+import PermissionsService from "src/stores/permissions.service.ts";
 
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
@@ -122,7 +124,14 @@ export const PassengerDetails = observer(() => {
   ) => {
     switch (columnHeader) {
       case "ID":
-        return <Link to={`/requests/${request.id}`}>{request.id}</Link>;
+        return (
+          <InternalLink
+            to={`/requests/${request.id}`}
+            disabled={PermissionsService.canRead("requests")}
+          >
+            {request.id}
+          </InternalLink>
+        );
       case "Дата":
         // eslint-disable-next-line no-case-declarations
         const date = new Date(request.datetime);
@@ -225,13 +234,15 @@ export const PassengerDetails = observer(() => {
                 {vm.data.additional_information || "Комментарий отсутствует"}
               </Text>
             </Stack>
-            <Button
-              type={"button"}
-              style={{ width: "fit-content" }}
-              onClick={handleEdit}
-            >
-              Редактировать
-            </Button>
+            {PermissionsService.canUpdate("passengers") && (
+              <Button
+                type={"button"}
+                style={{ width: "fit-content" }}
+                onClick={handleEdit}
+              >
+                Редактировать
+              </Button>
+            )}
           </DetailsSection>
           <DetailsSection direction={"column"} gap={20}>
             <Text size={24}>Заявки</Text>

@@ -6,6 +6,7 @@ import {
 } from "utils/api/authToken";
 import { AuthEndpoint } from "api/endpoints/auth.endpoint";
 import { makeAutoObservable } from "mobx";
+import { UsersDto } from "api/models/users.model.ts";
 
 const AuthService = new (class AuthService {
   private _token: string | null = null;
@@ -48,6 +49,10 @@ const AuthService = new (class AuthService {
 
   public get user(): AuthDto.AuthUser | null {
     return this._user;
+  }
+
+  public get role(): UsersDto.Roles {
+    return this._user?.role || "worker";
   }
 
   public get isLoading(): boolean {

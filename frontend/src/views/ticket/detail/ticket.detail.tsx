@@ -2,10 +2,12 @@ import { observer } from "mobx-react-lite";
 import { Text } from "components/text.ts";
 import { Stack } from "components/stack.ts";
 import { Tooltip } from "components/tooltip.tsx";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "components/button.tsx";
 import { RequestsDto } from "api/models/requests.model.ts";
 import { useTheme } from "@emotion/react";
+import { InternalLink } from "components/internalLink.tsx";
+import PermissionsService from "src/stores/permissions.service.ts";
 
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
@@ -86,12 +88,16 @@ const TicketDetails = observer(({ data }: { data: RequestsDto.Request }) => {
           <Stack direction={"column"} gap={6}>
             <ParamName>Исполнители</ParamName>
             {data.ticket.users?.map((user, index) => (
-              <Link key={index} to={`/staff/${user.id}`}>
+              <InternalLink
+                key={index}
+                to={`/staff/${user.id}`}
+                disabled={PermissionsService.canRead("staff")}
+              >
                 <Text
                   key={user.id}
                   size={18}
                 >{`${user.second_name} ${user.first_name} ${user.patronymic}`}</Text>
-              </Link>
+              </InternalLink>
             ))}
           </Stack>
         </>

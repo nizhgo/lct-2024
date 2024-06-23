@@ -11,6 +11,7 @@ import { Stack } from "components/stack.ts";
 import { Text } from "components/text.ts";
 import { useTheme } from "@emotion/react";
 import AuthService from "src/stores/auth.service.ts";
+import PermissionsService from "src/stores/permissions.service.ts";
 
 const useResponsiveSidebar = (setSidebarOpen: (isOpen: boolean) => void) => {
   const theme = useTheme();
@@ -201,42 +202,50 @@ export const AppLayout = () => {
           </Stack>
         </Link>
         <Stack gap={14} direction={"column"} wFull>
-          <Link to="/requests">
-            <SidebarItem
-              active={location.pathname.startsWith("/requests")}
-              onClick={onLinkClick}
-            >
-              <Svg src={RequestsIcon} width={24} />
-              <Text>Заявки</Text>
-            </SidebarItem>
-          </Link>
-          <Link to="/schedule">
-            <SidebarItem
-              active={location.pathname.startsWith("/schedule")}
-              onClick={onLinkClick}
-            >
-              <Svg src={ScheduleIcon} width={24} />
-              <Text>Расписание</Text>
-            </SidebarItem>
-          </Link>
-          <Link to="/staff">
-            <SidebarItem
-              active={location.pathname.startsWith("/staff")}
-              onClick={onLinkClick}
-            >
-              <Svg src={WorkersIcon} width={24} />
-              <Text>Сотрудники</Text>
-            </SidebarItem>
-          </Link>
-          <Link to="/passengers">
-            <SidebarItem
-              active={location.pathname.startsWith("/passengers")}
-              onClick={onLinkClick}
-            >
-              <Svg src={UsersIcon} width={24} />
-              <Text>Пассажиры</Text>
-            </SidebarItem>
-          </Link>
+          {PermissionsService.canRead("requests") && (
+            <Link to="/requests">
+              <SidebarItem
+                active={location.pathname.startsWith("/requests")}
+                onClick={onLinkClick}
+              >
+                <Svg src={RequestsIcon} width={24} />
+                <Text>Заявки</Text>
+              </SidebarItem>
+            </Link>
+          )}
+          {PermissionsService.canRead("schedule") && (
+            <Link to="/schedule">
+              <SidebarItem
+                active={location.pathname.startsWith("/schedule")}
+                onClick={onLinkClick}
+              >
+                <Svg src={ScheduleIcon} width={24} />
+                <Text>Расписание</Text>
+              </SidebarItem>
+            </Link>
+          )}
+          {PermissionsService.canRead("staff") && (
+            <Link to="/staff">
+              <SidebarItem
+                active={location.pathname.startsWith("/staff")}
+                onClick={onLinkClick}
+              >
+                <Svg src={WorkersIcon} width={24} />
+                <Text>Сотрудники</Text>
+              </SidebarItem>
+            </Link>
+          )}
+          {PermissionsService.canRead("passengers") && (
+            <Link to="/passengers">
+              <SidebarItem
+                active={location.pathname.startsWith("/passengers")}
+                onClick={onLinkClick}
+              >
+                <Svg src={UsersIcon} width={24} />
+                <Text>Пассажиры</Text>
+              </SidebarItem>
+            </Link>
+          )}
         </Stack>
         <Stack gap={14} direction={"column"} style={{ marginTop: "56px" }}>
           <Link to="/logout">

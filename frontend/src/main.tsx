@@ -2,10 +2,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import {
-  createBrowserRouter, Navigate,
+  createBrowserRouter,
+  Navigate,
   Outlet,
   redirect,
-  RouterProvider
+  RouterProvider,
 } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./assets/theme.ts";

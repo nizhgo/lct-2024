@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Button } from "components/button.tsx";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Stack } from "components/stack.ts";
 import { observer } from "mobx-react-lite";
 import { PageHeader } from "components/pageHeader.tsx";
@@ -10,6 +10,8 @@ import { findLineIconByName } from "src/assets/metro.tsx";
 import { RequestsPageViewModel } from "src/views/requests/requests.vm.ts";
 import { useState } from "react";
 import InfinityTable from "components/infinity-table.tsx";
+import PermissionsService from "src/stores/permissions.service.ts";
+import { InternalLink } from "components/internalLink.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -75,12 +77,22 @@ const RequestsPage = observer(() => {
   ) => {
     switch (columnHeader) {
       case "ID":
-        return <Link to={`/requests/${request.id}`}>{request.id}</Link>;
+        return (
+          <InternalLink
+            to={`/requests/${request.id}`}
+            disabled={PermissionsService.canRead("requests")}
+          >
+            {request.id}
+          </InternalLink>
+        );
       case "ФИО пассажира":
         return (
-          <Link to={`/passengers/${request.passenger_id}`}>
+          <InternalLink
+            to={`/passengers/${request.passenger_id}`}
+            disabled={PermissionsService.canRead("passengers")}
+          >
             {request.passenger.name}
-          </Link>
+          </InternalLink>
         );
       case "Откуда": {
         return (
@@ -110,9 +122,13 @@ const RequestsPage = observer(() => {
         return (
           <Stack direction={"column"} gap={5} align={"center"}>
             {request.ticket?.users?.map((user) => (
-              <Link to={`/staff/${user.id}`} key={user.id}>
+              <InternalLink
+                to={`/staff/${user.id}`}
+                key={user.id}
+                disabled={PermissionsService.canRead("staff")}
+              >
                 {user.first_name}.{user.patronymic}. {user.second_name}
-              </Link>
+              </InternalLink>
             ))}
           </Stack>
         );
@@ -136,9 +152,11 @@ const RequestsPage = observer(() => {
       <ContentHeader>
         <PageHeader>Заявки</PageHeader>
         <Stack gap={20}>
-          <Button onClick={() => navigate("/requests/new")}>
-            Добавить заявку
-          </Button>
+          {PermissionsService.canCreate("requests") && (
+            <Button onClick={() => navigate("/requests/new")}>
+              Добавить заявку
+            </Button>
+          )}
         </Stack>
       </ContentHeader>
 
