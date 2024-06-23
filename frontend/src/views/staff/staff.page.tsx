@@ -92,11 +92,9 @@ const StaffPage = observer(() => {
       case "Должность":
         return staff.rank;
       case "Работает сейчас":
-        // eslint-disable-next-line no-case-declarations
-        const isActive = Math.random() > 0.5; // Пример логики
         return (
-          <StatusBadge status={isActive ? "active" : "inactive"}>
-            {isActive ? "Да" : "Нет"}
+          <StatusBadge status={staff.is_working ? "active" : "inactive"}>
+            {staff.is_working ? "Да" : "Нет"}
           </StatusBadge>
         );
       default:
