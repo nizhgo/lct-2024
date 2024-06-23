@@ -24,7 +24,7 @@ export default defineConfig({
         short_name: 'M Project',
         description: 'Сервис мониторинга и адаптивного распределения заявок на обслуживание от маломобильных пассажиров',
         start_url: '/',
-        display: 'standalone',
+        display: 'fullscreen',
         background_color: '#ffffff',
         theme_color: '#D9282F',
         icons: [
@@ -39,10 +39,6 @@ export default defineConfig({
             type: 'image/png'
           }
         ],
-      },
-      workbox: {
-        skipWaiting: true,
-        clientsClaim: true,
       },
     }),
   ],

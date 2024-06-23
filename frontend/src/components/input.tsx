@@ -122,12 +122,18 @@ export interface InputProps {
   withClear?: boolean;
   required?: boolean;
   register?: UseFormRegisterReturn;
+  value?: string;
 }
 
 // Base input component
 export const InputBase = forwardRef<HTMLInputElement, InputProps>(
   function Input(props, ref) {
     const theme = useTheme();
+
+    const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      props.onChange?.("");
+      props.register?.onChange({ target: e.target, type: { value: "" } });
+    };
     return (
       <InputContainer
         fullWidth={props.fullWidth}
@@ -156,6 +162,7 @@ export const InputBase = forwardRef<HTMLInputElement, InputProps>(
             defaultValue={props.defaultValue ?? ""}
             readOnly={props.readonly}
             placeholder={props.placeholder}
+            value={props.value}
             aria-invalid={!!props.error}
             spellCheck={false}
             disabled={props.disabled}
@@ -169,15 +176,16 @@ export const InputBase = forwardRef<HTMLInputElement, InputProps>(
             hasError={!!props.error}
             {...props.register}
           />
-          <div style={{ position: "absolute", right: 0 }} aria-hidden>
+          <div style={{ position: "absolute", right: 8 }} aria-hidden>
             {props.right}
             {!props.disabled &&
               props.withClear &&
               !props.readonly &&
-              props.defaultValue && (
+              props.value && (
                 <ClearButton
-                  onClick={() => props.onChange?.("")}
+                  onClick={onClear}
                   title="Clear"
+                  type={"button"}
                   id="clearButton"
                 >
                   <Text

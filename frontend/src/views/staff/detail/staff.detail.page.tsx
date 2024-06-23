@@ -77,12 +77,22 @@ const StaffDetails = observer(() => {
     control,
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm<GapsDto.Gap>({
-    resolver: zodResolver(GapsDto.Gap),
+    shouldUnregister: false,
+    mode: "all",
+    resolver: zodResolver(GapsDto.GapForm),
+    defaultValues: {
+      status: "отсутствие",
+    },
   });
   useEffect(() => {
-    vm.loadStaff();
+    vm.loadStaff().then(() => {
+      if (vm.data) {
+        setValue("user_id", vm.data.id);
+      }
+    });
   }, [vm]);
 
   const handleEdit = () => {
@@ -91,6 +101,13 @@ const StaffDetails = observer(() => {
   const onOpenModal = () => {
     setIsModalOpen((isModalOpen) => !isModalOpen);
   };
+
+  const onSubmit = handleSubmit(async (data) => {
+    const isCreated = await vm.addGap(data);
+    if (isCreated) {
+      onOpenModal();
+    }
+  });
 
   if (vm.loading && !vm.data) {
     return (
@@ -122,7 +139,8 @@ const StaffDetails = observer(() => {
                 <Stack direction={"column"} gap={6}>
                   <ParamName>ФИО</ParamName>
                   <Text size={18}>
-                    {vm.data.second_name} {vm.data.first_name} {vm.data.patronymic}
+                    {vm.data.second_name} {vm.data.first_name}{" "}
+                    {vm.data.patronymic}
                   </Text>
                 </Stack>
                 <Stack direction={"column"} gap={6}>
@@ -165,7 +183,9 @@ const StaffDetails = observer(() => {
           </GridItem>
           <GridItem>
             <Text size={24}>Расписание сотрудника</Text>
-            <Button type={"button"} onClick={onOpenModal}>Добавить событие</Button>
+            <Button type={"button"} onClick={onOpenModal}>
+              Добавить событие
+            </Button>
             <div
               style={{
                 position: "absolute",
@@ -188,8 +208,16 @@ const StaffDetails = observer(() => {
               >
                 <Stack direction={"column"} gap={20}>
                   <Text size={24}>Добавление события</Text>
-                  <form onSubmit={handleSubmit}>
+                  <form onSubmit={onSubmit}>
                     <Stack direction={"column"} gap={20}>
+                      {/*{*/}
+                      {/*  //display all errors + field name*/}
+                      {/*  Object.entries(errors).map(([key, value]) => (*/}
+                      {/*    <Text key={key} color={"#D9232E"}>*/}
+                      {/*      {key}: {value?.message}*/}
+                      {/*    </Text>*/}
+                      {/*  ))*/}
+                      {/*}*/}
                       <Input
                         label="Дата начала"
                         type={"datetime-local"}
@@ -236,13 +264,16 @@ const StaffDetails = observer(() => {
                     </Stack>
                   </form>
                 </Stack>
-                <Button
+                <Button.Transparent
                   onClick={onOpenModal}
-                  variant={"black"}
+                  variant={"transparent"}
+                  size={"compact"}
                   style={{ position: "absolute", right: "10px", top: "10px" }}
                 >
-                  close
-                </Button>
+                  <Text fontFamily={"IcoMoon"} color={theme.colors.text}>
+                    
+                  </Text>
+                </Button.Transparent>
               </div>
             </div>
           </GridItem>

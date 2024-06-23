@@ -44,13 +44,13 @@ const StatusBadge = styled.div<{ status: string }>`
           : `${p.theme.colors.status.completed}30`};
   border: 1px solid
     ${(p) =>
-    p.status === "new"
-      ? p.theme.colors.status.new
-      : p.status === "processed_auto"
-        ? p.theme.colors.status.processed_auto
-        : p.status === "processed"
-          ? p.theme.colors.status.processed
-          : p.theme.colors.status.completed};
+      p.status === "new"
+        ? p.theme.colors.status.new
+        : p.status === "processed_auto"
+          ? p.theme.colors.status.processed_auto
+          : p.status === "processed"
+            ? p.theme.colors.status.processed
+            : p.theme.colors.status.completed};
   font-weight: 700;
   text-align: center;
 `;
@@ -66,7 +66,7 @@ const RequestsPage = observer(() => {
     { header: "Куда" },
     { header: "Дата и время", centred: true },
     { header: "Статус", centred: true },
-    { header: "Исполнители", centred: true },
+    { header: "Исполнители" },
   ];
 
   const renderCellContent = (
@@ -110,7 +110,7 @@ const RequestsPage = observer(() => {
         return (
           <Stack direction={"column"} gap={5} align={"center"}>
             {request.ticket?.users?.map((user) => (
-              <Link to={`/passengers/${user.id}`}>
+              <Link to={`/staff/${user.id}`} key={user.id}>
                 {user.first_name}.{user.patronymic}. {user.second_name}
               </Link>
             ))}

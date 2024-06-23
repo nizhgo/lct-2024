@@ -456,7 +456,9 @@ export const SearchableInfiniteDropdown = observer(
                 </Option>
               ))}
               {x.provider.isLoading && (
-                <LoaderWrapper>
+                <LoaderWrapper
+                  style={{ backgroundColor: "#FFF" }} height={"156px"}
+                >
                   <Loader />
                 </LoaderWrapper>
               )}

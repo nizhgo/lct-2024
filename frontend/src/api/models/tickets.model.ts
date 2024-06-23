@@ -28,11 +28,11 @@ export namespace TicketsDto {
     request_id: z.number(),
     route: z.array(z.string()),
     start_time: z.string(),
-    end_time: z.string().nullable(),
-    real_end_time: z.string().nullable(),
-    additional_information: z.string(),
+    end_time: z.string().optional(),
+    real_end_time: z.string().optional(),
+    additional_information: z.string().optional(),
     status: TicketStatus,
-    users: z.array(UsersDto.User).nullable(),
+    users: z.array(UsersDto.User).optional(),
     request: z
       .object({
         id: z.number(),

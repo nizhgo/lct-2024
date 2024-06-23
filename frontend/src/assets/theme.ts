@@ -28,6 +28,7 @@ export const theme = {
       red: "#D9282F",
       blue: "#04c",
       black: "#272727",
+      transparent: "transparent",
     },
     status: {
       active: "#008767", // зеленый

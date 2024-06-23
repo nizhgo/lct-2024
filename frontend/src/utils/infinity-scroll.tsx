@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 
 interface FetchDataFunction<T> {
-  (offset: number, limit: number, search?: string): Promise<T[]>;
+  (offset: number, limit: number, query?: string): Promise<T[]>;
 }
 
 export class InfinityScrollProvider<T> {
