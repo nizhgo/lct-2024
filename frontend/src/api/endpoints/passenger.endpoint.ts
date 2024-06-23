@@ -4,9 +4,9 @@ import { z } from "zod";
 
 export const PassengerEndpoint = new (class PassengerEndpoint {
   //find all passengers
-  findAll = async (offset: number, limit: number, query?: string) => {
+  findAll = async (offset: number, limit: number, search?: string) => {
     return await Http.request("/passengers/")
-      .withSearch({ offset, limit, query })
+      .withSearch({ offset, limit, search })
       .expectJson(z.array(PassengerDto.Passenger))
       .get();
   };

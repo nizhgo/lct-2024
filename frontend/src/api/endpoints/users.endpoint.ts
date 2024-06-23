@@ -4,10 +4,10 @@ import { z } from "zod";
 
 export const UsersEndpoint = new (class UsersEndpoint {
   //find all staff
-  findAll = async (offset?: number, limit?: number, query?: string) => {
+  findAll = async (offset?: number, limit?: number, search?: string) => {
     const res = await Http.request("/users/")
       .expectJson(z.array(UsersDto.User))
-      .withSearch({ offset, limit, query })
+      .withSearch({ offset, limit, search })
       .get();
     return res;
   };
