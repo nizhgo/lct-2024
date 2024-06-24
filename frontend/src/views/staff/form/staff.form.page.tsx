@@ -15,6 +15,7 @@ import { UsersDto } from "api/models/users.model.ts";
 import { useNavigate } from "react-router-dom";
 import { Svg } from "components/svg.tsx";
 import BackArrowIcon from "src/assets/icons/arrow_undo_up_left.svg";
+import { toast } from "react-toastify";
 
 export const ShiftButton = styled(Button)<{ active?: boolean }>`
   background-color: ${({ active }) =>
@@ -56,10 +57,16 @@ const WorkerRegPage = observer(() => {
 
   const onSubmit = async (data: UsersDto.UserForm) => {
     console.log("onSubmit", data);
-    const isRegistered = await vm.onSubmit(data);
-    if (isRegistered) {
-      navigate("/staff");
-    }
+    const res = await vm.onSubmit(data);
+    if (!res) return;
+    toast.success(
+      <Stack direction="column" gap={10}>
+        <Text>Сотрудник успешно зарегистрирован</Text>
+        <Text>Телефон: {res.personal_phone}</Text>
+        <Text>Пароль: {res.password}</Text>
+      </Stack>,
+    );
+    navigate("/staff");
   };
 
   return (
@@ -229,14 +236,6 @@ const WorkerRegPage = observer(() => {
                 <input type="checkbox" {...register("is_lite")} />
                 <Text size={14}>Легкий труд</Text>
               </Stack>
-              <Input
-                label="Пароль"
-                type="password"
-                placeholder="Введите пароль"
-                error={errors.password?.message?.toString()}
-                register={register("password")}
-                required
-              />
               <Button type="submit">Зарегистрировать</Button>
             </Stack>
           </form>

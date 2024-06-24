@@ -8,17 +8,18 @@ export class WorkerRegPageViewModel {
     makeAutoObservable(this);
   }
 
-  async onSubmit(data: UsersDto.UserForm): Promise<boolean> {
+  async onSubmit(
+    data: UsersDto.UserForm,
+  ): Promise<UsersDto.RegistrationResponse | false> {
     console.log("data", data);
     try {
-      await UsersEndpoint.create(data);
+      const res = await UsersEndpoint.create(data);
+      return res;
     } catch (e) {
       if (e instanceof Error)
         toast.error(`Ошибка при создании сотрудника: ${e.message}`);
       console.error(e);
       return false;
     }
-    toast("Cотрудник успешно создан");
-    return true;
   }
 }

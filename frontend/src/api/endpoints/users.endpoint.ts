@@ -22,7 +22,7 @@ export const UsersEndpoint = new (class UsersEndpoint {
 
   //create worker
   create = async (data: UsersDto.UserForm) => {
-    return await Http.request("/users/").post(data);
+    return await Http.request("/users/").expectJson(UsersDto.RegistrationResponse).post(data);
   };
 
   //update worker
