@@ -14,5 +14,5 @@ class SuccessResponse(SQLModel):
 
 
 class DistributionType(str, enum.Enum):
-    auto = "auto"
-    manual = "manual"
+    hard = "hard"
+    soft = "soft"

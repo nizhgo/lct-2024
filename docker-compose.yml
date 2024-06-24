@@ -54,9 +54,7 @@ services:
       context: ./algorithms
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
-    depends_on:
-      - backend
+      - "9999:9999"
 
   frontend:
     build:

@@ -63,6 +63,7 @@ def get_gaps(
         end_time: datetime | None = datetime.now().replace(hour=23, minute=59, second=59, microsecond=0),
         limit: int | None = None,
         offset: int | None = None,
+        find_intersection: bool | None = False,
         current_user: CurrentUser
 ):
 
@@ -74,7 +75,8 @@ def get_gaps(
             end_time=end_time,
             limit=limit,
             offset=offset,
-            current_user=current_user
+            current_user=current_user,
+            find_intersection=find_intersection
         )
 
     gaps = crud.read_gaps(
@@ -83,6 +85,7 @@ def get_gaps(
         end_time=end_time,
         limit=limit,
         offset=offset,
+        find_intersection=find_intersection
     )
     return gaps
 

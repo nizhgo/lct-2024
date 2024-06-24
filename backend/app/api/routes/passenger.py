@@ -33,7 +33,7 @@ def get_passengers(
         session: SessionDep,
         offset: int | None = None,
         limit: int | None = None,
-        query: str | None = None,
+        search: str | None = None,
         sex_query: PassengerSex | None = None,
         category_query: PassengerCategory | None = None,
         has_cardiac_pacemaker_query: bool | None = None
@@ -45,7 +45,7 @@ def get_passengers(
         session=session,
         offset=offset,
         limit=limit,
-        query=query,
+        query=search,
         sex_query=sex_query,
         category_query=category_query,
         has_cardiac_pacemaker_query=has_cardiac_pacemaker_query

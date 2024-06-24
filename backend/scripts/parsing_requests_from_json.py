@@ -5,7 +5,7 @@ from random import choices, choice
 from app.crud import create_request, get_passenger_by_id
 from sqlmodel import create_engine, Session
 
-engine = create_engine("postgresql+psycopg://postgres:changethis@papuas.tech:6432/app")
+engine = create_engine("postgresql+psycopg://postgres:changethis@api.papuas.tech:6432/app")
 session = Session(engine)
 
 first_names_male = ["Александр", "Михаил", "Иван", "Максим", "Артём", "Даниил", "Дмитрий", "Кирилл", "Андрей", "Егор",
@@ -76,6 +76,8 @@ for elem in d:
         baggage_weight=0.0,
         baggage_help=False
     )
+
+    request.datetime = request.datetime.replace(year=2024, month=6, day=24)
 
     create_request(
         session=session,

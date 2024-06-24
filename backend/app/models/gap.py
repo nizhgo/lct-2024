@@ -13,6 +13,7 @@ class GapStatus(str, enum.Enum):
     day_off = "отгул"
     training = "обучение"
     childcare_leave = "отпуск по уходу за ребёнком"
+    lunch = "обед"
 
 
 class GapBase(SQLModel):
@@ -22,7 +23,7 @@ class GapBase(SQLModel):
     end_time: dt.datetime = Field()
 
     is_working: bool = Field()
-    status: GapStatus = Field(sa_column=Column(Enum(GapStatus).values_callable))
+    status: GapStatus = Field()
     description: str = Field()
 
     is_deleted: bool = Field(default=False)

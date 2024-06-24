@@ -11,7 +11,7 @@ from app.models import TicketResponse, TicketUpdate, UserResponse, UserTickets, 
 
 router = APIRouter()
 
-BOT_ID = 3
+BOT_ID = 473
 
 
 @router.get(
@@ -219,7 +219,14 @@ def delete_ticket(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"The ticket with id {ticket_id} does not exist."
         )
-
+    request_status = "new"
+    crud.update_request(
+        session=session,
+        db_request=db_ticket.request,
+        request_in=RequestUpdate(
+            status=request_status,
+        ),
+    )
     return DeleteResponse(
         success=True,
         details="Successfully deleted"
