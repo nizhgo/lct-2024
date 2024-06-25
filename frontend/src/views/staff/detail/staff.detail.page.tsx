@@ -187,7 +187,7 @@ const StaffDetails = observer(() => {
           <GridItem>
             <Text size={24}>Расписание сотрудника</Text>
             {vm.gaps ? (
-              <Stack direction={"row"} gap={20}>
+              <Stack direction={"column"} gap={20}>
                 {vm.gaps.map((gap) => (
                   <Stack
                     key={gap.id}
@@ -295,6 +295,7 @@ const StaffDetails = observer(() => {
                           aria-rowcount={5}
                           aria-colcount={33}
                           placeholder="Введите дополнительную информацию"
+                          required
                         />
                       </Stack>
                       <Button type={"submit"}>Отправить</Button>
