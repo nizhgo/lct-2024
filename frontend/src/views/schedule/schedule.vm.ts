@@ -3,6 +3,7 @@ import moment from "moment";
 import { ScheduleEndpoint } from "api/endpoints/schedule.endpoint";
 import { ScheduleDto } from "api/models/schedule.model.ts";
 import { toast } from "react-toastify";
+import { AsyncTask } from "utils/async-task.ts";
 
 interface TimelessItem {
   id: string;
@@ -111,7 +112,7 @@ export class ScheduleViewModel {
     return !this.distributeType;
   }
 
-  distributeSchedule = async () => {
+  distributeSchedule = new AsyncTask(async () => {
     if (!this.distributeType) return;
     try {
       await ScheduleEndpoint.autoDistribute(
@@ -123,5 +124,5 @@ export class ScheduleViewModel {
     } catch (error) {
       toast.error(`Не удалось распределить записи: ${JSON.stringify(error)}`);
     }
-  };
+  });
 }
