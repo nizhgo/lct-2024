@@ -32,8 +32,6 @@ def read_passengers(
             or_(
                 Passenger.name.ilike('%' + query + '%'),
                 Passenger.contact_details.ilike('%' + query + '%'),
-                Passenger.sex.ilike('%' + query + '%'),
-                Passenger.category.ilike('%' + query + '%'),
                 Passenger.additional_information.ilike('%' + query + '%'),
             )
         )

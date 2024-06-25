@@ -1,13 +1,14 @@
 from datetime import datetime
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from app import crud
 from app.api.deps import SessionDep, get_current_active_admin, get_current_active_specialist, \
-    get_current_active_operator, get_current_active_worker
+    get_current_active_operator, get_current_active_worker, CurrentUser
 from app.models import Request, RequestCreate, RequestResponse, RequestUpdate, DeleteResponse, SuccessResponse, \
     DistributionType, RequestStatus
+import requests
 
 router = APIRouter()
 
@@ -27,7 +28,7 @@ def create_request(session: SessionDep, request_in: RequestCreate) -> RequestRes
 
 @router.get(
     "/",
-    dependencies=[Depends(get_current_active_operator)],
+    dependencies=[Depends(get_current_active_worker)],
     response_model=List[RequestResponse],
 )
 def get_requests(
@@ -35,33 +36,47 @@ def get_requests(
         session: SessionDep,
         offset: int | None = None,
         limit: int | None = None,
-        query: str | None = None,
-        status_query: RequestStatus | None = None
+        search: str | None = None,
+        start_time: datetime | None = None,
+        end_time: datetime | None = None,
+        status_query: RequestStatus | None = None,
+        current_user: CurrentUser,
 ) -> List[RequestResponse]:
     """
     Get all requests.
     """
-    requests = crud.read_requests(
-        session=session,
-        offset=offset,
-        limit=limit,
-        query=query,
-        status_query=status_query
-    )
+
+    if current_user.role == "worker":
+        requests = crud.get_requests_by_user_id(session=session, user_id=current_user.id)
+    else:
+        requests = crud.read_requests(
+            session=session,
+            offset=offset,
+            limit=limit,
+            query=search,
+            status_query=status_query,
+            end_time=end_time,
+            start_time=start_time,
+        )
     requests = list(map(lambda request: RequestResponse.model_validate(request), requests))
     return requests
 
 
 @router.get(
     "/{request_id}",
-    dependencies=[Depends(get_current_active_operator)],
+    dependencies=[Depends(get_current_active_worker)],
     response_model=RequestResponse,
 )
-def get_request_by_id(*, session: SessionDep, request_id: int) -> RequestResponse:
+def get_request_by_id(*, session: SessionDep, request_id: int, current_user: CurrentUser) -> RequestResponse:
     """
     Get request by id
     """
     request = crud.get_request_by_id(session=session, request_id=request_id)
+    if current_user.role == "worker":
+        if request.ticket and current_user.id in [user.id for user in request.ticket.users]:
+            return RequestResponse.model_validate(request)
+        else:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="not enough privileges")
     return RequestResponse.model_validate(request)
 
 
@@ -137,9 +152,22 @@ def delete_request(
 )
 def distribute_requests(
         *,
-        session: SessionDep,
         distribution_type: DistributionType,
         current_time: datetime | None = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 ):
-    # TODO: make request to algorithms backend
-    pass
+    query_params = {
+        "current_time": current_time,
+        "assign_type": distribution_type,
+    }
+    response = requests.post("http://algorithm:9999/api/v1/assign", params=query_params)
+
+    if response.ok:
+        return SuccessResponse(
+            success=True,
+            details="Requests assigned."
+        )
+    else:
+        return SuccessResponse(
+            success=False,
+            details=f"Error: {response.text}"
+        )

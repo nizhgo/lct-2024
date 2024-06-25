@@ -115,7 +115,6 @@ export namespace UsersDto {
     sex: Genders,
     area: Areas,
     is_lite: z.boolean().optional(),
-    password: z.string().min(1, { message: "Пароль обязателен" }),
   });
 
   export type UserForm = z.infer<typeof UsersDto.UserForm>;
@@ -159,6 +158,15 @@ export namespace UsersDto {
   };
 
   export const localizeRole = (role: Roles) => localizedRole[role];
+
+  export const RegistrationResponse = z.object({
+    personal_phone: z.string(),
+    password: z.string(),
+  });
+
+  export type RegistrationResponse = z.infer<
+    typeof UsersDto.RegistrationResponse
+  >;
 
   //getWorkingHours by area
   ////Время работы сотрудников на участках:

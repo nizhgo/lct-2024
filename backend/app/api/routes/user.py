@@ -109,7 +109,7 @@ def get_users(
         session: SessionDep,
         offset: int | None = None,
         limit: int | None = None,
-        query: str | None = None,
+        search: str | None = None,
         rank_query: UserRank | None = None,
         shift_query: UserShift | None = None,
         sex_query: UserSex | None = None
@@ -121,7 +121,7 @@ def get_users(
         session=session,
         offset=offset,
         limit=limit,
-        query=query,
+        query=search,
         rank_query=rank_query,
         shift_query=shift_query,
         sex_query = sex_query

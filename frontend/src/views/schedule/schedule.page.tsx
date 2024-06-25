@@ -24,12 +24,12 @@ const SchedulePage = observer(() => {
 
   const onDistribute = async (e: React.FormEvent) => {
     e.preventDefault();
-    await vm.distributeSchedule();
+    await vm.distributeSchedule.execute();
   };
 
   return (
     <Stack direction={"column"} gap={8}>
-      <Stack justify={"space-between"} align={"center"}>
+      <Stack justify={"space-between"} align={"start"}>
         <Stack direction={"column"} gap={10}>
           <PageHeader>Расписание</PageHeader>
           <Input
@@ -39,16 +39,23 @@ const SchedulePage = observer(() => {
           />
         </Stack>
         <form onSubmit={onDistribute}>
-          <Stack gap={20} align={"center"}>
+          <Stack gap={20} align={"center"} justify={"end"}>
             <CustomDropdown
-              onChange={obj => vm.setDistributeType(obj.value)}
+              onChange={(obj) => vm.setDistributeType(obj.value)}
               options={ScheduleDto.distributionTypes}
-              render={obj => obj.title}
+              render={(obj) => obj.title}
             />
-            <Tooltip content={vm.distributeType ? "" : "Выберите тип распределения"} action={"hover"}>
-            <Button type={"submit"} disabled={vm.isDistributeDisabled}>
-              Распределить записи
-            </Button>
+            <Tooltip
+              content={vm.distributeType ? "" : "Выберите тип распределения"}
+              action={"hover"}
+            >
+              <Button
+                type={"submit"}
+                disabled={vm.isDistributeDisabled}
+                pending={vm.distributeSchedule.isPending}
+              >
+                Распределить записи
+              </Button>
             </Tooltip>
           </Stack>
         </form>
