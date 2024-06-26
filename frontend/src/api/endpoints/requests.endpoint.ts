@@ -37,7 +37,6 @@ export const RequestsEndpoint = new (class RequestsEndpoint {
 
   create = async (data: RequestsDto.RequestForm) => {
     return await Http.request("/requests/")
-      .expectJson(RequestsDto.Request)
       .post(data);
   };
 

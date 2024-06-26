@@ -22,11 +22,11 @@ export namespace RequestsDto {
     "distribution_error",
   ];
 
-  export const AcceptationMethod = z.enum(["phone", "email"]);
+  export const AcceptationMethod = z.enum(["phone", "internet"]);
 
   export type AcceptationMethod = z.infer<typeof AcceptationMethod>;
 
-  export const acceptationMethods: AcceptationMethod[] = ["phone", "email"];
+  export const acceptationMethods: AcceptationMethod[] = ["phone", "internet"];
 
   export const Request = z.object({
     passenger_id: z.number(),
@@ -99,7 +99,7 @@ export namespace RequestsDto {
 
   const acceptationMethodLocalizations: Record<AcceptationMethod, string> = {
     phone: "Телефон",
-    email: "Email",
+    internet: "Интернет",
   };
 
   export const localizeAcceptationMethod = (method: AcceptationMethod) =>
