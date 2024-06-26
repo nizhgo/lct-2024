@@ -12,6 +12,8 @@ import { useState } from "react";
 import InfinityTable from "components/infinity-table.tsx";
 import PermissionsService from "src/stores/permissions.service.ts";
 import { InternalLink } from "components/internalLink.tsx";
+import { CustomDropdown } from "components/dropdown.tsx";
+import { Input } from "components/input.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -170,7 +172,31 @@ const RequestsPage = observer(() => {
         provider={vm.provider}
         columns={columns}
         renderRow={renderRow}
-        searchPlaceholder={"Поиск"}
+        searchPlaceholder={"Поиск по ФИО пассажира"}
+        filters={{
+          status: ({ onChange }) => (
+            <CustomDropdown
+              label="Статус"
+              options={RequestsDto.requestsStatuses}
+              render={(option) => RequestsDto.localizeRequestStatus(option)}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          start_time: ({ onChange }) => (
+            <Input
+              label="Дата и время начала"
+              type={"datetime-local"}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          end_time: ({ onChange }) => (
+            <Input
+              label="Дата и время окончания"
+              type={"datetime-local"}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+        }}
       />
     </Stack>
   );
