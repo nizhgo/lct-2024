@@ -5,6 +5,7 @@ import { InfinityScrollProvider } from "utils/infinity-scroll.tsx";
 
 export class PassengersPageViewModel {
   provider: InfinityScrollProvider<PassengerDto.Passenger>;
+
   constructor() {
     this.provider = new InfinityScrollProvider(this.fetchRequests.bind(this));
     makeAutoObservable(this);
@@ -12,8 +13,12 @@ export class PassengersPageViewModel {
 
   async fetchRequests(offset: number, limit: number, search?: string) {
     try {
-      const response = await PassengerEndpoint.findAll(offset, limit, search);
-      return response;
+      return await PassengerEndpoint.findAll(
+        offset,
+        limit,
+        search,
+        this.provider.filters,
+      );
     } catch (e) {
       console.error("Failed to load passengers", e);
       return [];
