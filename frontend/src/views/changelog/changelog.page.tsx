@@ -30,7 +30,9 @@ const ChangelogPage = () => {
       <PageHeader>Изменения распределения заявки #{id}</PageHeader>
       <Stack $wrap={"wrap"}>
         {vm.data.map((item, i) => (
-          <Stack key={i} direction={"column"}>{item.start_time}</Stack>
+          <Stack key={i} direction={"column"}>
+            {item.status}
+          </Stack>
         ))}
       </Stack>
     </Stack>
