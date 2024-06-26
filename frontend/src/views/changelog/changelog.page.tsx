@@ -5,13 +5,14 @@ import { Stack } from "components/stack.ts";
 import { PageHeader } from "components/pageHeader.tsx";
 import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { Text } from "components/text.ts";
+import { observer } from "mobx-react-lite";
 
-const ChangelogPage = () => {
+const ChangelogPage = observer(() => {
   const { id } = useParams<{ id: string }>();
   const [vm] = useState(() => new ChangeLogPageViewModel(id!));
 
   useEffect(() => {
-    vm.loadHistory().then(data => console.log(data));
+    vm.loadHistory().then((data) => console.log(data));
   }, [vm]);
 
   if (vm.loading && !vm.data) {
@@ -37,6 +38,6 @@ const ChangelogPage = () => {
       </Stack>
     </Stack>
   );
-};
+});
 
 export default ChangelogPage;
