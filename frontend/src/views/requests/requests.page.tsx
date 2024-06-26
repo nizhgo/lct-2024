@@ -35,7 +35,9 @@ const StatusBadge = styled.div<{ status: string }>`
         ? p.theme.colors.status.processed_auto
         : p.status === "processed"
           ? p.theme.colors.status.processed
-          : p.theme.colors.status.completed};
+          : p.status === "distribution_error"
+            ? p.theme.colors.status.distribution_error
+            : p.theme.colors.status.completed};
   background-color: ${(p) =>
     p.status === "new"
       ? `${p.theme.colors.status.new}30`
@@ -43,7 +45,9 @@ const StatusBadge = styled.div<{ status: string }>`
         ? `${p.theme.colors.status.processed_auto}30`
         : p.status === "processed"
           ? `${p.theme.colors.status.processed}30`
-          : `${p.theme.colors.status.completed}30`};
+          : p.status === "distribution_error"
+            ? `${p.theme.colors.status.distribution_error}30`
+            : `${p.theme.colors.status.completed}30`};
   border: 1px solid
     ${(p) =>
       p.status === "new"
@@ -52,7 +56,9 @@ const StatusBadge = styled.div<{ status: string }>`
           ? p.theme.colors.status.processed_auto
           : p.status === "processed"
             ? p.theme.colors.status.processed
-            : p.theme.colors.status.completed};
+            : p.status === "distribution_error"
+              ? p.theme.colors.status.distribution_error
+              : p.theme.colors.status.completed};
   font-weight: 700;
   text-align: center;
 `;

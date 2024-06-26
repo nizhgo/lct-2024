@@ -19,6 +19,7 @@ import PermissionsService, {
   Permission,
   Section,
 } from "src/stores/permissions.service.ts";
+import ChangelogPage from "src/views/changelog/changelog.page.tsx";
 
 // Lazy loaded components
 const PassengersPage = lazy(
@@ -175,6 +176,11 @@ const router = createBrowserRouter([
           {
             path: "/requests/edit/:id/",
             element: <RequestEditPage />,
+            loader: () => securityCheck("requests", ["update"]),
+          },
+          {
+            path: "/requests/changelog/:id/",
+            element: <ChangelogPage />,
             loader: () => securityCheck("requests", ["update"]),
           },
         ],

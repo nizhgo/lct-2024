@@ -22,4 +22,9 @@ export const TicketsEndpoint = new (class TicketsEndpoint {
       .put(data);
   };
 
+  history = async (id: string) => {
+    return await Http.request(`/tickets/${id}/history`)
+      .expectJson(z.array(TicketsDto.ChangeLog))
+      .get();
+  };
 })();
