@@ -8,6 +8,7 @@ from app.api.deps import SessionDep, get_current_active_admin, CurrentUser, get_
     get_current_active_operator, get_current_active_worker
 from app.models import TicketResponse, TicketUpdate, UserResponse, UserTickets, TicketCreate, DeleteResponse, \
     TicketDifference, UserRole, RequestUpdate, TicketStatus
+from app.utils import datetime_to_moscow_native
 
 router = APIRouter()
 
@@ -31,7 +32,8 @@ def get_users_tickets(
     """
     Get all tickets
     """
-
+    start_time = datetime_to_moscow_native(start_time)
+    end_time = datetime_to_moscow_native(end_time)
     if current_user.role == UserRole.worker:
         return [
             UserTickets(
@@ -213,16 +215,17 @@ def delete_ticket(
     """
     Delete ticket
     """
+    db_request = crud.get_request_by_ticket_id(session=session, ticket_id=ticket_id)
     db_ticket = crud.delete_ticket(session=session, ticket_id=ticket_id)
     if db_ticket is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"The ticket with id {ticket_id} does not exist."
         )
-    request_status = "new"
+    request_status = "distribution_error"
     crud.update_request(
         session=session,
-        db_request=db_ticket.request,
+        db_request=db_request,
         request_in=RequestUpdate(
             status=request_status,
         ),

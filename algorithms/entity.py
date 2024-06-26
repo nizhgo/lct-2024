@@ -22,6 +22,10 @@ class Base(BaseModel):
     def get(id_: int):
         return BASE[id_]
 
+    @staticmethod
+    def delete(id_: int):
+        BASE.pop(id_)
+
     @classmethod
     def all(cls):
         result = []

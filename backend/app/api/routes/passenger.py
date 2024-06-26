@@ -6,6 +6,7 @@ from app import crud
 from app.api.deps import SessionDep, get_current_active_admin, get_current_active_specialist, get_current_active_operator, get_current_active_worker
 from app.models import (Passenger, PassengerCreate, PassengerResponse,
                         PassengerUpdate, DeleteResponse, PassengerSex, PassengerCategory)
+from app.utils import datetime_to_moscow_native
 
 router = APIRouter()
 

@@ -1,5 +1,4 @@
 import random
-from pprint import pprint
 
 from globals import ROUTES, BASE
 from math import ceil
@@ -40,7 +39,9 @@ def get_time(from_station: str, to_station: str, coefficient: int) -> (int, list
         return timedelta(minutes=0)
     route = ROUTES[coefficient]
     response = route[str((from_station, to_station))]
-    time = ceil(response["time"])
+    time = ceil(response["time"]) + 1.5 * coefficient + 0.3 * len(response["path"])
+    if time == 0:
+        print(from_station, to_station, coefficient)
     return timedelta(minutes=time)
 
 
@@ -66,18 +67,16 @@ def match_user(user: User, event: Event) -> bool:
     if event.start < user.free_time + travel_time:
         return False
     # не работает
-    if not (user.start < event.start < event.end < user.end):
+    if not (user.start < event.start <= event.end < user.end):
         return False
     # не задевает permanent событие
     for some_event in all_events:
-        if some_event.id == event.id:
+        if some_event.id == event.id and some_event.type == event.type:
             continue
         if all((
                 some_event.is_permanent,
                 user.id in some_event.user_ids,
                 min(event.end, some_event.end) > max(event.start, some_event.start),
-                some_event.start > event.start,
-                some_event.start < event.end
         )):
             return False
 
@@ -95,11 +94,13 @@ def generate_random_datetime(start_time, end_time):
     return random_datetime
 
 
-def get_work_time(working_hours: str) -> dict:
+def get_work_time(working_hours: str, current_date: datetime) -> dict:
     response = {}
     start_hours, start_minutes = map(int, working_hours.split('-')[0].split(':'))
     end_hours, end_minutes = map(int, working_hours.split('-')[1].split(':'))
-    response["start"] = datetime.now().replace(hour=start_hours, minute=start_minutes)
-    response["end"] = datetime.now().replace(hour=end_hours, minute=end_minutes)
+    response["start"] = datetime.now().replace(hour=start_hours, minute=start_minutes, year=current_date.year,
+                                               month=current_date.month, day=current_date.day)
+    response["end"] = datetime.now().replace(hour=end_hours, minute=end_minutes, year=current_date.year,
+                                             month=current_date.month, day=current_date.day)
 
     return response

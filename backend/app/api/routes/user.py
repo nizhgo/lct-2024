@@ -5,7 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from app import crud
 from app.api.deps import (CurrentUser, SessionDep,
-                          get_current_active_admin, get_current_active_specialist, get_current_active_operator, get_current_active_worker)
+                          get_current_active_admin, get_current_active_specialist, get_current_active_operator,
+                          get_current_active_worker)
 from app.core.security import generate_password
 from app.models import (Credentials, TokenResponse, UserCreate, UserResponse, UserBase,
                         UserUpdate, AttendanceCreate, AttendanceResponse, DeleteResponse, UserRank, UserShift, UserSex)
@@ -68,7 +69,9 @@ def get_free_users(
 
     free_users = set()
     for user in users:
-        if UserBase.should_work_time(start_time, user.shift, user.working_hours) and UserBase.should_work_time(end_time, user.shift, user.working_hours):
+        if UserBase.should_work_time(start_time, user.shift, user.working_hours) and UserBase.should_work_time(end_time,
+                                                                                                               user.shift,
+                                                                                                               user.working_hours):
             free_users.add(user.id)
 
     for gap in gaps:
@@ -84,7 +87,6 @@ def get_free_users(
             free.append(UserResponse.model_validate(user))
 
     return free
-
 
 
 @router.post(
@@ -124,7 +126,7 @@ def get_users(
         query=search,
         rank_query=rank_query,
         shift_query=shift_query,
-        sex_query = sex_query
+        sex_query=sex_query
     )
     users = list(map(lambda user: UserResponse.model_validate(user), users))
 

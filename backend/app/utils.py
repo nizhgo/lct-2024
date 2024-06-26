@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -18,19 +18,33 @@ class EmailData:
     subject: str
 
 
+def datetime_to_moscow_native(dt: datetime):
+    if not dt:
+        return dt
+    if dt.tzinfo is not None:
+        moscow_offset = timedelta(hours=3)
+        moscow_time = dt.replace(tzinfo=timezone.utc) + moscow_offset
+
+        moscow_time_native = moscow_time.replace(tzinfo=None)
+    else:
+        moscow_time_native = dt
+    dt += timedelta(seconds=1)
+    return moscow_time_native
+
+
 def render_email_template(*, template_name: str, context: dict[str, Any]) -> str:
     template_str = (
-        Path(__file__).parent / "email-templates" / "build" / template_name
+            Path(__file__).parent / "email-templates" / "build" / template_name
     ).read_text()
     html_content = Template(template_str).render(context)
     return html_content
 
 
 def send_email(
-    *,
-    email_to: str,
-    subject: str = "",
-    html_content: str = "",
+        *,
+        email_to: str,
+        subject: str = "",
+        html_content: str = "",
 ) -> None:
     assert settings.emails_enabled, "no provided configuration for email variables"
     message = emails.Message(
@@ -79,7 +93,7 @@ def generate_reset_password_email(email_to: str, email: str, token: str) -> Emai
 
 
 def generate_new_account_email(
-    email_to: str, username: str, password: str
+        email_to: str, username: str, password: str
 ) -> EmailData:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - New account for user {username}"

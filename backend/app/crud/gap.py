@@ -62,7 +62,7 @@ def get_gaps_by_user_id(
             statement = statement.where(Gap.end_time <= end_time)
 
     statement = statement.order_by(Gap.start_time).offset(offset).limit(limit)
-    gaps = session.exec(statement).unique().all()
+    gaps = session.exec(statement).all()
 
     return gaps
 

@@ -8,6 +8,7 @@ from app import crud
 from app.api.deps import SessionDep, get_current_active_admin, get_current_active_specialist, get_current_active_operator, get_current_active_worker, CurrentUser
 from app.models import (GapResponse, ScheduleResponse, TicketBase,
                         UserResponse, UserRole)
+from app.utils import datetime_to_moscow_native
 
 router = APIRouter()
 
@@ -31,7 +32,8 @@ def get_schedules(
     """
     Get all schedules.
     """
-
+    start_time = datetime_to_moscow_native(start_time)
+    end_time = datetime_to_moscow_native(end_time)
     if current_user.role == UserRole.worker:
         return [
             get_user_schedule(
@@ -103,7 +105,8 @@ def get_user_schedule(
     """
     Get users schedule.
     """
-
+    start_time = datetime_to_moscow_native(start_time)
+    end_time = datetime_to_moscow_native(end_time)
     if current_user.role == UserRole.worker and current_user.id != user_id:
         return HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

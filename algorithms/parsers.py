@@ -21,7 +21,7 @@ def get_routes() -> dict:
     """
     result = {}
     for w in range(1, 5):
-        with open(f"/code/static/routes/calculated_paths_{w}.p", "rb") as f:
+        with open(f"/сode/static/routes/calculated_paths_{w}.p", "rb") as f:
             routes = pickle.load(f)
             ROUTES[w] = routes
     return result
@@ -31,7 +31,7 @@ def get_requests(current_time: datetime, assign_type: Literal["hard", "soft"]) -
     now = datetime.now()
 
     queries = {
-        "start_time": datetime.strftime(current_time, "%Y-%m-%dT%H:%M:%S"),
+        "start_time": datetime.strftime(current_time.replace(hour=0, minute=0, second=0, microsecond=0), "%Y-%m-%dT%H:%M:%S"),
         "end_time": datetime.strftime(current_time.replace(hour=23, minute=59, second=59, microsecond=999999),
                                       "%Y-%m-%dT%H:%M:%S"),
     }
@@ -49,9 +49,8 @@ def get_requests(current_time: datetime, assign_type: Literal["hard", "soft"]) -
         start = datetime.strptime(request["ticket"]["start_time"], "%Y-%m-%dT%H:%M:%S") if (
                     request.get("ticket") is not None) else request["datetime"]
         end = datetime.strptime(request["ticket"]["end_time"], "%Y-%m-%dT%H:%M:%S") if (
-                    request.get("ticket") is not None) else request["datetime"] + get_time(station_from, station_to,
-                                                                                           get_coefficient(
-                                                                                               request["category"]))
+                request.get("ticket") is not None) else (
+                request["datetime"] + get_time(station_from, station_to, get_coefficient(request["category"])))
         requests_list.append(
             Event(
                 id=request["id"],
@@ -75,7 +74,7 @@ def get_requests(current_time: datetime, assign_type: Literal["hard", "soft"]) -
     return requests_list
 
 
-def get_users() -> list[User]:
+def get_users(current_date) -> list[User]:
     response = session.get(ENDPOINT_URL + "users/")
 
     users = []
@@ -83,7 +82,7 @@ def get_users() -> list[User]:
     for user in response.json():
         user_obj = User(
             id=user["id"],
-            **get_work_time(user["working_hours"]),
+            **get_work_time(user["working_hours"], current_date=current_date),
             sex=user["sex"],
             has_lunch=False
         )
@@ -97,8 +96,8 @@ def get_gaps(current_time: datetime) -> list[Event]:
     now = datetime.now()
 
     queries = {
-        "start_time": datetime.strftime(current_time, "%Y-%m-%dT%H:%M:%S"),
-        "end_time": datetime.strftime(now.replace(hour=23, minute=59, second=59, microsecond=999999),
+        "start_time": datetime.strftime(current_time.replace(hour=0, minute=0, second=0, microsecond=0), "%Y-%m-%dT%H:%M:%S"),
+        "end_time": datetime.strftime(current_time.replace(hour=23, minute=59, second=59, microsecond=999999),
                                       "%Y-%m-%dT%H:%M:%S"),
         "find_intersection": True
     }

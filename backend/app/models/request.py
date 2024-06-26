@@ -11,6 +11,7 @@ class RequestAcceptationMethod(str, enum.Enum):
 
 class RequestStatus(str, enum.Enum):
     new = "new"
+    distribution_error = "distribution_error"
     processed_auto = "processed_auto"
     processed = "processed"
     completed = "completed"
@@ -47,9 +48,9 @@ class RequestBase(SQLModel):
         default=RequestStatus.new, sa_column=Column(Enum(RequestStatus))
     )
     additional_information: str = Field()
-    baggage_type: str = Field()
-    baggage_weight: float = Field()
-    baggage_help: bool = Field()
+    baggage_type: str | None = Field(nullable=True)
+    baggage_weight: float | None = Field(nullable=True)
+    baggage_help: bool | None = Field(nullable=True)
 
 
 class Request(RequestBase, table=True):
@@ -71,6 +72,9 @@ class Request(RequestBase, table=True):
 class RequestCreate(RequestBase):
     station_from_id: int = Field()
     station_to_id: int = Field()
+    baggage_type: str | None = None
+    baggage_weight: float | None = None
+    baggage_help: bool | None = None
 
 
 class TicketsRequestResponse(RequestBase):

@@ -7,8 +7,10 @@ from app import crud
 from app.api.deps import SessionDep, get_current_active_admin, get_current_active_specialist, \
     get_current_active_operator, get_current_active_worker, CurrentUser
 from app.models import Request, RequestCreate, RequestResponse, RequestUpdate, DeleteResponse, SuccessResponse, \
-    DistributionType, RequestStatus
+    DistributionType, RequestStatus, TicketDifference, UserRole, UserResponse
 import requests
+
+from app.utils import datetime_to_moscow_native
 
 router = APIRouter()
 
@@ -45,7 +47,8 @@ def get_requests(
     """
     Get all requests.
     """
-
+    start_time = datetime_to_moscow_native(start_time)
+    end_time = datetime_to_moscow_native(end_time)
     if current_user.role == "worker":
         requests = crud.get_requests_by_user_id(session=session, user_id=current_user.id)
     else:
@@ -171,3 +174,116 @@ def distribute_requests(
             success=False,
             details=f"Error: {response.text}"
         )
+
+
+@router.get(
+    "/{request_id}/tickets/history",
+    dependencies=[Depends(get_current_active_worker)],
+    response_model=List[TicketDifference],
+)
+def get_requests_ticket_history(
+        *, session: SessionDep, request_id: int, current_user: CurrentUser
+) -> List[TicketDifference]:
+    db_request = crud.get_request_by_id(session=session, request_id=request_id)
+    ticket = db_request.ticket
+
+    if current_user.role == UserRole.worker and current_user.id not in [user.id for user in ticket.users]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"You don't have permission to access this resource"
+        )
+
+    ticket_changes = crud.get_ticket_changes_by_request(
+        session=session, request_id=request_id,
+    )
+
+    differences = []
+
+    for i in range(len(ticket_changes)):
+        differences.append(
+            TicketDifference(
+                author=UserResponse.model_validate(
+                    crud.get_user_by_id(
+                        session=session, user_id=ticket_changes[i].author_id
+                    )
+                ),
+                change_date=ticket_changes[i].change_date,
+                ticket_id=ticket_changes[i].ticket_id,
+                request_id=(
+                    ticket_changes[i].request_id
+                    if (
+                            i == 0
+                            or ticket_changes[i].request_id
+                            != ticket_changes[i - 1].request_id
+                    )
+                    else None
+                ),
+                route=(
+                    ticket_changes[i].route
+                    if (
+                            i == 0
+                            or ticket_changes[i].request_id
+                            != ticket_changes[i - 1].request_id
+                    )
+                    else None
+                ),
+                start_time=(
+                    ticket_changes[i].start_time
+                    if (
+                            i == 0
+                            or ticket_changes[i].start_time
+                            != ticket_changes[i - 1].start_time
+                    )
+                    else None
+                ),
+                end_time=(
+                    ticket_changes[i].end_time
+                    if (
+                            i == 0
+                            or ticket_changes[i].end_time != ticket_changes[i - 1].end_time
+                    )
+                    else None
+                ),
+                real_end_time=(
+                    ticket_changes[i].real_end_time
+                    if (
+                            i == 0
+                            or ticket_changes[i].real_end_time
+                            != ticket_changes[i - 1].real_end_time
+                    )
+                    else None
+                ),
+                additional_information=(
+                    ticket_changes[i].additional_information
+                    if (
+                            i == 0
+                            or ticket_changes[i].additional_information
+                            != ticket_changes[i - 1].additional_information
+                    )
+                    else None
+                ),
+                status=(
+                    ticket_changes[i].status
+                    if (
+                            i == 0
+                            or ticket_changes[i].status != ticket_changes[i - 1].status
+                    )
+                    else None
+                ),
+                users=(
+                    [
+                        UserResponse.model_validate(
+                            crud.get_user_by_id(session=session, user_id=user_id)
+                        )
+                        for user_id in ticket_changes[i].user_ids
+                    ]
+                    if (
+                            i == 0
+                            or ticket_changes[i].user_ids != ticket_changes[i - 1].user_ids
+                    )
+                    else None
+                ),
+            )
+        )
+
+    return differences

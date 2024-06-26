@@ -54,11 +54,16 @@ def update_ticket(
     if "user_ids" in ticket_data:
         statement = delete(UserTicket).where(UserTicket.ticket_id == db_ticket.id)
         session.exec(statement)
+        session.commit()
 
         for user_id in ticket_data["user_ids"]:
             user_ticket = UserTicket(user_id=user_id, ticket_id=db_ticket.id)
-            session.add(user_ticket)
-            session.commit()
+            try:
+                session.add(user_ticket)
+                session.commit()
+            except Exception as e:
+                session.rollback()
+                print(f"constraint already wxsists: {e}")
 
         ticket_data.pop("user_ids")
     db_ticket.sqlmodel_update(ticket_data)
@@ -88,8 +93,14 @@ def update_ticket(
 
 
 def create_ticket(*, session: Session, users: list[User], ticket_create: TicketCreate, author: User):
+    chkr = set()
+    usrs = []
+    for usr in users:
+        if usr.id not in chkr:
+            usrs.append(usr)
+            chkr.add(usr.id)
     db_obj = Ticket.model_validate(
-        ticket_create, update={"users": users}
+        ticket_create, update={"users": usrs}
     )
     session.add(db_obj)
     session.commit()
@@ -137,6 +148,15 @@ def get_ticket_changes_by_tecket_id(
         *, session: Session, ticket_id: int
 ) -> List[TicketChange]:
     statement = select(TicketChange).where(TicketChange.ticket_id == ticket_id)
+    ticket_changes = session.exec(statement).all()
+
+    return ticket_changes
+
+
+def get_ticket_changes_by_request(
+        *, session: Session, request_id: int
+) -> List[TicketChange]:
+    statement = select(TicketChange).where(TicketChange.request_id == request_id).order_by(TicketChange.change_date)
     ticket_changes = session.exec(statement).all()
 
     return ticket_changes

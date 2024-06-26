@@ -6,6 +6,7 @@ from app import crud
 from app.api.deps import SessionDep, get_current_active_admin, get_current_active_specialist, \
     get_current_active_operator, get_current_active_worker, CurrentUser
 from app.models import GapResponse, GapUpdate, GapCreate, DeleteResponse, UserRole
+from app.utils import datetime_to_moscow_native
 
 router = APIRouter()
 
@@ -66,7 +67,8 @@ def get_gaps(
         find_intersection: bool | None = False,
         current_user: CurrentUser
 ):
-
+    start_time = datetime_to_moscow_native(start_time)
+    end_time = datetime_to_moscow_native(end_time)
     if current_user.role == UserRole.worker:
         return get_gaps_by_user_id(
             session=session,
@@ -105,7 +107,8 @@ def get_gaps_by_user_id(
         offset: int | None = None,
         current_user: CurrentUser
 ):
-
+    start_time = datetime_to_moscow_native(start_time)
+    end_time = datetime_to_moscow_native(end_time)
     if current_user.role == UserRole.worker and current_user.id != user_id:
         return HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

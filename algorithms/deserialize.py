@@ -59,6 +59,12 @@ def post_gap(event: Event):
     response.raise_for_status()
 
 
+def patch_request(event_change: dict, request_id):
+    data = event_change
+    response = session.patch(ENDPOINT_URL + f"requests/{request_id}", json=data)
+    response.raise_for_status()
+
+
 def commit_to_server():
     for event in Event.all():
         try:
@@ -71,6 +77,9 @@ def commit_to_server():
                 else:
                     if event.has_ticket:
                         delete_ticket(event)
+                    patch_request({
+                        "status": "distribution_error"
+                    }, event.id)
             elif event.type == "lunch":
                 post_gap(event)
         except Exception as e:

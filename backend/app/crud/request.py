@@ -75,6 +75,16 @@ def get_requests_by_user_id(
     return requests
 
 
+def get_request_by_ticket_id(
+        *, session: Session, ticket_id: int
+) -> Request:
+    db_ticket = session.exec(select(Ticket).where(Ticket.id == ticket_id)).first()
+
+    request = get_request_by_id(session=session, request_id=db_ticket.request.id)
+
+    return request
+
+
 def update_request(
         *, session: Session, db_request: Request, request_in: RequestUpdate
 ) -> Request:

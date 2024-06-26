@@ -92,9 +92,9 @@ class UserBase(SQLModel):
         if shift == UserShift.five:
             return date.weekday() <= 4
         elif shift in [UserShift.first, UserShift.first_night]:
-            return (date - start_date).days % 4 in [0, 1]
+            return (date - start_date).days % 4 in [0, 1] or (shift != UserShift.five)
         else:
-            return (date - start_date).days % 4 in [2, 3]
+            return (date - start_date).days % 4 in [2, 3] or (shift != UserShift.five)
 
     @staticmethod
     def should_work_time(date: datetime.datetime, shift: UserShift, working_hours: UserWorkingHours):
@@ -106,9 +106,9 @@ class UserBase(SQLModel):
             working_hours.split("-")[1], time_format
         ).time()
         if shift in [UserShift.first, UserShift.second, UserShift.five]:
-            return User.should_work_date(date.date(), shift) and time_start < date.time() < time_end
+            return User.should_work_date(date.date(), shift) and time_start < date.time() < time_end or (shift != UserShift.five)
         else:
-            return (User.should_work_date(date.date(), shift) and time_start < date.time()) or (User.should_work_date(date.date() - datetime.timedelta(days=1),shift) and date.time() < time_end)
+            return (User.should_work_date(date.date(), shift) and time_start < date.time()) or (User.should_work_date(date.date() - datetime.timedelta(days=1),shift) and date.time() < time_end) or (shift != UserShift.five)
 
 
 class User(UserBase, table=True):

@@ -4,7 +4,7 @@ from pprint import pprint
 from entity import User, Event, UserSchedule, Bracket, Segment
 from utils import sort_users_by_time, match_user, get_time, generate_random_datetime, get_path
 from parsers import get_routes
-from datetime import timedelta
+from datetime import timedelta, datetime
 from globals import BASE
 
 NORMAL_COEFFICIENT = 1
@@ -56,6 +56,8 @@ def assign(users: list[User], events: list[Event]) -> dict:
                 else:
                     male_count -= 1
                 assigned_users.append(user.id)
+            else:
+                pass
         if (male_count + female_count) != 0:
             event.user_ids = []
             unassigned_events.append(event)
@@ -69,24 +71,38 @@ def assign(users: list[User], events: list[Event]) -> dict:
             if event.station_to:
                 user.current_station = event.station_to
             result[user_id].append(event.object_id)
+
+            # unc
+            # events_ = [Event.get(event_id) for event_id in result[user_id]]
+            # events_.sort(key=lambda event: event.start)
+            #
+            # for i in range(1, len(events_)):
+            #     if events_[i - 1].end > events_[i].start - (
+            #             TRAVEL_LAG if events_[i].type == "request" else timedelta()):
+            #         print(user_id, events_[i - 1], events_[i])
+
             if user.free_time >= lunch_supposed_time_by_user_id[user_id] and not user.has_lunch:
-                result[user_id].append(
-                    Event(
-                        type="lunch",
-                        is_permanent=True,
-                        user_ids=[user_id],
-                        male_count=0,
-                        female_count=1,
-                        start=user.free_time,
-                        end=user.free_time + timedelta(hours=1),
-                        coefficient=1,
-                        station_from=None,
-                        station_to=None,
-                        has_ticket=False
-                    ).object_id
+                lunch = Event(
+                    type="lunch",
+                    is_permanent=True,
+                    user_ids=[user_id],
+                    male_count=0,
+                    female_count=1,
+                    start=user.free_time,
+                    end=user.free_time + timedelta(hours=1),
+                    coefficient=1,
+                    station_from=None,
+                    station_to=None,
+                    has_ticket=False
                 )
-                user.free_time += timedelta(hours=1)
-                user.has_lunch = True
+                if match_user(user, lunch):
+                    result[user_id].append(
+                        lunch.object_id
+                    )
+                    user.free_time += timedelta(hours=1)
+                    user.has_lunch = True
+                else:
+                    Event.delete(lunch.object_id)
 
     segments: list[Segment] = []
 
@@ -144,7 +160,7 @@ def assign(users: list[User], events: list[Event]) -> dict:
         for segment in segments:
             start = segment.start + get_time(segment.station_from, event.station_from, NORMAL_COEFFICIENT)
             end = segment.end - get_time(event.station_to, segment.station_to,
-                                         NORMAL_COEFFICIENT) - event.duration
+                                         NORMAL_COEFFICIENT) - event.duration - TRAVEL_LAG
             if end < start:
                 continue
 
@@ -190,6 +206,15 @@ def assign(users: list[User], events: list[Event]) -> dict:
                         event.user_ids = [user_id for user_id, _ in user_ids_segment_object_ids]
                         for user_id, segment_object_id in user_ids_segment_object_ids:
                             result[user_id].append(event.object_id)
+
+                            # unc
+                            # events_ = [Event.get(event_id) for event_id in result[user_id]]
+                            # events_.sort(key=lambda event: event.start)
+                            # for i in range(1, len(events_)):
+                            #     if events_[i - 1].end > events_[i].start - (
+                            #             TRAVEL_LAG if events_[i].type == "request" else timedelta()):
+                            #         print(user_id, events_[i - 1], events_[i])
+
                             segment = Segment.get(bracket.segment_object_id)
                             new_segments.append(
                                 Segment(
@@ -222,12 +247,13 @@ def assign(users: list[User], events: list[Event]) -> dict:
                     females_open.discard((bracket.user_id, bracket.segment_object_id))
         segments = new_segments
 
+
     for (user_id, event_ids) in result.items():
         events_ = [Event.get(event_id) for event_id in event_ids]
         events_.sort(key=lambda event: event.start)
 
         for i in range(1, len(events_)):
-            if events_[i - 1].end > events_[i].start:
+            if events_[i - 1].end > events_[i].start - (TRAVEL_LAG if events_[i].type == "request" else timedelta()):
                 print(user_id, event_ids, events_[i - 1], events_[i])
-    print(result)
+
     return result
