@@ -133,6 +133,7 @@ const StaffPage = observer(() => {
         columns={columns}
         provider={vm.provider}
         renderRow={renderRow}
+        searchPlaceholder={"Поиск сотрудников"}
         filters={{
           sex_query: ({ onChange }) => (
             <CustomDropdown
