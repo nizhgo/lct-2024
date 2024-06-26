@@ -60,6 +60,8 @@ const RequestEditPage = observer(() => {
   useEffect(() => {
     if (vm.data) {
       requestForm.reset(vm.data);
+      requestForm.setValue("station_from_id", vm.data.station_from.id);
+      requestForm.setValue("station_to_id", vm.data.station_to.id);
       if (vm.data.ticket) {
         ticketForm.reset(TicketsDto.convertTicketShortToForm(vm.data.ticket));
       }
@@ -113,6 +115,7 @@ const RequestEditPage = observer(() => {
               <Controller
                 name="passenger_id"
                 control={requestForm.control}
+                rules={{ required: "Необходимо указать пассажира", min: 1 }}
                 render={({ field }) => (
                   <SearchableInfiniteDropdown
                     label="Пассажир"
@@ -120,7 +123,7 @@ const RequestEditPage = observer(() => {
                     provider={vm.passengerProvider}
                     onChange={(option) => field.onChange(Number(option.id))}
                     searchField="name"
-                    error={requestForm.formState.errors.station_from_id?.message?.toString()}
+                    error={requestForm.formState.errors.passenger_id?.message?.toString()}
                     required
                     render={(option) => option.name}
                   />
@@ -157,7 +160,7 @@ const RequestEditPage = observer(() => {
                     value={vm.data?.station_to}
                     onChange={(option) => field.onChange(Number(option.id))}
                     searchField="name_station"
-                    error={requestForm.formState.errors.station_from_id?.message?.toString()}
+                    error={requestForm.formState.errors.station_to_id?.message?.toString()}
                     required
                     render={(option) => (
                       <Stack direction={"row"} gap={5} align={"center"}>
