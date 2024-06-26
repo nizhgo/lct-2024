@@ -58,6 +58,12 @@ const ChangelogPage = observer(() => {
                 >
                   <Stack direction={"column"} gap={10}>
                     <Text size={16} color={theme.colors.status.completed}>
+                      ID распределения
+                    </Text>
+                    <Text>#{item.ticket_id}</Text>
+                  </Stack>
+                  <Stack direction={"column"} gap={10}>
+                    <Text size={16} color={theme.colors.status.completed}>
                       Статус
                     </Text>
                     <Text>{item.status}</Text>
@@ -104,6 +110,12 @@ const ChangelogPage = observer(() => {
                     }}
                     gap={20}
                   >
+                    <Stack direction={"column"} gap={10}>
+                      <Text size={16} color={theme.colors.status.completed}>
+                        ID распределения
+                      </Text>
+                      <Text>#{item.ticket_id}</Text>
+                    </Stack>
                     <Stack direction={"column"} gap={10}>
                       <Text size={16} color={theme.colors.status.new}>
                         Статус
