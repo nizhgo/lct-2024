@@ -139,19 +139,11 @@ const StaffPage = observer(() => {
               label="Пол"
               options={[
                 { value: "", label: "Все" },
-                { value: "male", label: "Мужчина" },
-                { value: "female", label: "Женщина" },
+                { value: "male", label: "Мужской" },
+                { value: "female", label: "Женский" },
               ]}
               render={(option) => option.label}
               onChange={(option) => onChange(option.value)}
-            />
-          ),
-          role_query: ({ onChange }) => (
-            <CustomDropdown
-              label="Роль"
-              options={UsersDto.rolesValues}
-              render={(option) => UsersDto.localizeRole(option)}
-              onChange={(option) => onChange(option)}
             />
           ),
           rank_query: ({ onChange }) => (
@@ -161,15 +153,11 @@ const StaffPage = observer(() => {
               onChange={(option) => onChange(option)}
             />
           ),
-          is_working_query: ({ onChange }) => (
+          shift_query: ({ onChange }) => (
             <CustomDropdown
-              label="Работает сейчас"
-              options={[
-                { value: true, label: "Да" },
-                { value: false, label: "Нет" },
-              ]}
-              render={(option) => option.label}
-              onChange={(option) => onChange(String(option.value))}
+              label="Режим работы"
+              options={UsersDto.shiftsValues}
+              onChange={(option) => onChange(option)}
             />
           ),
         }}

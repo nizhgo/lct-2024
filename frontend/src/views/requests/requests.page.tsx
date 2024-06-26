@@ -174,7 +174,7 @@ const RequestsPage = observer(() => {
         renderRow={renderRow}
         searchPlaceholder={"Поиск по ФИО пассажира"}
         filters={{
-          status: ({ onChange }) => (
+          status_query: ({ onChange }) => (
             <CustomDropdown
               label="Статус"
               options={RequestsDto.requestsStatuses}

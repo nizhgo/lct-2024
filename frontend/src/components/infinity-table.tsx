@@ -6,6 +6,7 @@ import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { ResponsiveTable, ColumnConfig } from "components/table.tsx";
 import { InfinityScrollProvider } from "utils/infinity-scroll.tsx";
 import useDebounce from "utils/hooks/debounce.ts";
+import { Button } from "components/button.tsx";
 
 interface ResponsiveTableWrapperProps<T> {
   provider: InfinityScrollProvider<T>;
@@ -59,6 +60,10 @@ const InfinityTable = observer(
       provider.setFilters(filterValues);
     }, [filterValues, provider]);
 
+    const clearHandler = () => {
+      location.reload();
+    };
+
     const handleSearch = (value: string) => {
       setSearchTerm(value);
     };
@@ -90,8 +95,11 @@ const InfinityTable = observer(
           />
         </Stack>
 
-        <Stack direction={"row"} align={"center"} gap={10}>
+        <Stack direction={"row"} align={"flex-end"} gap={10}>
           {renderFilters()}
+          <Button style={{ marginBottom: "5px" }} onClick={clearHandler}>
+            Очистить
+          </Button>
         </Stack>
 
         <div ref={containerRef} style={{ overflowY: "auto", height: "100%" }}>
