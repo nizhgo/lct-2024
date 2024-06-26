@@ -12,6 +12,10 @@ interface ResponsiveTableWrapperProps<T> {
   columns: ColumnConfig[];
   renderRow: (item: T, columns: ColumnConfig[]) => React.ReactNode;
   searchPlaceholder?: string;
+  filters?: Record<
+    string,
+    (props: { onChange: (value: string) => void }) => JSX.Element
+  >;
 }
 
 const InfinityTable = observer(
@@ -20,9 +24,13 @@ const InfinityTable = observer(
     columns,
     renderRow,
     searchPlaceholder,
+    filters,
   }: ResponsiveTableWrapperProps<T>) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [searchTerm, setSearchTerm] = useState("");
+    const [filterValues, setFilterValues] = useState<Record<string, string>>(
+      {},
+    );
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
     useEffect(() => {
@@ -47,8 +55,27 @@ const InfinityTable = observer(
       provider.search(debouncedSearchTerm);
     }, [debouncedSearchTerm, provider]);
 
+    useEffect(() => {
+      provider.setFilters(filterValues);
+    }, [filterValues, provider]);
+
     const handleSearch = (value: string) => {
       setSearchTerm(value);
+    };
+
+    const handleFilterChange = (key: string, value: string) => {
+      console.log("Filter change", key, value);
+      setFilterValues((prev) => ({ ...prev, [key]: value }));
+    };
+
+    const renderFilters = () => {
+      if (!filters) return null;
+      return Object.entries(filters).map(([key, FilterComponent]) => (
+        <FilterComponent
+          key={key}
+          onChange={(value) => handleFilterChange(key, value)}
+        />
+      ));
     };
 
     return (
@@ -59,8 +86,12 @@ const InfinityTable = observer(
             style={{ width: "300px" }}
             withClear
             value={searchTerm}
-            onChange={handleSearch}
+            onChange={(e) => handleSearch(e)}
           />
+        </Stack>
+
+        <Stack direction={"row"} align={"center"} gap={10}>
+          {renderFilters()}
         </Stack>
 
         <div ref={containerRef} style={{ overflowY: "auto", height: "100%" }}>

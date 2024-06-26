@@ -13,6 +13,7 @@ import { useTheme } from "@emotion/react";
 import InfinityTable from "components/infinity-table.tsx";
 import { InternalLink } from "components/internalLink.tsx";
 import PermissionService from "src/stores/permissions.service.ts";
+import { CustomDropdown } from "components/dropdown.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const PassengersPage = observer(() => {
   const [vm] = useState(() => new PassengersPageViewModel());
   const theme = useTheme();
   const navigate = useNavigate();
+
   const handleAdd = () => {
     navigate("/passengers/new");
   };
@@ -105,6 +107,36 @@ const PassengersPage = observer(() => {
         columns={columns}
         renderRow={renderRow}
         searchPlaceholder={"Поиск пассажиров"}
+        filters={{
+          sex_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Пол"
+              options={[
+                { value: "", label: "Все" },
+                { value: "male", label: "Мужчина" },
+                { value: "female", label: "Женщина" },
+              ]}
+              render={(option) => option.label}
+              onChange={(option) => onChange(option.value)}
+            />
+          ),
+          category_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Категория"
+              options={PassengerDto.passengerCategoryValues}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          has_cardiac_pacemaker_query: ({ onChange }) => (
+            <label>
+              <input
+                type="checkbox"
+                onChange={(e) => onChange(String(e.target.checked))}
+              />
+              Кардиостимулятор
+            </label>
+          ),
+        }}
       />
     </Stack>
   );
