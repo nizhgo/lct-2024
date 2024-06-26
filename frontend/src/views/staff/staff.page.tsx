@@ -138,7 +138,6 @@ const StaffPage = observer(() => {
             <CustomDropdown
               label="Пол"
               options={[
-                { value: "", label: "Все" },
                 { value: "male", label: "Мужской" },
                 { value: "female", label: "Женский" },
               ]}

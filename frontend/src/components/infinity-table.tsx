@@ -7,6 +7,7 @@ import { ResponsiveTable, ColumnConfig } from "components/table.tsx";
 import { InfinityScrollProvider } from "utils/infinity-scroll.tsx";
 import useDebounce from "utils/hooks/debounce.ts";
 import { Button } from "components/button.tsx";
+import styled from "@emotion/styled";
 
 interface ResponsiveTableWrapperProps<T> {
   provider: InfinityScrollProvider<T>;
@@ -73,6 +74,28 @@ const InfinityTable = observer(
       setFilterValues((prev) => ({ ...prev, [key]: value }));
     };
 
+    const FiltersRow = styled.div`
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      gap: 10px;
+
+      @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        border-top: none;
+      }
+    `;
+    const FilterClearButton = styled.div`
+      margin-bottom: 5px;
+      margin-left: auto;
+      @media (max-width: ${(p) => p.theme.breakpoints.mobile}) {
+        margin-left: 0;
+      }
+    `;
+
     const renderFilters = () => {
       if (!filters) return null;
       return Object.entries(filters).map(([key, FilterComponent]) => (
@@ -95,12 +118,12 @@ const InfinityTable = observer(
           />
         </Stack>
 
-        <Stack direction={"row"} align={"flex-end"} gap={10}>
+        <FiltersRow>
           {renderFilters()}
-          <Button style={{ marginBottom: "5px" }} onClick={clearHandler}>
-            Очистить
-          </Button>
-        </Stack>
+          <FilterClearButton>
+            <Button onClick={clearHandler}>Очистить</Button>
+          </FilterClearButton>
+        </FiltersRow>
 
         <div ref={containerRef} style={{ overflowY: "auto", height: "100%" }}>
           {provider.isLoading && provider.data.length === 0 ? (
