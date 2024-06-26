@@ -62,24 +62,43 @@ const ChangelogPage = observer(() => {
                     </Text>
                     <Text>#{item.ticket_id}</Text>
                   </Stack>
-                  <Stack direction={"column"} gap={10}>
-                    <Text size={16} color={theme.colors.status.completed}>
-                      Статус
-                    </Text>
-                    <Text>{item.status}</Text>
-                  </Stack>
-                  <Stack direction={"column"} gap={10}>
-                    <Text size={16} color={theme.colors.status.completed}>
-                      Время начала
-                    </Text>
-                    <Text>{item.start_time}</Text>
-                  </Stack>
-                  <Stack direction={"column"} gap={10}>
-                    <Text size={16} color={theme.colors.status.completed}>
-                      Время окончания
-                    </Text>
-                    <Text>{item.end_time}</Text>
-                  </Stack>
+                  {item.status !== null ? (
+                    <Stack direction={"column"} gap={10}>
+                      <Text size={16} color={theme.colors.status.completed}>
+                        Статус
+                      </Text>
+                      <Text>{item.status}</Text>
+                    </Stack>
+                  ) : null}
+                  {item.end_time !== null ? (
+                    <Stack direction={"column"} gap={10}>
+                      <Text size={16} color={theme.colors.status.completed}>
+                        Время начала
+                      </Text>
+                      <Text>{item.start_time}</Text>
+                    </Stack>
+                  ) : null}
+                  {item.end_time ? (
+                    <Stack direction={"column"} gap={10}>
+                      <Text size={16} color={theme.colors.status.completed}>
+                        Время окончания
+                      </Text>
+                      <Text>{item.end_time}</Text>
+                    </Stack>
+                  ) : null}
+                  {item.users ? (
+                    <Stack direction={"column"} gap={10}>
+                      <Text size={16} color={theme.colors.status.completed}>
+                        Список сотрудников
+                      </Text>
+                      {item.users?.map((user, i) => (
+                        <Text key={i}>
+                          {user?.second_name} {user?.first_name}{" "}
+                          {user?.patronymic}
+                        </Text>
+                      ))}
+                    </Stack>
+                  ) : null}
                   <Stack direction={"column"} gap={10}>
                     <Text size={16} color={"#787486"}>
                       Автор редактирования
@@ -111,29 +130,48 @@ const ChangelogPage = observer(() => {
                     gap={20}
                   >
                     <Stack direction={"column"} gap={10}>
-                      <Text size={16} color={theme.colors.status.completed}>
+                      <Text size={16} color={theme.colors.status.new}>
                         ID распределения
                       </Text>
                       <Text>#{item.ticket_id}</Text>
                     </Stack>
-                    <Stack direction={"column"} gap={10}>
-                      <Text size={16} color={theme.colors.status.new}>
-                        Статус
-                      </Text>
-                      <Text>{item.status}</Text>
-                    </Stack>
-                    <Stack direction={"column"} gap={10}>
-                      <Text size={16} color={theme.colors.status.new}>
-                        Время начала
-                      </Text>
-                      <Text>{item.start_time}</Text>
-                    </Stack>
-                    <Stack direction={"column"} gap={10}>
-                      <Text size={16} color={theme.colors.status.new}>
-                        Время окончания
-                      </Text>
-                      <Text>{item.end_time}</Text>
-                    </Stack>
+                    {item.status !== null ? (
+                      <Stack direction={"column"} gap={10}>
+                        <Text size={16} color={theme.colors.status.new}>
+                          Статус
+                        </Text>
+                        <Text>{item.status}</Text>
+                      </Stack>
+                    ) : null}
+                    {item.end_time !== null ? (
+                      <Stack direction={"column"} gap={10}>
+                        <Text size={16} color={theme.colors.status.new}>
+                          Время начала
+                        </Text>
+                        <Text>{item.start_time}</Text>
+                      </Stack>
+                    ) : null}
+                    {item.end_time ? (
+                      <Stack direction={"column"} gap={10}>
+                        <Text size={16} color={theme.colors.status.new}>
+                          Время окончания
+                        </Text>
+                        <Text>{item.end_time}</Text>
+                      </Stack>
+                    ) : null}
+                    {item.users ? (
+                      <Stack direction={"column"} gap={10}>
+                        <Text size={16} color={theme.colors.status.new}>
+                          Список сотрудников
+                        </Text>
+                        {item.users?.map((user, i) => (
+                          <Text key={i}>
+                            {user?.second_name} {user?.first_name}{" "}
+                            {user?.patronymic}
+                          </Text>
+                        ))}
+                      </Stack>
+                    ) : null}
                     <Stack direction={"column"} gap={10}>
                       <Text size={16} color={"#787486"}>
                         Автор редактирования
@@ -142,6 +180,12 @@ const ChangelogPage = observer(() => {
                         {item.author.first_name} {item.author.second_name}{" "}
                         {item.author.patronymic}
                       </Text>
+                    </Stack>
+                    <Stack direction={"column"} gap={10}>
+                      <Text size={16} color={"#787486"}>
+                        Время редактирования
+                      </Text>
+                      <Text>{item.change_date}</Text>
                     </Stack>
                   </Stack>
                   <img src={arrowLeft} alt="" />
