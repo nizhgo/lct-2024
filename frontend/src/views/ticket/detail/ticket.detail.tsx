@@ -100,7 +100,7 @@ const TicketDetails = observer(({ data }: { data: RequestsDto.Request }) => {
               </InternalLink>
             ))}
           </Stack>
-          <Link to={`/requests/changelog/${data.id}`}>
+          <Link to={`/requests/changelog/${data.ticket.id}`}>
             <Text size={18} style={{ textDecoration: "underline" }}>
               История изменений распределения заявки
             </Text>
