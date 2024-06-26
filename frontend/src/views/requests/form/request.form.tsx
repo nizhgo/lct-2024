@@ -1,4 +1,4 @@
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
@@ -48,6 +48,11 @@ const RequestCreatePage = observer(() => {
     formState: { errors },
   } = useForm<RequestsDto.RequestForm>({
     resolver: zodResolver(RequestsDto.RequestForm),
+  });
+
+  const isBaggageHelpChecked = useWatch({
+    control,
+    name: "baggage_help",
   });
 
   const onSubmit = async (data: RequestsDto.RequestForm) => {
@@ -173,7 +178,9 @@ const RequestCreatePage = observer(() => {
                   label="Количество пассажиров"
                   placeholder="Введите количество пассажиров"
                   error={errors.passengers_count?.message?.toString()}
-                  register={register("passengers_count", { valueAsNumber: true })}
+                  register={register("passengers_count", {
+                    valueAsNumber: true,
+                  })}
                   required
                 />
                 <Controller
@@ -195,14 +202,18 @@ const RequestCreatePage = observer(() => {
                   label="Количество мужчин"
                   placeholder="Введите количество мужчин"
                   error={errors.male_users_count?.message?.toString()}
-                  register={register("male_users_count", { valueAsNumber: true })}
+                  register={register("male_users_count", {
+                    valueAsNumber: true,
+                  })}
                 />
                 <Input.Number
                   min={0}
                   label="Количество женщин"
                   placeholder="Введите количество женщин"
                   error={errors.female_users_count?.message?.toString()}
-                  register={register("female_users_count", { valueAsNumber: true })}
+                  register={register("female_users_count", {
+                    valueAsNumber: true,
+                  })}
                 />
                 <Input
                   label="Дополнительная информация"
@@ -210,22 +221,28 @@ const RequestCreatePage = observer(() => {
                   error={errors.additional_information?.message?.toString()}
                   register={register("additional_information")}
                 />
-                <Input
-                  label="Тип багажа"
-                  placeholder="Введите тип багажа"
-                  error={errors.baggage_type?.message?.toString()}
-                  register={register("baggage_type")}
-                />
-                <Input.Number
-                  label="Вес багажа"
-                  placeholder="Введите вес багажа"
-                  error={errors.baggage_weight?.message?.toString()}
-                  register={register("baggage_weight", { valueAsNumber: true })}
-                />
                 <Stack direction="row" align="center" gap={10}>
                   <input type="checkbox" {...register("baggage_help")} />
                   <Text size={14}>Нужна помощь с багажом</Text>
                 </Stack>
+                {isBaggageHelpChecked && (
+                  <>
+                    <Input
+                      label="Тип багажа"
+                      placeholder="Введите тип багажа"
+                      error={errors.baggage_type?.message?.toString()}
+                      register={register("baggage_type")}
+                    />
+                    <Input.Number
+                      label="Вес багажа"
+                      placeholder="Введите вес багажа"
+                      error={errors.baggage_weight?.message?.toString()}
+                      register={register("baggage_weight", {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </>
+                )}
                 <Button type="submit">Создать</Button>
               </Stack>
             </form>

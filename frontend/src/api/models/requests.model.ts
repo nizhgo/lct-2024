@@ -40,8 +40,8 @@ export namespace RequestsDto {
     female_users_count: z.number().optional(),
     status: RequestsStatus,
     additional_information: z.string(),
-    baggage_type: z.string(),
-    baggage_weight: z.number(),
+    baggage_type: z.string().optional(),
+    baggage_weight: z.number().optional(),
     baggage_help: z.boolean(),
     id: z.number(),
     passenger: PassengerDto.Passenger,
@@ -80,7 +80,7 @@ export namespace RequestsDto {
       .optional(),
     additional_information: z.string().optional(),
     baggage_type: z.string().optional(),
-    baggage_weight: z.number().optional().default(0),
+    baggage_weight: z.number().optional(),
     baggage_help: z.boolean().optional().default(false),
   });
 
