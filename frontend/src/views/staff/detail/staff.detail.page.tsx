@@ -202,7 +202,7 @@ const StaffDetails = observer(() => {
                   >
                     <Text size={20}>Событие #{gap.id}</Text>
                     <Text>
-                      {gap.start_time} - {gap.end_time}
+                      {new Date(gap.start_time).toLocaleString()} - {new Date(gap.end_time).toLocaleString()}
                     </Text>
                     <Text>Категория: {gap.status}</Text>
                     <Text>{gap.description}</Text>

@@ -106,7 +106,7 @@ const ChangelogPage = observer(() => {
                     <Text size={16} color={"#787486"}>
                       Время редактирования
                     </Text>
-                    <Text>{item.change_date}</Text>
+                    <Text>{new Date(item.change_date).toLocaleString()}</Text>
                   </Stack>
                 </Stack>
               );
@@ -173,7 +173,7 @@ const ChangelogPage = observer(() => {
                       <Text size={16} color={"#787486"}>
                         Время редактирования
                       </Text>
-                      <Text>{item.change_date}</Text>
+                      <Text>{new Date(item.change_date).toLocaleString()}</Text>
                     </Stack>
                   </Stack>
                   <img src={arrowLeft} alt="" />
