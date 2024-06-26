@@ -69,4 +69,8 @@ export class InfinityScrollProvider<T> {
     this.reset();
     this.loadMore();
   }
+
+  getFilterValue(key: string) {
+    return this.filters[key] || null;
+  }
 }

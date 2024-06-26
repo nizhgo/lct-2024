@@ -62,7 +62,8 @@ const InfinityTable = observer(
     }, [filterValues, provider]);
 
     const clearHandler = () => {
-      location.reload();
+      setSearchTerm("");
+      setFilterValues({});
     };
 
     const handleSearch = (value: string) => {

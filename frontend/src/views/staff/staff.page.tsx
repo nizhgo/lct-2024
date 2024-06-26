@@ -138,18 +138,19 @@ const StaffPage = observer(() => {
           sex_query: ({ onChange }) => (
             <CustomDropdown
               label="Пол"
-              options={[
-                { value: "male", label: "Мужской" },
-                { value: "female", label: "Женский" },
-              ]}
-              render={(option) => option.label}
-              onChange={(option) => onChange(option.value)}
+              options={UsersDto.genderValues}
+              render={(option) => UsersDto.localizeGender(option)}
+              value={
+                vm.provider.getFilterValue("sex_query") as UsersDto.Genders
+              }
+              onChange={(option) => onChange(option)}
             />
           ),
           rank_query: ({ onChange }) => (
             <CustomDropdown
               label="Должность"
               options={UsersDto.ranksValues}
+              value={vm.provider.getFilterValue("rank_query") as UsersDto.Ranks}
               onChange={(option) => onChange(option)}
             />
           ),
@@ -157,6 +158,9 @@ const StaffPage = observer(() => {
             <CustomDropdown
               label="Режим работы"
               options={UsersDto.shiftsValues}
+              value={
+                vm.provider.getFilterValue("shift_query") as UsersDto.Shifts
+              }
               onChange={(option) => onChange(option)}
             />
           ),

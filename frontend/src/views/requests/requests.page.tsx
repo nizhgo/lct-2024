@@ -178,6 +178,11 @@ const RequestsPage = observer(() => {
             <CustomDropdown
               label="Статус"
               options={RequestsDto.requestsStatuses}
+              value={
+                vm.provider.getFilterValue(
+                  "status_query",
+                ) as RequestsDto.RequestsStatus
+              }
               render={(option) => RequestsDto.localizeRequestStatus(option)}
               onChange={(option) => onChange(option)}
             />
@@ -185,6 +190,7 @@ const RequestsPage = observer(() => {
           start_time: ({ onChange }) => (
             <Input
               label="Дата и время начала"
+              value={vm.provider.getFilterValue("start_time") ?? ""}
               type={"datetime-local"}
               onChange={(option) => onChange(option)}
             />
@@ -192,6 +198,7 @@ const RequestsPage = observer(() => {
           end_time: ({ onChange }) => (
             <Input
               label="Дата и время окончания"
+              value={vm.provider.getFilterValue("end_time") ?? ""}
               type={"datetime-local"}
               onChange={(option) => onChange(option)}
             />
