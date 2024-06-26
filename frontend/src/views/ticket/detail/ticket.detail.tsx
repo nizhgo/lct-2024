@@ -8,7 +8,7 @@ import { RequestsDto } from "api/models/requests.model.ts";
 import { useTheme } from "@emotion/react";
 import { InternalLink } from "components/internalLink.tsx";
 import PermissionsService from "src/stores/permissions.service.ts";
-
+import { Link } from "react-router-dom";
 const ParamName = (x: { children: React.ReactNode }) => {
   return <Text color={"#787486"}>{x.children}</Text>;
 };
@@ -100,6 +100,11 @@ const TicketDetails = observer(({ data }: { data: RequestsDto.Request }) => {
               </InternalLink>
             ))}
           </Stack>
+          <Link to={`/requests/changelog/${data.id}`}>
+            <Text size={18} style={{ textDecoration: "underline" }}>
+              История изменений распределения заявки
+            </Text>
+          </Link>
         </>
       ) : (
         <>
