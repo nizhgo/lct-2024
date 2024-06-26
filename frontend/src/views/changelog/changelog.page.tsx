@@ -11,7 +11,7 @@ const ChangelogPage = () => {
   const [vm] = useState(() => new ChangeLogPageViewModel(id!));
 
   useEffect(() => {
-    vm.loadHistory();
+    vm.loadHistory().then(data => console.log(data));
   }, [vm]);
 
   if (vm.loading && !vm.data) {

@@ -45,6 +45,7 @@ export const theme = {
       processed_auto: "rgba(255, 165, 0, 0.3)",
       processed: "rgba(36, 163, 255, 0.3)",
       completed: "rgba(0, 128, 0, 0.3)",
+      distribution_error: "rgba(178, 0, 0, 0.3)",
     },
   },
   breakpoints: {
