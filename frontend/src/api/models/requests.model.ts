@@ -9,6 +9,7 @@ export namespace RequestsDto {
     "processed_auto",
     "processed",
     "completed",
+    "distribution_error",
   ]);
 
   export type RequestsStatus = z.infer<typeof RequestsStatus>;
@@ -18,6 +19,7 @@ export namespace RequestsDto {
     "processed_auto",
     "processed",
     "completed",
+    "distribution_error",
   ];
 
   export const AcceptationMethod = z.enum(["phone", "email"]);
@@ -89,6 +91,7 @@ export namespace RequestsDto {
     processed_auto: "Обработана автоматически",
     processed: "Обработана",
     completed: "Завершена",
+    distribution_error: "Не удалось распределить автоматически",
   };
 
   export const localizeRequestStatus = (status: RequestsStatus) =>

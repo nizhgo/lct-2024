@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ChangeLogPageViewModel } from "src/views/changelog/changelog.vm.ts";
 import { Stack } from "components/stack.ts";
 import { PageHeader } from "components/pageHeader.tsx";
-import { Loader, LoaderWrapper} from "src/loader.tsx";
+import { Loader, LoaderWrapper } from "src/loader.tsx";
 import { Text } from "components/text.ts";
 
 const ChangelogPage = () => {
