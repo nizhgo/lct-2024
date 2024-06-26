@@ -18,7 +18,7 @@ const ChangelogPage = observer(() => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    vm.loadHistory().then((data) => console.log(data));
+    vm.loadHistory();
   }, [vm]);
 
   if (vm.loading && !vm.data) {
@@ -56,12 +56,6 @@ const ChangelogPage = observer(() => {
                   }}
                   gap={20}
                 >
-                  <Stack direction={"column"} gap={10}>
-                    <Text size={16} color={theme.colors.status.completed}>
-                      ID распределения
-                    </Text>
-                    <Text>#{item.ticket_id}</Text>
-                  </Stack>
                   {item.status !== null ? (
                     <Stack direction={"column"} gap={10}>
                       <Text size={16} color={theme.colors.status.completed}>
@@ -129,12 +123,6 @@ const ChangelogPage = observer(() => {
                     }}
                     gap={20}
                   >
-                    <Stack direction={"column"} gap={10}>
-                      <Text size={16} color={theme.colors.status.new}>
-                        ID распределения
-                      </Text>
-                      <Text>#{item.ticket_id}</Text>
-                    </Stack>
                     {item.status !== null ? (
                       <Stack direction={"column"} gap={10}>
                         <Text size={16} color={theme.colors.status.new}>

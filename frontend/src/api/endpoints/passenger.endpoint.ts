@@ -3,10 +3,21 @@ import { Http } from "utils/api/http.ts";
 import { z } from "zod";
 
 export const PassengerEndpoint = new (class PassengerEndpoint {
-  //find all passengers
-  findAll = async (offset: number, limit: number, search?: string) => {
+  findAll = async (
+    offset: number,
+    limit: number,
+    search?: string,
+    filters?: Record<string, string>,
+  ) => {
+    const queryParams: Record<string, string | number> = { offset, limit };
+    if (search) {
+      queryParams.search = search;
+    }
+    if (filters) {
+      Object.assign(queryParams, filters);
+    }
     return await Http.request("/passengers/")
-      .withSearch({ offset, limit, search })
+      .withSearch(queryParams)
       .expectJson(z.array(PassengerDto.Passenger))
       .get();
   };

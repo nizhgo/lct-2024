@@ -14,6 +14,7 @@ import { Tooltip } from "components/tooltip.tsx";
 import InfinityTable from "components/infinity-table.tsx";
 import PermissionsService from "src/stores/permissions.service.ts";
 import { InternalLink } from "components/internalLink.tsx";
+import { CustomDropdown } from "components/dropdown.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -132,6 +133,46 @@ const StaffPage = observer(() => {
         columns={columns}
         provider={vm.provider}
         renderRow={renderRow}
+        filters={{
+          sex_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Пол"
+              options={[
+                { value: "", label: "Все" },
+                { value: "male", label: "Мужчина" },
+                { value: "female", label: "Женщина" },
+              ]}
+              render={(option) => option.label}
+              onChange={(option) => onChange(option.value)}
+            />
+          ),
+          role_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Роль"
+              options={UsersDto.rolesValues}
+              render={(option) => UsersDto.localizeRole(option)}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          rank_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Должность"
+              options={UsersDto.ranksValues}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          is_working_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Работает сейчас"
+              options={[
+                { value: true, label: "Да" },
+                { value: false, label: "Нет" },
+              ]}
+              render={(option) => option.label}
+              onChange={(option) => onChange(String(option.value))}
+            />
+          ),
+        }}
       />
     </Stack>
   );
