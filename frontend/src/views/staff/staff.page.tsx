@@ -169,7 +169,7 @@ const StaffPage = observer(() => {
                 { value: false, label: "Нет" },
               ]}
               render={(option) => option.label}
-              onChange={(option) => onChange(option.value)}
+              onChange={(option) => onChange(String(option.value))}
             />
           ),
         }}
