@@ -13,7 +13,12 @@ export class StaffPageViewModel {
 
   async fetchRequests(offset: number, limit: number, search?: string) {
     try {
-      return await UsersEndpoint.findAll(offset, limit, search);
+      return await UsersEndpoint.findAll(
+        offset,
+        limit,
+        search,
+        this.provider && this.provider.filters,
+      );
     } catch (e) {
       console.error("Failed to load staff", e);
       return [];

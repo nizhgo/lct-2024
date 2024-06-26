@@ -3,13 +3,23 @@ import { Http } from "utils/api/http.ts";
 import { z } from "zod";
 
 export const UsersEndpoint = new (class UsersEndpoint {
-  //find all staff
-  findAll = async (offset?: number, limit?: number, search?: string) => {
-    const res = await Http.request("/users/")
+  findAll = async (
+    offset: number,
+    limit: number,
+    search?: string,
+    filters?: Record<string, string>,
+  ) => {
+    const queryParams: Record<string, string | number> = { offset, limit };
+    if (search) {
+      queryParams.search = search;
+    }
+    if (filters) {
+      Object.assign(queryParams, filters);
+    }
+    return await Http.request("/users/")
+      .withSearch(queryParams)
       .expectJson(z.array(UsersDto.User))
-      .withSearch({ offset, limit, search })
       .get();
-    return res;
   };
 
   //find worker by id
@@ -22,7 +32,9 @@ export const UsersEndpoint = new (class UsersEndpoint {
 
   //create worker
   create = async (data: UsersDto.UserForm) => {
-    return await Http.request("/users/").expectJson(UsersDto.RegistrationResponse).post(data);
+    return await Http.request("/users/")
+      .expectJson(UsersDto.RegistrationResponse)
+      .post(data);
   };
 
   //update worker
