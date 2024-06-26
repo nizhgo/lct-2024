@@ -14,6 +14,7 @@ import { Tooltip } from "components/tooltip.tsx";
 import InfinityTable from "components/infinity-table.tsx";
 import PermissionsService from "src/stores/permissions.service.ts";
 import { InternalLink } from "components/internalLink.tsx";
+import { CustomDropdown } from "components/dropdown.tsx";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -132,6 +133,38 @@ const StaffPage = observer(() => {
         columns={columns}
         provider={vm.provider}
         renderRow={renderRow}
+        searchPlaceholder={"Поиск сотрудников"}
+        filters={{
+          sex_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Пол"
+              options={UsersDto.genderValues}
+              render={(option) => UsersDto.localizeGender(option)}
+              value={
+                vm.provider.getFilterValue("sex_query") as UsersDto.Genders
+              }
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          rank_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Должность"
+              options={UsersDto.ranksValues}
+              value={vm.provider.getFilterValue("rank_query") as UsersDto.Ranks}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          shift_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Режим работы"
+              options={UsersDto.shiftsValues}
+              value={
+                vm.provider.getFilterValue("shift_query") as UsersDto.Shifts
+              }
+              onChange={(option) => onChange(option)}
+            />
+          ),
+        }}
       />
     </Stack>
   );

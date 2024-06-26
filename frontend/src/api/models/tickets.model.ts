@@ -2,6 +2,24 @@ import { z } from "zod";
 import { UsersDto } from "api/models/users.model.ts";
 
 export namespace TicketsDto {
+  import User = UsersDto.User;
+  export const Roles = z.enum(["admin", "worker", "operator", "specialist"]);
+
+  export type Roles = z.infer<typeof UsersDto.Roles>;
+
+  export const rolesValues: Roles[] = [
+    "admin",
+    "worker",
+    "operator",
+    "specialist",
+  ];
+
+  export const Ranks = z.enum(["ЦУ", "ЦСИ", "ЦИО", "ЦИ", "ЦА"]);
+
+  export type Ranks = z.infer<typeof UsersDto.Ranks>;
+
+  export const ranksValues: Ranks[] = ["ЦУ", "ЦСИ", "ЦИО", "ЦИ"];
+
   export const TicketStatus = z.enum([
     "Принята",
     "Инспектор выехал",
@@ -68,6 +86,42 @@ export namespace TicketsDto {
   });
 
   export type TicketForm = z.infer<typeof TicketForm>;
+
+  export const ChangeLogAuthor = z.object({
+    first_name: z.string(),
+    second_name: z.string(),
+    patronymic: z.string(),
+    work_phone: z.string().nullable(),
+    personal_phone: z.string().nullable(),
+    personnel_number: z.string(),
+    role: Roles,
+    rank: Ranks,
+    shift: z.string(),
+    working_hours: z.string(),
+    sex: z.string(),
+    area: z.string(),
+    is_lite: z.boolean(),
+    id: z.number(),
+    is_working: z.boolean(),
+    initials: z.string(),
+    should_work_today: z.boolean(),
+  });
+
+  export const ChangeLog = z.object({
+    author: ChangeLogAuthor,
+    change_date: z.string(),
+    ticket_id: z.number(),
+    request_id: z.number().nullable(),
+    route: z.array(z.string()).nullable(),
+    start_time: z.string().nullable(),
+    end_time: z.string().nullable(),
+    real_end_time: z.string().nullable(),
+    additional_information: z.string().nullable(),
+    status: TicketStatus.nullable(),
+    users: z.array(User).nullable(),
+  });
+
+  export type ChangeLog = z.infer<typeof ChangeLog>;
 
   export const convertTicketShortToForm = (ticket: TicketShort): TicketForm => {
     return {

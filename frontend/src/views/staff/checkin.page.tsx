@@ -115,6 +115,33 @@ const CheckinPage = observer(() => {
         columns={columns}
         provider={vm.provider}
         renderRow={renderRow}
+        filters={{
+          sex_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Пол"
+              options={[
+                { value: "male", label: "Мужской" },
+                { value: "female", label: "Женский" },
+              ]}
+              render={(option) => option.label}
+              onChange={(option) => onChange(option.value)}
+            />
+          ),
+          rank_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Должность"
+              options={UsersDto.ranksValues}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          shift_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Режим работы"
+              options={UsersDto.shiftsValues}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+        }}
       />
     </Stack>
   );

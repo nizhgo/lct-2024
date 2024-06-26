@@ -6,11 +6,11 @@ export namespace UsersDto {
   export type Genders = z.infer<typeof UsersDto.Genders>;
 
   export const genderValues: Genders[] = ["male", "female"];
-  export const Shifts = z.enum(["1", "2H", "1(Н)", "2(Н)", "5"]);
+  export const Shifts = z.enum(["1", "2", "1(Н)", "2(Н)", "5"]);
 
   export type Shifts = z.infer<typeof UsersDto.Shifts>;
 
-  export const shiftsValues: Shifts[] = ["1", "2H", "1(Н)", "2(Н)", "5"];
+  export const shiftsValues: Shifts[] = ["1", "2", "1(Н)", "2(Н)", "5"];
 
   //"admin""specialist""operator""worker"
   export const Roles = z.enum(["admin", "worker", "operator", "specialist"]);

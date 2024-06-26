@@ -13,6 +13,8 @@ import { useTheme } from "@emotion/react";
 import InfinityTable from "components/infinity-table.tsx";
 import { InternalLink } from "components/internalLink.tsx";
 import PermissionService from "src/stores/permissions.service.ts";
+import { CustomDropdown } from "components/dropdown.tsx";
+import { UsersDto } from "api/models/users.model.ts";
 
 const ContentHeader = styled.div`
   display: flex;
@@ -30,6 +32,7 @@ const PassengersPage = observer(() => {
   const [vm] = useState(() => new PassengersPageViewModel());
   const theme = useTheme();
   const navigate = useNavigate();
+
   const handleAdd = () => {
     navigate("/passengers/new");
   };
@@ -105,6 +108,44 @@ const PassengersPage = observer(() => {
         columns={columns}
         renderRow={renderRow}
         searchPlaceholder={"Поиск пассажиров"}
+        filters={{
+          sex_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Пол"
+              options={UsersDto.genderValues}
+              value={
+                vm.provider.getFilterValue("sex_query") as UsersDto.Genders
+              }
+              render={(option) => UsersDto.localizeGender(option)}
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          category_query: ({ onChange }) => (
+            <CustomDropdown
+              label="Категория"
+              options={PassengerDto.passengerCategoryValues}
+              value={
+                vm.provider.getFilterValue(
+                  "category_query",
+                ) as PassengerDto.PassengerCategory
+              }
+              onChange={(option) => onChange(option)}
+            />
+          ),
+          has_cardiac_pacemaker_query: ({ onChange }) => (
+            <label>
+              <input
+                type="checkbox"
+                checked={
+                  vm.provider.getFilterValue("has_cardiac_pacemaker_query") ===
+                  "true"
+                }
+                onChange={(e) => onChange(String(e.target.checked))}
+              />
+              Кардиостимулятор
+            </label>
+          ),
+        }}
       />
     </Stack>
   );

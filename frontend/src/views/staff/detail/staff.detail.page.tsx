@@ -187,7 +187,7 @@ const StaffDetails = observer(() => {
           <GridItem>
             <Text size={24}>Расписание сотрудника</Text>
             {vm.gaps ? (
-              <Stack direction={"row"} gap={20}>
+              <Stack direction={"column"} gap={20}>
                 {vm.gaps.map((gap) => (
                   <Stack
                     key={gap.id}
@@ -202,7 +202,7 @@ const StaffDetails = observer(() => {
                   >
                     <Text size={20}>Событие #{gap.id}</Text>
                     <Text>
-                      {gap.start_time} - {gap.end_time}
+                      {new Date(gap.start_time).toLocaleString()} - {new Date(gap.end_time).toLocaleString()}
                     </Text>
                     <Text>Категория: {gap.status}</Text>
                     <Text>{gap.description}</Text>
@@ -295,6 +295,7 @@ const StaffDetails = observer(() => {
                           aria-rowcount={5}
                           aria-colcount={33}
                           placeholder="Введите дополнительную информацию"
+                          required
                         />
                       </Stack>
                       <Button type={"submit"}>Отправить</Button>

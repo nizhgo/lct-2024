@@ -9,6 +9,7 @@ export namespace RequestsDto {
     "processed_auto",
     "processed",
     "completed",
+    "distribution_error",
   ]);
 
   export type RequestsStatus = z.infer<typeof RequestsStatus>;
@@ -18,6 +19,7 @@ export namespace RequestsDto {
     "processed_auto",
     "processed",
     "completed",
+    "distribution_error",
   ];
 
   export const AcceptationMethod = z.enum(["phone", "email"]);
@@ -38,8 +40,8 @@ export namespace RequestsDto {
     female_users_count: z.number().optional(),
     status: RequestsStatus,
     additional_information: z.string(),
-    baggage_type: z.string(),
-    baggage_weight: z.number(),
+    baggage_type: z.string().optional(),
+    baggage_weight: z.number().optional(),
     baggage_help: z.boolean(),
     id: z.number(),
     passenger: PassengerDto.Passenger,
@@ -78,7 +80,7 @@ export namespace RequestsDto {
       .optional(),
     additional_information: z.string().optional(),
     baggage_type: z.string().optional(),
-    baggage_weight: z.number().optional().default(0),
+    baggage_weight: z.number().optional(),
     baggage_help: z.boolean().optional().default(false),
   });
 
@@ -89,6 +91,7 @@ export namespace RequestsDto {
     processed_auto: "Обработана автоматически",
     processed: "Обработана",
     completed: "Завершена",
+    distribution_error: "Не удалось распределить автоматически",
   };
 
   export const localizeRequestStatus = (status: RequestsStatus) =>
