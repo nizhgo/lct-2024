@@ -195,6 +195,7 @@ export const CustomDropdown = observer(
         ref={ref}
         key={x.label}
         spellCheck={false}
+        style={{ maxWidth: "400px" }}
       >
         {!x.label ? null : (
           <Label>

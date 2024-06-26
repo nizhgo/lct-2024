@@ -112,7 +112,6 @@ const PassengersPage = observer(() => {
             <CustomDropdown
               label="Пол"
               options={[
-                { value: "", label: "Все" },
                 { value: "male", label: "Мужчина" },
                 { value: "female", label: "Женщина" },
               ]}
