@@ -40,9 +40,9 @@ export namespace RequestsDto {
     female_users_count: z.number().optional(),
     status: RequestsStatus,
     additional_information: z.string(),
-    baggage_type: z.string().optional(),
-    baggage_weight: z.number().optional(),
-    baggage_help: z.boolean(),
+    baggage_type: z.string().nullable().optional(),
+    baggage_weight: z.number().nullable().optional(),
+    baggage_help: z.boolean().nullable().optional(),
     id: z.number(),
     passenger: PassengerDto.Passenger,
     ticket: TicketsDto.TicketShort.nullable(),
@@ -79,9 +79,9 @@ export namespace RequestsDto {
       .default(0)
       .optional(),
     additional_information: z.string().optional(),
-    baggage_type: z.string().optional(),
-    baggage_weight: z.number().optional(),
-    baggage_help: z.boolean().optional().default(false),
+    baggage_type: z.string().nullable().optional(),
+    baggage_weight: z.number().nullable().optional(),
+    baggage_help: z.boolean().nullable().optional().default(false),
   });
 
   export type RequestForm = z.infer<typeof RequestForm>;
@@ -119,7 +119,7 @@ export namespace RequestsDto {
       male_users_count: request.male_users_count,
       female_users_count: request.female_users_count,
       baggage_weight: request.baggage_weight,
-      baggage_help: request.baggage_help,
+      baggage_help: request.baggage_help || false,
     };
   };
 }
